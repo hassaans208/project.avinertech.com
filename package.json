@@ -1,0 +1,15 @@
+{
+  "name": "my-monorepo",
+  "version": "1.0.0",
+  "private": true,
+  "workspaces": [
+    "core.avinertech.com/MicroServices/manager.avinertech.com",
+    "core.avinertech.com/MicroServices/mailer.avinertech.com",
+    "core.avinertech.com/MicroServices/auth.avinertech.com",
+    "tenant.avinertech.com/Stubs/demo.avinertech.com"
+  ],
+  "scripts": {
+    "install-all": "npm install --workspaces",
+    "build-all": "npm run build --workspaces"
+  }
+}
