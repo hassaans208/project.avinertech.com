@@ -5,9 +5,9 @@
   8 => 'hashing',
   'app' => 
   array (
-    'name' => 'Tenant Larevel',
-    'env' => 'local',
-    'debug' => true,
+    'name' => 'Laravel',
+    'env' => 'production',
+    'debug' => false,
     'url' => 'http://localhost',
     'frontend_url' => 'http://localhost:3000',
     'asset_url' => NULL,
@@ -16,7 +16,7 @@
     'fallback_locale' => 'en',
     'faker_locale' => 'en_US',
     'cipher' => 'AES-256-CBC',
-    'key' => 'base64:RH0qASJKuEkpVrljdngDFceQ9AahKptCRkLc51bVAN8=',
+    'key' => NULL,
     'previous_keys' => 
     array (
     ),
@@ -100,7 +100,6 @@
       'View' => 'Illuminate\\Support\\Facades\\View',
       'Vite' => 'Illuminate\\Support\\Facades\\Vite',
     ),
-    'root_path' => 'E:\\xampp-8\\htdocs\\Project',
   ),
   'auth' => 
   array (
@@ -192,8 +191,8 @@
       'dynamodb' => 
       array (
         'driver' => 'dynamodb',
-        'key' => '',
-        'secret' => '',
+        'key' => NULL,
+        'secret' => NULL,
         'region' => 'us-east-1',
         'table' => 'cache',
         'endpoint' => NULL,
@@ -203,7 +202,7 @@
         'driver' => 'octane',
       ),
     ),
-    'prefix' => '',
+    'prefix' => 'laravel_cache_',
     'cache' => 'E:\\xampp-8\\htdocs\\Project\\core.avinertech.com\\MicroServices\\manager.avinertech.com\\storage\\framework/cache',
   ),
   'database' => 
@@ -302,7 +301,7 @@
       'options' => 
       array (
         'cluster' => 'redis',
-        'prefix' => 'tenant_larevel_database_',
+        'prefix' => 'laravel_database_',
       ),
       'default' => 
       array (
@@ -341,7 +340,7 @@
       array (
         'driver' => 'local',
         'root' => 'E:\\xampp-8\\htdocs\\Project\\core.avinertech.com\\MicroServices\\manager.avinertech.com\\storage\\app/public',
-        'url' => 'http://localhost/storage',
+        'url' => '/storage',
         'visibility' => 'public',
         'throw' => false,
         'report' => false,
@@ -349,10 +348,10 @@
       's3' => 
       array (
         'driver' => 's3',
-        'key' => '',
-        'secret' => '',
-        'region' => 'us-east-1',
-        'bucket' => '',
+        'key' => NULL,
+        'secret' => NULL,
+        'region' => NULL,
+        'bucket' => NULL,
         'url' => NULL,
         'endpoint' => NULL,
         'use_path_style_endpoint' => false,
@@ -370,7 +369,7 @@
     'default' => 'stack',
     'deprecations' => 
     array (
-      'channel' => NULL,
+      'channel' => 'null',
       'trace' => false,
     ),
     'channels' => 
@@ -405,7 +404,7 @@
         'url' => NULL,
         'username' => 'Laravel Log',
         'emoji' => ':boom:',
-        'level' => 'debug',
+        'level' => 'critical',
         'replace_placeholders' => true,
       ),
       'papertrail' => 
@@ -474,7 +473,7 @@
         'scheme' => NULL,
         'url' => NULL,
         'host' => '127.0.0.1',
-        'port' => '2525',
+        'port' => 2525,
         'username' => NULL,
         'password' => NULL,
         'timeout' => NULL,
@@ -528,7 +527,7 @@
     'from' => 
     array (
       'address' => 'hello@example.com',
-      'name' => 'Tenant Larevel',
+      'name' => 'Example',
     ),
     'markdown' => 
     array (
@@ -569,8 +568,8 @@
       'sqs' => 
       array (
         'driver' => 'sqs',
-        'key' => '',
-        'secret' => '',
+        'key' => NULL,
+        'secret' => NULL,
         'prefix' => 'https://sqs.us-east-1.amazonaws.com/your-account-id',
         'queue' => 'default',
         'suffix' => NULL,
@@ -607,8 +606,8 @@
     ),
     'ses' => 
     array (
-      'key' => '',
-      'secret' => '',
+      'key' => NULL,
+      'secret' => NULL,
       'region' => 'us-east-1',
     ),
     'resend' => 
@@ -639,7 +638,7 @@
       0 => 2,
       1 => 100,
     ),
-    'cookie' => 'tenant_larevel_session',
+    'cookie' => 'laravel_session',
     'path' => '/',
     'domain' => NULL,
     'secure' => NULL,
@@ -657,7 +656,7 @@
   ),
   'broadcasting' => 
   array (
-    'default' => 'log',
+    'default' => 'null',
     'connections' => 
     array (
       'reverb' => 
@@ -748,7 +747,7 @@
     'driver' => 'bcrypt',
     'bcrypt' => 
     array (
-      'rounds' => '12',
+      'rounds' => 12,
       'verify' => true,
     ),
     'argon' => 
