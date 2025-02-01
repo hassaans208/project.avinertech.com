@@ -23,7 +23,6 @@ class LoadConfiguration
         // First we will see if we have a cache configuration file. If we do, we'll load
         // the configuration items from that file so that it is very quick. Otherwise
         // we will need to spin through every configuration file and load them all.
-//        dd($app->getCachedConfigPath());
         if (file_exists($cached = $app->getCachedConfigPath())) {
             $items = require $cached;
 
@@ -95,9 +94,7 @@ class LoadConfiguration
     protected function loadConfigurationFile(RepositoryContract $repository, $name, $path, array $base)
     {
         $config = (fn () => require $path)();
-        if(!is_array($config)) {
-//            dd($config);
-        }
+
         if (isset($base[$name])) {
             $config = array_merge($base[$name], $config);
 
