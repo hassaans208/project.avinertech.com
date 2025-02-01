@@ -1,0 +1,8 @@
+/node_modules
+/vendor
+/auth.json
+/.fleet
+/.idea
+/.nova
+/.vscode
+/.zed
