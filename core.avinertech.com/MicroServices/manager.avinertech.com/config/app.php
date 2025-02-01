@@ -123,5 +123,4 @@ return [
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
 
-    'root_path' => env('APP_ROOTPATH', ''),
 ];

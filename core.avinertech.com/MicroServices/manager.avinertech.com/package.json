@@ -1,6 +1,6 @@
 {
     "private": true,
-    "name": "manager-module",
+    "name": "manager-service",
     "type": "module",
     "vaersion": "1.0.0",
     "scripts": {
