@@ -19,68 +19,104 @@
             </style>
         @endif
     </head>
-    <body class="bg-gray-100 py-8">
+    <body class="min-h-screen flex items-center justify-center bg-gray-900 text-white py-8">
 
-    <div class="max-w-md mx-auto bg-white p-6 rounded shadow-md">
-        <h2 class="text-xl font-bold mb-6 text-gray-800">Module Setup</h2>
+        <div class="max-w-md w-full bg-gray-800 p-6 rounded-md shadow-md"   >
+            <!-- Message Box -->
+            <div id="messageBox" class="hidden p-3 mb-4 rounded text-center text-sm"></div>
 
-        <form action="#" method="POST" class="space-y-6">
-            <!-- Module Name -->
-            <div>
-                <label for="moduleName" class="block text-gray-700 font-medium mb-1">
-                    Module Name
-                </label>
-                <select
-                        id="moduleName"
-                        name="moduleName"
-                        class="w-full rounded border border-gray-300 px-3 py-2 outline-none focus:ring-2 focus:ring-blue-500"
-                >
-                    <option value="core">Core</option>
-                    <option value="tenant">Tenant</option>
-                </select>
-            </div>
+            <h2 class="text-xl font-bold mb-6 text-gray-200">Module Setup</h2>
 
-            <!-- Submodule -->
-            <div>
-                <label for="subModule" class="block text-gray-700 font-medium mb-1">
-                    Submodule
-                </label>
-                <select
-                        id="subModule"
-                        name="subModule"
-                        class="w-full rounded border border-gray-300 px-3 py-2 outline-none focus:ring-2 focus:ring-blue-500"
-                >
-                    <option value="micro">Micro</option>
-                    <option value="service">Service</option>
-                    <option value="apps">Apps</option>
-                </select>
-            </div>
+            <form id="moduleForm" class="space-y-6">
+                <!-- Module Name -->
+                <div>
+                    <label for="moduleName" class="block text-gray-300 font-medium mb-1">Module Name</label>
+                    <select id="moduleName" name="moduleName"
+                            class="w-full rounded border border-gray-600 bg-gray-700 px-3 py-2 text-white outline-none focus:ring-2 focus:ring-blue-500">
+                        <option value="core">Core</option>
+                        <option value="tenant">Tenant</option>
+                    </select>
+                </div>
 
-            <!-- App Name -->
-            <div>
-                <label for="appName" class="block text-gray-700 font-medium mb-1">
-                    App Name
-                </label>
-                <input
-                        type="text"
-                        id="appName"
-                        name="appName"
-                        placeholder="Enter application name"
-                        class="w-full rounded border border-gray-300 px-3 py-2 outline-none focus:ring-2 focus:ring-blue-500"
-                />
-            </div>
+                <!-- Submodule -->
+                <div>
+                    <label for="subModule" class="block text-gray-300 font-medium mb-1">Submodule</label>
+                    <select id="subModule" name="subModule"
+                            class="w-full rounded border border-gray-600 bg-gray-700 px-3 py-2 text-white outline-none focus:ring-2 focus:ring-blue-500">
+                        <option value="micro">Micro</option>
+                        <option value="service">Service</option>
+                        <option value="apps">Apps</option>
+                    </select>
+                </div>
 
-            <!-- Submit -->
-            <div>
-                <button
-                        type="submit"
-                        class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded"
-                >
-                    Submit
-                </button>
-            </div>
-        </form>
-    </div>
+                <!-- App Name -->
+                <div>
+                    <label for="appName" class="block text-gray-300 font-medium mb-1">App Name</label>
+                    <input type="text" id="appName" name="appName" placeholder="Enter application name"
+                           class="w-full rounded border border-gray-600 bg-gray-700 px-3 py-2 text-white outline-none focus:ring-2 focus:ring-blue-500"/>
+                </div>
 
-    </body>
+                <!-- Submit -->
+                <div>
+                    <button type="submit"
+                            class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded">
+                        Submit
+                    </button>
+                </div>
+            </form>
+        </div>
+
+<!-- JavaScript -->
+<script>
+    document.getElementById("moduleForm").addEventListener("submit", async function(event) {
+        event.preventDefault(); // Prevent form submission
+
+        // Get input values
+        const moduleName = document.getElementById("moduleName").value;
+        const subModule = document.getElementById("subModule").value;
+        const appName = document.getElementById("appName").value;
+        const messageBox = document.getElementById("messageBox");
+
+        // Clear message box
+        messageBox.classList.add("hidden");
+
+        // Validate Inputs
+        if (!moduleName || !subModule || !appName) {
+            showMessage("All fields are required!", "red");
+            return;
+        }
+
+        // API Endpoint
+        const apiUrl = "/api/manage-module";
+
+        try {
+            const response = await fetch(apiUrl, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ module: moduleName, submodule: subModule, appName: appName }),
+            });
+
+            const result = await response.json();
+
+            if (result.status) {
+                showMessage(result.message, "bg-green-500");
+            } else {
+                showMessage(result.message || "An error occurred.", "red");
+            }
+        } catch (error) {
+            showMessage(error, "bg-red-700");
+        }
+    });
+
+    function showMessage(message, color) {
+        const messageBox = document.getElementById("messageBox");
+        messageBox.textContent = message;
+        messageBox.className = `p-3 mb-4 rounded text-center text-sm text-${color}-700 bg-${color}-100 border border-${color}-500`;
+        messageBox.classList.remove("hidden");
+    }
+</script>
+
+</body>
 </html>

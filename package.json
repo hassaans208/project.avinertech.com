@@ -10,6 +10,7 @@
   ],
   "scripts": {
     "install-all": "npm install --workspaces",
-    "build-all": "npm run build --workspaces"
+    "build-all": "npm run build --workspaces",
+    "dev-all": "npm run dev --workspaces"
   }
 }

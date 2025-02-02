@@ -6,8 +6,8 @@
   'app' => 
   array (
     'name' => 'Laravel',
-    'env' => 'production',
-    'debug' => false,
+    'env' => 'local',
+    'debug' => true,
     'url' => 'http://localhost',
     'frontend_url' => 'http://localhost:3000',
     'asset_url' => NULL,
@@ -16,7 +16,7 @@
     'fallback_locale' => 'en',
     'faker_locale' => 'en_US',
     'cipher' => 'AES-256-CBC',
-    'key' => NULL,
+    'key' => 'base64:UyrRUjut4HwZfn7p30O+kFZi0zgO0D83hiDYorySymE=',
     'previous_keys' => 
     array (
     ),
@@ -100,6 +100,7 @@
       'View' => 'Illuminate\\Support\\Facades\\View',
       'Vite' => 'Illuminate\\Support\\Facades\\Vite',
     ),
+    'root_path' => 'E:\\xampp-8\\htdocs\\Project',
   ),
   'auth' => 
   array (
@@ -191,8 +192,8 @@
       'dynamodb' => 
       array (
         'driver' => 'dynamodb',
-        'key' => NULL,
-        'secret' => NULL,
+        'key' => '',
+        'secret' => '',
         'region' => 'us-east-1',
         'table' => 'cache',
         'endpoint' => NULL,
@@ -202,19 +203,19 @@
         'driver' => 'octane',
       ),
     ),
-    'prefix' => 'laravel_cache_',
+    'prefix' => '',
     'cache' => 'E:\\xampp-8\\htdocs\\Project\\core.avinertech.com\\MicroServices\\manager.avinertech.com\\storage\\framework/cache',
   ),
   'database' => 
   array (
-    'default' => 'sqlite',
+    'default' => 'mysql',
     'connections' => 
     array (
       'sqlite' => 
       array (
         'driver' => 'sqlite',
         'url' => NULL,
-        'database' => 'E:\\xampp-8\\htdocs\\Project\\core.avinertech.com\\MicroServices\\manager.avinertech.com\\database\\database.sqlite',
+        'database' => 'backend',
         'prefix' => '',
         'foreign_key_constraints' => true,
         'busy_timeout' => NULL,
@@ -227,7 +228,7 @@
         'url' => NULL,
         'host' => '127.0.0.1',
         'port' => '3306',
-        'database' => 'laravel',
+        'database' => 'backend',
         'username' => 'root',
         'password' => '',
         'unix_socket' => '',
@@ -247,7 +248,7 @@
         'url' => NULL,
         'host' => '127.0.0.1',
         'port' => '3306',
-        'database' => 'laravel',
+        'database' => 'backend',
         'username' => 'root',
         'password' => '',
         'unix_socket' => '',
@@ -266,8 +267,8 @@
         'driver' => 'pgsql',
         'url' => NULL,
         'host' => '127.0.0.1',
-        'port' => '5432',
-        'database' => 'laravel',
+        'port' => '3306',
+        'database' => 'backend',
         'username' => 'root',
         'password' => '',
         'charset' => 'utf8',
@@ -280,9 +281,9 @@
       array (
         'driver' => 'sqlsrv',
         'url' => NULL,
-        'host' => 'localhost',
-        'port' => '1433',
-        'database' => 'laravel',
+        'host' => '127.0.0.1',
+        'port' => '3306',
+        'database' => 'backend',
         'username' => 'root',
         'password' => '',
         'charset' => 'utf8',
@@ -340,7 +341,7 @@
       array (
         'driver' => 'local',
         'root' => 'E:\\xampp-8\\htdocs\\Project\\core.avinertech.com\\MicroServices\\manager.avinertech.com\\storage\\app/public',
-        'url' => '/storage',
+        'url' => 'http://localhost/storage',
         'visibility' => 'public',
         'throw' => false,
         'report' => false,
@@ -348,10 +349,10 @@
       's3' => 
       array (
         'driver' => 's3',
-        'key' => NULL,
-        'secret' => NULL,
-        'region' => NULL,
-        'bucket' => NULL,
+        'key' => '',
+        'secret' => '',
+        'region' => 'us-east-1',
+        'bucket' => '',
         'url' => NULL,
         'endpoint' => NULL,
         'use_path_style_endpoint' => false,
@@ -369,7 +370,7 @@
     'default' => 'stack',
     'deprecations' => 
     array (
-      'channel' => 'null',
+      'channel' => NULL,
       'trace' => false,
     ),
     'channels' => 
@@ -404,7 +405,7 @@
         'url' => NULL,
         'username' => 'Laravel Log',
         'emoji' => ':boom:',
-        'level' => 'critical',
+        'level' => 'debug',
         'replace_placeholders' => true,
       ),
       'papertrail' => 
@@ -473,7 +474,7 @@
         'scheme' => NULL,
         'url' => NULL,
         'host' => '127.0.0.1',
-        'port' => 2525,
+        'port' => '2525',
         'username' => NULL,
         'password' => NULL,
         'timeout' => NULL,
@@ -527,7 +528,7 @@
     'from' => 
     array (
       'address' => 'hello@example.com',
-      'name' => 'Example',
+      'name' => 'Laravel',
     ),
     'markdown' => 
     array (
@@ -568,8 +569,8 @@
       'sqs' => 
       array (
         'driver' => 'sqs',
-        'key' => NULL,
-        'secret' => NULL,
+        'key' => '',
+        'secret' => '',
         'prefix' => 'https://sqs.us-east-1.amazonaws.com/your-account-id',
         'queue' => 'default',
         'suffix' => NULL,
@@ -588,13 +589,13 @@
     ),
     'batching' => 
     array (
-      'database' => 'sqlite',
+      'database' => 'mysql',
       'table' => 'job_batches',
     ),
     'failed' => 
     array (
       'driver' => 'database-uuids',
-      'database' => 'sqlite',
+      'database' => 'mysql',
       'table' => 'failed_jobs',
     ),
   ),
@@ -606,8 +607,8 @@
     ),
     'ses' => 
     array (
-      'key' => NULL,
-      'secret' => NULL,
+      'key' => '',
+      'secret' => '',
       'region' => 'us-east-1',
     ),
     'resend' => 
@@ -656,7 +657,7 @@
   ),
   'broadcasting' => 
   array (
-    'default' => 'null',
+    'default' => 'log',
     'connections' => 
     array (
       'reverb' => 
@@ -747,7 +748,7 @@
     'driver' => 'bcrypt',
     'bcrypt' => 
     array (
-      'rounds' => 12,
+      'rounds' => '12',
       'verify' => true,
     ),
     'argon' => 
