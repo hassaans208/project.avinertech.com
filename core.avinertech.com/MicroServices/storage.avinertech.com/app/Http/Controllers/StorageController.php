@@ -35,9 +35,9 @@ class StorageController extends Controller
         } catch (\Exception $e) {
             return response()->json([
                 'status' => false,
-                'message' => 'File upload failed!',
-                'error' => $e->getMessage()
-            ], 500);
+                'error' => 'File upload failed!',
+                'message' => $e->getMessage()
+            ], 200);
         }
     }
 
