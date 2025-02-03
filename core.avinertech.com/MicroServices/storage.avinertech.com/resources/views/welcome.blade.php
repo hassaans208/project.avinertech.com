@@ -179,6 +179,7 @@
                 document.getElementById("uploadBtn").setAttribute('disabled', 'false')
                 showMessage("Server error, try again!", "bg-red-500");
             }
+            document.getElementById("uploadBtn").setAttribute('disabled', 'false')
         }
 
         // Show Message
