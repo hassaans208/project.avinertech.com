@@ -12,7 +12,7 @@ class StorageController extends Controller
 //        dd($request->file('file'));
 
         $validated = validator()->make($request->all(), [
-            'file' => 'required|file|max:20480', // Max 20MB
+            'file' => 'required|file|max:50000', // Max 20MB
         ]);
 
         if($validated->fails()){
