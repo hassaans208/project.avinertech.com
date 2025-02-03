@@ -39,10 +39,6 @@
 
         <!-- Security Meta Tags -->
         <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://apis.google.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;">
-        <meta http-equiv="X-Frame-Options" content="DENY">
-        <meta http-equiv="X-Content-Type-Options" content="nosniff">
-        <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
-
         <!-- Favicon -->
         <link rel="icon" href="https://storage.avinertech.com/favicon.ico" type="image/x-icon">
 
