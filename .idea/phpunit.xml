@@ -7,6 +7,8 @@
         <option value="$PROJECT_DIR$/core.avinertech.com/tests/Feature" />
         <option value="$PROJECT_DIR$/tenant.avinertech.com/tests/Unit" />
         <option value="$PROJECT_DIR$/tenant.avinertech.com/tests/Feature" />
+        <option value="$PROJECT_DIR$/core.avinertech.com/Services/admin.avinertech.com/tests/Unit" />
+        <option value="$PROJECT_DIR$/core.avinertech.com/Services/admin.avinertech.com/tests/Feature" />
       </list>
     </option>
   </component>
