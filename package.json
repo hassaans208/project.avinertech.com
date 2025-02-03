@@ -5,6 +5,7 @@
   "workspaces": [
     "core.avinertech.com/MicroServices/manager.avinertech.com",
     "core.avinertech.com/MicroServices/mailer.avinertech.com",
+    "core.avinertech.com/MicroServices/storage.avinertech.com",
     "core.avinertech.com/MicroServices/auth.avinertech.com",
     "tenant.avinertech.com/Stubs/demo.avinertech.com"
   ],

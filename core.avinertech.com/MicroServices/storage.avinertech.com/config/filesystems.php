@@ -29,6 +29,19 @@ return [
     */
 
     'disks' => [
+        'sftp' => [
+            'driver' => 'sftp',
+            'host' => env('SFTP_HOST', 'your-server.com'), // SSH Server Address
+            'username' => env('SFTP_USERNAME', 'your-username'),
+
+            // Option 1: Use password authentication
+            'password' => env('SFTP_PASSWORD', 'your-password'),
+
+            'root' => env('SFTP_ROOT', '/remote/path/storage'), // Remote storage path
+            'port' => (int) env('SFTP_PORT', 22), // Default SSH port
+            'timeout' => 30,
+            'visibility' => 'public',
+        ],
 
         'local' => [
             'driver' => 'local',
