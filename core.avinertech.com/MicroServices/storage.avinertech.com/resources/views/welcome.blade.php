@@ -125,11 +125,18 @@
                     previewContainer.classList.add("hidden");
                     document.getElementById("copyButton").addEventListener("click", function(e) {
                         const link = e.target.getAttribute('data-target'); // Replace with your actual link
-                        navigator.clipboard.writeText(link).then(() => {
-                            alert("Link copied to clipboard!");
-                        }).catch(err => {
-                            console.error("Failed to copy: ", err);
-                        });
+                        try {
+                            navigator.clipboard.writeText(link).then(() => {
+                                alert("Link copied to clipboard!");
+                            }).catch(err => {
+                                fallbackCopy(link); // Fallback to older method
+                                console.error("Failed to copy: ", err);
+                            });
+                        } catch (e) {
+                            console.log(e)
+                            fallbackCopy(link); // Fallback to older method
+                        }
+
                     });
                 } else {
                     showMessage(result.message || "Upload failed!", "bg-red-500");
@@ -149,7 +156,16 @@
             messageBox.classList.remove("hidden");
         }
 
-
+        // Fallback for older browsers / Ubuntu Server
+        function fallbackCopy(text) {
+            const textarea = document.createElement("textarea");
+            textarea.value = text;
+            document.body.appendChild(textarea);
+            textarea.select();
+            document.execCommand("copy");
+            document.body.removeChild(textarea);
+            alert("Link copied to clipboard!");
+        }
     </script>
 
     </body>
