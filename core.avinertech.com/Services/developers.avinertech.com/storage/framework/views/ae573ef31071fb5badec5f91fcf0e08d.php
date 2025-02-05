@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    @include('partials.meta')
-    @include('partials.configuration')
+    <?php echo $__env->make('partials.meta', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+    <?php echo $__env->make('partials.configuration', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
 </head>
 <body class="bg-gray-900 text-white min-h-screen flex">
-@include('partials.header')
+<?php echo $__env->make('partials.header', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
 <!-- Main Content -->
 <main class="flex-1 p-6 mt-16">
     <h1 class="text-4xl font-bold mb-6 text-center text-blue-400">What We Do</h1>
@@ -95,3 +95,4 @@
 
 </body>
 </html>
+<?php /**PATH E:\xampp-8\htdocs\Project\core.avinertech.com\Services\developers.avinertech.com\resources\views/what-we-do.blade.php ENDPATH**/ ?>
