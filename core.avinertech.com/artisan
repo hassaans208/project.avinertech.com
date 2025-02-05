@@ -1,0 +1,7 @@
+#!/usr/bin/env php
+<?php
+
+$base = __DIR__;
+$system = '/Services/migrator.avinertech.com';
+require_once $base . '/global-artisan.php';
+

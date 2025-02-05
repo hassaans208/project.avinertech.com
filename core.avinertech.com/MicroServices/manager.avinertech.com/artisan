@@ -1,15 +1,7 @@
 #!/usr/bin/env php
 <?php
 
-use Symfony\Component\Console\Input\ArgvInput;
+$base = __DIR__;
+$system = '';
+require_once $base . '/../../global-artisan.php';
 
-define('LARAVEL_START', microtime(true));
-
-// Register the Composer autoloader...
-require __DIR__.'/autoload.php';
-
-// Bootstrap Laravel and handle the command...
-$app = (require_once __DIR__.'/bootstrap/app.php');
-$status = $app->handleCommand(new ArgvInput);
-
-exit($status);
