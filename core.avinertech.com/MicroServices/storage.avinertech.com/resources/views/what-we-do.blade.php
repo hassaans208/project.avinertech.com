@@ -1,39 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    @include('partials.meta')
+    @include('partials.configuration')
 
-    <!-- Title & Description -->
-    <title>What We Do | AvinerTech</title>
-    <meta name="description" content="AvinerTech provides cutting-edge cloud storage, AI-powered image processing, database management, and custom software development solutions.">
-
-    <!-- Keywords -->
-    <meta name="keywords" content="AvinerTech, Cloud Storage, Image Processing, Database Management, Custom Software Development, AI Solutions">
-
-    <!-- Author -->
-    <meta name="author" content="AvinerTech">
-
-    <!-- Canonical URL -->
-    <link rel="canonical" href="https://avinertech.com/what-we-do">
-
-    <!-- Open Graph (Facebook & LinkedIn) -->
-    <meta property="og:title" content="What We Do | AvinerTech">
-    <meta property="og:description" content="Explore AvinerTech’s range of services including cloud storage, AI-powered image processing, and enterprise software solutions.">
-    <meta property="og:url" content="https://avinertech.com/what-we-do">
-    <meta property="og:image" content="https://avinertech.com/preview.png">
-    <meta property="og:type" content="website">
-
-    <!-- Favicon -->
-    <link rel="icon" href="https://avinertech.com/favicon.ico" type="image/x-icon">
-
-    <!-- Styles -->
-    @if (file_exists(public_path('build/manifest.json')) || file_exists(public_path('hot')))
-        @vite(['resources/css/app.css', 'resources/js/app.js'])
-    @endif
-
-    <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-900 text-white min-h-screen flex flex-col">
 

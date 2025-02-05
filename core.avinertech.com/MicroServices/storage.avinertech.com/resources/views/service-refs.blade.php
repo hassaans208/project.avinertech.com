@@ -1,32 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-
-    <!-- Title & Description -->
-    <title>Cloud Storage Service | AvinerTech</title>
-    <meta name="description" content="Secure and scalable cloud storage service by AvinerTech, offering file encryption, SSH authentication, and secure data transfers.">
-
-    <!-- Keywords -->
-    <meta name="keywords" content="Cloud Storage, Secure Storage, File Upload, SSH Authentication, Secure Data Transfer, AvinerTech">
-
-    <!-- Open Graph -->
-    <meta property="og:title" content="Cloud Storage Service | AvinerTech">
-    <meta property="og:description" content="Explore AvinerTech’s cloud storage service with top-tier security and tech-driven architecture.">
-    <meta property="og:url" content="https://avinertech.com/cloud-storage">
-    <meta property="og:image" content="https://avinertech.com/storage-preview.png">
-
-    <!-- Favicon -->
-    <link rel="icon" href="https://avinertech.com/favicon.ico" type="image/x-icon">
-
-    <!-- Styles -->
-    @if (file_exists(public_path('build/manifest.json')) || file_exists(public_path('hot')))
-        @vite(['resources/css/app.css', 'resources/js/app.js'])
-    @endif
-
-    <script src="https://cdn.tailwindcss.com"></script>
+    @include('partials.meta')
+    @include('partials.configuration')
 </head>
 <body class="bg-gray-900 text-white min-h-screen flex flex-col">
 
