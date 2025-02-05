@@ -9,7 +9,7 @@
     <nav class="hidden md:flex gap-6 text-gray-400 text-lg">
         <a href="/" class="hover:text-white transition">Home</a>
         <a href="{{url('/what-we-do')}}" class="hover:text-white transition">What We Do?</a>
-        <a href="{{url('https://developers.avinertech.com/')}}" class="hover:text-white transition">API References</a>
+        <a href="{{url('https://developers.avinertech.com/')}}" target="_blank" class="hover:text-white transition">API References</a>
         <a href="{{url('/service-references')}}" class="hover:text-white transition text-blue-400">Cloud Storage</a>
     </nav>
 
