@@ -21,7 +21,7 @@
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
-        <link rel="icon" href="https://storage.avinertech.com/favicon.ico" type="image/x-icon">
+        <link rel="icon" href="/favicon.ico" type="image/x-icon">
 
         <!-- Styles / Scripts -->
         @if (file_exists(public_path('build/manifest.json')) || file_exists(public_path('hot')))
@@ -32,48 +32,50 @@
             </style>
         @endif
     </head>
-    <body>
-{{--     Email Subscription--}}
-    {{--        <form action="" method="POST" class="mt-6">--}}
-    {{--            @csrf--}}
-    {{--            <input type="email" name="email" placeholder="Enter your email for updates"--}}
-    {{--                   class="w-full p-3 rounded bg-gray-800 border border-gray-600 text-white focus:ring-2 focus:ring-blue-500">--}}
-    {{--            <button type="submit"--}}
-    {{--                    class="w-full mt-3 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">--}}
-    {{--                Notify Me--}}
-    {{--            </button>--}}
-    {{--        </form>lass="bg-gray-900 text-white flex items-center justify-center h-screen">
+    <body class="bg-gray-900 text-white flex items-center justify-center h-screen">
 
-        <div class="text-center max-w-2xl mx-auto p-6">
-            <!-- Logo -->
-            <img src="https://storage.avinertech.com/favicon.ico" alt="AvinerTech Logo" class="w-16 h-16 mx-auto">
-            <h1 class="text-4xl md:text-5xl font-bold mt-4">Something Amazing is Coming Soon! 🚀</h1>
-            <p class="text-gray-400 mt-2 text-lg">We are working on an <strong>AI-Integrated POS Builder</strong> and a <strong>cloud-powered innovation</strong>. Stay tuned for the launch!</p>
+    <div class="text-center max-w-2xl mx-auto p-6">
+        <!-- Logo -->
+        <img src="https://storage.avinertech.com/favicon.ico" alt="AvinerTech Logo" class="w-16 h-16 mx-auto">
+        <h1 class="text-4xl md:text-5xl font-bold mt-4">Something Amazing is Coming Soon! 🚀</h1>
+        <p class="text-gray-400 mt-2 text-lg">We are working on an <strong>AI-Integrated POS Builder</strong> and a <strong>cloud-powered innovation</strong>. Stay tuned for the launch!</p>
 
-            <!-- Countdown Timer -->
-            <div class="flex justify-center space-x-6 mt-6 text-2xl">
-                <div>
-                    <span id="days" class="block text-4xl font-bold">00</span>
-                    <span class="text-gray-400">Days</span>
-                </div>
-                <div>
-                    <span id="hours" class="block text-4xl font-bold">00</span>
-                    <span class="text-gray-400">Hours</span>
-                </div>
-                <div>
-                    <span id="minutes" class="block text-4xl font-bold">00</span>
-                    <span class="text-gray-400">Minutes</span>
-                </div>
-                <div>
-                    <span id="seconds" class="block text-4xl font-bold">00</span>
-                    <span class="text-gray-400">Seconds</span>
-                </div>
-            </div> --}}
+        <!-- Countdown Timer -->
+        <div class="flex justify-center space-x-6 mt-6 text-2xl">
+            <div>
+                <span id="days" class="block text-4xl font-bold">00</span>
+                <span class="text-gray-400">Days</span>
+            </div>
+            <div>
+                <span id="hours" class="block text-4xl font-bold">00</span>
+                <span class="text-gray-400">Hours</span>
+            </div>
+            <div>
+                <span id="minutes" class="block text-4xl font-bold">00</span>
+                <span class="text-gray-400">Minutes</span>
+            </div>
+            <div>
+                <span id="seconds" class="block text-4xl font-bold">00</span>
+                <span class="text-gray-400">Seconds</span>
+            </div>
+        </div>
 
+        <!-- Email Subscription Form -->
+{{--        <form action="" method="POST" class="mt-6">--}}
+{{--            @csrf--}}
+{{--            <input type="email" name="email" placeholder="Enter your email for updates"--}}
+{{--                   class="w-full p-3 rounded bg-gray-800 border border-gray-600 text-white focus:ring-2 focus:ring-blue-500">--}}
+{{--            <button type="submit"--}}
+{{--                    class="w-full mt-3 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">--}}
+{{--                Notify Me--}}
+{{--            </button>--}}
+{{--        </form>--}}
+
+        <!-- Social Media Links -->
         <div class="flex justify-center space-x-4 mt-6">
-{{--            <a href="https://twitter.com/avinertech" class="text-gray-400 hover:text-white">Twitter</a>--}}
-{{--            <a href="https://linkedin.com/company/avinertech" class="text-gray-400 hover:text-white">LinkedIn</a>--}}
-            <a href="mailto:sales@avinertech.com" class="text-gray-400 hover:text-white">Contact</a>
+            <a href="https://twitter.com/avinertech" class="text-gray-400 hover:text-white">Twitter</a>
+            <a href="https://linkedin.com/company/avinertech" class="text-gray-400 hover:text-white">LinkedIn</a>
+            <a href="https://avinertech.com" class="text-gray-400 hover:text-white">Website</a>
         </div>
     </div>
 
