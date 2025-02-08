@@ -73,9 +73,9 @@
 
         <!-- Social Media Links -->
         <div class="flex justify-center space-x-4 mt-6">
-            <a href="https://twitter.com/avinertech" class="text-gray-400 hover:text-white">Twitter</a>
-            <a href="https://linkedin.com/company/avinertech" class="text-gray-400 hover:text-white">LinkedIn</a>
-            <a href="https://avinertech.com" class="text-gray-400 hover:text-white">Website</a>
+{{--            <a href="https://twitter.com/avinertech" class="text-gray-400 hover:text-white">Twitter</a>--}}
+            <a href="mailto:sales@avinertech.com" class="text-gray-400 hover:text-white">Contact Sales</a>
+{{--            <a href="https://avinertech.com" class="text-gray-400 hover:text-white">Website</a>--}}
         </div>
     </div>
 
