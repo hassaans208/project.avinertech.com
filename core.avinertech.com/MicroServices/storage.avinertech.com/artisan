@@ -4,5 +4,4 @@
 $base = __DIR__;
 $system = '';
 $loaderBinding = [];
-//die($base);
 require_once $base . '/../../global-artisan.php';

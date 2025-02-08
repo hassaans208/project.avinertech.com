@@ -8,6 +8,7 @@
     "core.avinertech.com/MicroServices/storage.avinertech.com",
     "core.avinertech.com/MicroServices/auth.avinertech.com",
     "core.avinertech.com/Services/developers.avinertech.com",
+    "core.avinertech.com/Services/onboard.avinertech.com",
     "tenant.avinertech.com/Stubs/demo.avinertech.com"
   ],
   "scripts": {

@@ -123,4 +123,5 @@ return [
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
 
+    'launched' => env('APP_LAUNCHED', 'false'),
 ];

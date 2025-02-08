@@ -1,6 +1,6 @@
 {
     "private": true,
-    "name": "manager-module",
+    "name": "onboard-module",
     "type": "module",
     "vaersion": "1.0.0",
     "scripts": {
