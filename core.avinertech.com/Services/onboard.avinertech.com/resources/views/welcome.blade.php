@@ -47,22 +47,22 @@
             </div>
         </div>
 
-        <!-- Email Subscription Form -->
-        <form action="" method="POST" class="mt-6">
-            @csrf
-            <input type="email" name="email" placeholder="Enter your email for updates"
-                   class="w-full p-3 rounded bg-gray-800 border border-gray-600 text-white focus:ring-2 focus:ring-blue-500">
-            <button type="submit"
-                    class="w-full mt-3 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                Notify Me
-            </button>
-        </form>
+{{--        <!-- Email Subscription Form -->--}}
+{{--        <form action="" method="POST" class="mt-6">--}}
+{{--            @csrf--}}
+{{--            <input type="email" name="email" placeholder="Enter your email for updates"--}}
+{{--                   class="w-full p-3 rounded bg-gray-800 border border-gray-600 text-white focus:ring-2 focus:ring-blue-500">--}}
+{{--            <button type="submit"--}}
+{{--                    class="w-full mt-3 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">--}}
+{{--                Notify Me--}}
+{{--            </button>--}}
+{{--        </form>--}}
 
         <!-- Social Media Links -->
         <div class="flex justify-center space-x-4 mt-6">
-            <a href="https://twitter.com/avinertech" class="text-gray-400 hover:text-white">Twitter</a>
-            <a href="https://linkedin.com/company/avinertech" class="text-gray-400 hover:text-white">LinkedIn</a>
-            <a href="https://avinertech.com" class="text-gray-400 hover:text-white">Website</a>
+{{--            <a href="https://twitter.com/avinertech" class="text-gray-400 hover:text-white">Twitter</a>--}}
+{{--            <a href="https://linkedin.com/company/avinertech" class="text-gray-400 hover:text-white">LinkedIn</a>--}}
+            <a href="mailto:sales@avinertech.com" class="text-gray-400 hover:text-white">Contact</a>
         </div>
     </div>
 
