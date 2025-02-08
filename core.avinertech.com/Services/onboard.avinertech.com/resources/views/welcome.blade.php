@@ -32,7 +32,8 @@
             </style>
         @endif
     </head>
-    <body c   <!-- Email Subscription Form -->--}}
+    <body>
+{{--     Email Subscription--}}
     {{--        <form action="" method="POST" class="mt-6">--}}
     {{--            @csrf--}}
     {{--            <input type="email" name="email" placeholder="Enter your email for updates"--}}
@@ -67,11 +68,8 @@
                     <span id="seconds" class="block text-4xl font-bold">00</span>
                     <span class="text-gray-400">Seconds</span>
                 </div>
-            </div>
+            </div> --}}
 
-    {{--     --}}
-
-        <!-- Social Media Links -->
         <div class="flex justify-center space-x-4 mt-6">
 {{--            <a href="https://twitter.com/avinertech" class="text-gray-400 hover:text-white">Twitter</a>--}}
 {{--            <a href="https://linkedin.com/company/avinertech" class="text-gray-400 hover:text-white">LinkedIn</a>--}}
