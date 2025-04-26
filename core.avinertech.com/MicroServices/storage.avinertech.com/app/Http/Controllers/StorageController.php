@@ -9,8 +9,6 @@ class StorageController extends Controller
 {
     public function index(Request $request)
     {
-//        dd($request->file('file'));
-
         $validated = validator()->make($request->all(), [
             'file' => 'required|file|max:50000', // Max 20MB
         ]);
@@ -23,7 +21,6 @@ class StorageController extends Controller
         }
 
         try {
-            // Store the file on the mounted disk
             $path = $request->file('file')->store('upload', 'sftp');
 
             return response()->json([
@@ -43,8 +40,6 @@ class StorageController extends Controller
 
     public function show(Request $request, $filename)
     {
-        $get = Storage::disk('sftp')->download("upload/$filename");
-
         return Storage::disk('sftp')->download("upload/$filename");
     }
 }

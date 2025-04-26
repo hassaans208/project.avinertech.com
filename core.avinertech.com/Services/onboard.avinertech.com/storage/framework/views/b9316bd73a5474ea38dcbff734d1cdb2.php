@@ -4,11 +4,24 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>Laravel</title>
+        <!-- Title & Description -->
+        <title>Dynamic POS Builder | AvinerTech</title>
+        <meta name="description" content="AI Integrated Dynamic POS Builder. Offers you guided Point Of Sales System Build fully customized accompanied with AI!">
+
+        <!-- Keywords (Optional) -->
+        <meta name="keywords" content="AI, POS Builder, Point Of Sales System, onboard.avinertech.com, File Hosting, Laravel Storage">
+
+        <!-- Author -->
+        <meta name="author" content="AvinerTech">
+
+        <!-- Canonical URL (Prevents Duplicate Content Issues) -->
+        <link rel="canonical" href="https://avinertech.com/">
+
 
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
+        <link rel="icon" href="/favicon.ico" type="image/x-icon">
 
         <!-- Styles / Scripts -->
         <?php if(file_exists(public_path('build/manifest.json')) || file_exists(public_path('hot'))): ?>
@@ -25,7 +38,7 @@
         <!-- Logo -->
         <img src="https://storage.avinertech.com/favicon.ico" alt="AvinerTech Logo" class="w-16 h-16 mx-auto">
         <h1 class="text-4xl md:text-5xl font-bold mt-4">Something Amazing is Coming Soon! 🚀</h1>
-        <p class="text-gray-400 mt-2 text-lg">We are working on an **AI-Integrated POS System** and a **cloud-powered innovation**. Stay tuned for the launch!</p>
+        <p class="text-gray-400 mt-2 text-lg">We are working on an <strong>AI-Integrated POS Builder</strong> and a <strong>cloud-powered innovation</strong>. Stay tuned for the launch!</p>
 
         <!-- Countdown Timer -->
         <div class="flex justify-center space-x-6 mt-6 text-2xl">
@@ -48,21 +61,21 @@
         </div>
 
         <!-- Email Subscription Form -->
-        <form action="" method="POST" class="mt-6">
-            <?php echo csrf_field(); ?>
-            <input type="email" name="email" placeholder="Enter your email for updates"
-                   class="w-full p-3 rounded bg-gray-800 border border-gray-600 text-white focus:ring-2 focus:ring-blue-500">
-            <button type="submit"
-                    class="w-full mt-3 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                Notify Me
-            </button>
-        </form>
+
+
+
+
+
+
+
+
+
 
         <!-- Social Media Links -->
         <div class="flex justify-center space-x-4 mt-6">
-            <a href="https://twitter.com/avinertech" class="text-gray-400 hover:text-white">Twitter</a>
-            <a href="https://linkedin.com/company/avinertech" class="text-gray-400 hover:text-white">LinkedIn</a>
-            <a href="https://avinertech.com" class="text-gray-400 hover:text-white">Website</a>
+
+            <a href="mailto:sales@avinertech.com" class="text-gray-400 hover:text-white">Contact Sales</a>
+
         </div>
     </div>
 
