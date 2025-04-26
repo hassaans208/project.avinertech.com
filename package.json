@@ -10,7 +10,7 @@
     "core.avinertech.com/MicroServices/auth.avinertech.com",
     "core.avinertech.com/Services/developers.avinertech.com",
     "core.avinertech.com/Services/onboard.avinertech.com",
-    "tenant.avinertech.com/Applications/mirza-auth.avinertech.com"
+    "tenant.avinertech.com/Applications/mirza-autos.avinertech.com"
   ],
   "scripts": {
     "install-all": "npm install --workspaces",
