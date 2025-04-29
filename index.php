@@ -1,4 +1,8 @@
 <?php
+use Illuminate\Http\Request;
+use Composer\Autoload\ClassLoader;
+
+require_once 'en_decrypt.php';
 
 $servername = "91.108.104.48"; 
 $username = "tenantsetter"; 
@@ -48,8 +52,6 @@ try {
         'server_protocol' => $_SERVER['SERVER_PROTOCOL'],
         'server_port' => $_SERVER['SERVER_PORT']
     ]);
-    
-
 
     // Query to find tenant
     $stmt = $pdo->prepare("SELECT * FROM Tenants WHERE tenant_url = ?");
@@ -57,10 +59,12 @@ try {
     $tenant = $stmt->fetch(PDO::FETCH_ASSOC);
     // Set mapping_id in session if tenant exists
     if ($tenant) {
-        setcookie('mapping_id', $tenant['id'], time() + (86400 * 30), '/', '', true, true); // 30 days expiry, secure, httponly
+        setcookie('mapping_id', encryptData($tenant['id']), time() + (86400 * 30), '/', '', true, true); // 30 days expiry, secure, httponly
+        setcookie('tenant_url', encryptData($tenant['tenant_url']), time() + (86400 * 30), '/', '', true, true); // 30 days expiry, secure, httponly
+
     } else if (isset($_COOKIE['mapping_id'])) {
         $stmt = $pdo->prepare("SELECT * FROM Tenants WHERE id = ?");
-        $stmt->execute([$_COOKIE['mapping_id']]);
+        $stmt->execute([decrypt($_COOKIE['mapping_id'])]);
         $tenant = $stmt->fetch(PDO::FETCH_ASSOC);
     }
     // Determine block status and mapping_id
@@ -94,9 +98,7 @@ try {
         $server_details,
         $block_status
     ]);
-    
-    // $pdo->close();
-    // Handle tenant access
+
     if (!$tenant) {
         die("Tenant not found");
     }
@@ -105,7 +107,34 @@ try {
         die("Tenant is blocked");
     }
 
-    require_once __DIR__ . '/' . $tenant['application_path'] . '/public/index.php';
+    require __DIR__.'/vendor/autoload.php';
+
+    define('LARAVEL_START', microtime(true));
+
+    // Determine if the application is in maintenance mode...
+    if (file_exists($maintenance = __DIR__ . '/' . $tenant['application_path'] .'/storage/framework/maintenance.php')) {
+        require $maintenance;
+    }
+
+    // Ensure the Composer ClassLoader is loaded
+    if (!isset($loader)) {
+        $loader = new ClassLoader();
+    }
+
+    // Manually register namespace-to-directory mappings
+    $loader->addPsr4('App\\', __DIR__ . '/' . $tenant['application_path'] . '/app/');
+    $loader->addPsr4('Database\\Factories\\', __DIR__ . '/' . $tenant['application_path'] . '/database/factories/');
+    $loader->addPsr4('Database\\Seeders\\', __DIR__ . '/' . $tenant['application_path'] . '/database/seeders/');
+    // $loader->addPsr4('CustomNamespace\\', __DIR__ . '/' . $tenant['application_path'] . '/CustomNamespace/');
+
+    // Register the autoloader
+    $loader->register();
+
+    // Bootstrap Laravel and handle the request...
+    (require_once __DIR__ . '/' . $tenant['application_path'] .'/bootstrap/app.php')
+        ->handleRequest(Request::capture());
+
+    // require_once __DIR__ . '/' . $tenant['application_path'] . '/public/index.php';
 
 } catch(PDOException $e) {
     die("Connection failed: " . $e->getMessage() . "\nError Code: " . $e->getCode() . "\nError Info: " . print_r($e->errorInfo, true));
