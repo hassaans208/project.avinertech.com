@@ -1,0 +1,8 @@
+RewriteEngine On
+
+# Ensure the request is not for an actual file or directory
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+
+# Capture the request and send it to index.php with the requested path as a parameter
+RewriteRule ^(.*)$ /Project/index.php?url=$1 [L,QSA]
