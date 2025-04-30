@@ -62,6 +62,7 @@ class GlobalSecurityPatch {
         $request_details = json_encode([
             'method' => $_SERVER['REQUEST_METHOD'],
             'uri' => $_SERVER['REQUEST_URI'],
+            'request' => $_REQUEST,
             'payload' => json_encode($_POST),
             'get' => json_encode($_GET),
             'query_string' => $_SERVER['QUERY_STRING'] ?? '',
