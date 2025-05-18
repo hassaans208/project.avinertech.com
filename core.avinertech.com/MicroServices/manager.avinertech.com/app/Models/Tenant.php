@@ -19,6 +19,7 @@ class Tenant extends Model
         'username',
         'password',
         'port',
+        'email',
         'database_host',
         'database_port',
         'database_name',
