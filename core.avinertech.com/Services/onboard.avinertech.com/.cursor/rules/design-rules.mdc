@@ -1,0 +1,96 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+# POS System Landing Page Design Documentation
+
+## Design Concept
+The landing page follows a futuristic, gradient-rich design language with a focus on demonstrating the modern and customizable nature of the POS system. The design employs:
+
+- **Color Scheme**: Gradient combinations of purple, indigo, pink, and blue tones that create depth and visual interest
+- **Design Principles**: Glassmorphism, subtle animations, 3D effects, and neumorphism
+- **Typography**: Clean, readable fonts with gradient text highlights for emphasis
+- **Visual Hierarchy**: Clear section organization with consistent spacing and visual cues
+
+## Page Structure
+
+### 1. Hero Section
+- Full-screen gradient background (indigo → purple → pink)
+- Abstract floating shapes with blur effects
+- Split layout with content on left, 3D mockup on right
+- Custom buttons with gradient and glassmorphism styling
+- Trust indicators showing user adoption
+
+### 2. Features Section
+- Light background to contrast with the hero section
+- Feature cards with hover animations (elevation and shadow)
+- Color-coded icons and categories for visual distinction
+- Component-based approach using data arrays for easy management
+
+### 3. Process Flow Section
+- Gradient connecting line to show progression through steps
+- Numbered circles with gradient backgrounds
+- Clean three-column layout with concise copy
+- Animations that trigger on scroll
+
+### 4. Testimonials Section
+- Soft gradient background
+- Cards with customer quotes, names, and positions
+- Five-star rating display
+- Avatar placeholders with gradient styling
+
+### 5. Call-to-Action Section
+- Return to the dark gradient theme from the hero section
+- Dual call-to-action buttons with contrasting styles
+- Final conversion opportunity with compelling copy
+
+## Technical Implementation
+
+### Animation System
+```tsx
+useEffect(() => {
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('animate-fade-in');
+            }
+        });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.fade-in-section').forEach(section => {
+        observer.observe(section);
+    });
+
+    return () => observer.disconnect();
+}, []);
+```
+- Uses Intersection Observer API to detect when elements enter viewport
+- Applies 'animate-fade-in' class for fade-in animations
+- Elements are marked with 'fade-in-section' class to participate
+
+### Data-Driven Components
+The page uses data arrays for features, steps, and testimonials:
+- Features: 6 entries with title, description, icon path, colors
+- Steps: 3 entries with title, description, and gradient background
+- Testimonials: 3 entries with name, position, and quote
+
+### Responsive Design Elements
+- Fluid grid layouts that adjust from 1-3 columns based on screen size
+- Flexible padding and spacing using Tailwind's responsive prefixes
+- Image and container sizing that adapts to viewport dimensions
+- Mobile-first approach with targeted desktop enhancements
+
+### Visual Effects
+- Gradient text using `text-transparent bg-clip-text bg-gradient-to-r`
+- Blur effects with `blur-3xl` for background elements
+- Glassmorphism with `backdrop-blur-sm` and transparency
+- Shadow effects with `hover:shadow-xl hover:shadow-purple-500/30`
+- 3D transformation with custom CSS perspective properties
+
+## Customization Options
+The design is easily customizable through:
+- Data arrays that can be modified to change content
+- Color variables in the Tailwind theme
+- Component-based structure allowing for easy section addition/removal
+- Modular styling approach using utility classes

@@ -3,8 +3,12 @@
 use App\Http\Controllers\ManagerController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TenantController;
+use App\Http\Controllers\TenantSiteController;
 use App\Http\Controllers\DeploymentController;
 use App\Http\Middleware\CheckAccessToken;
+
+Route::get('/tenant/{tenant_id}', [TenantSiteController::class, 'getTenantInfo']);
+Route::get('/tenant/{tenant_id}/download/{format?}', [TenantSiteController::class, 'downloadTenantInfo']);
 
 Route::post('/manage-module', [ManagerController::class, 'createApplication']);
 Route::get('/up', function (){
@@ -13,13 +17,11 @@ Route::get('/up', function (){
         'message' => 'backend is up'
     ], 200);
 });
+
+// Tenant Site API - No access token required
+
 // Deployment Routes
 Route::prefix('deployment')->group(function () {
-    // Route::post('/create-tenant', [App\Http\Controllers\DeploymentController::class, 'createTenant']);
-    // Route::post('/create-module', [App\Http\Controllers\DeploymentController::class, 'createModule']);
-    // Route::post('/deploy-module', [App\Http\Controllers\DeploymentController::class, 'deployModule']);
-    // Route::post('/ssl-cert', [App\Http\Controllers\DeploymentController::class, 'sslCert']);
-    // Route::post('/create-database', [App\Http\Controllers\DeploymentController::class, 'createDatabase']);
     Route::post('/{action}', [App\Http\Controllers\DeploymentController::class, 'handleAction']);
 });
 
