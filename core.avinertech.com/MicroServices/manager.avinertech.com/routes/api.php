@@ -7,9 +7,6 @@ use App\Http\Controllers\TenantSiteController;
 use App\Http\Controllers\DeploymentController;
 use App\Http\Middleware\CheckAccessToken;
 
-Route::get('/tenant/{tenant_id}', [TenantSiteController::class, 'getTenantInfo']);
-Route::get('/tenant/{tenant_id}/download/{format?}', [TenantSiteController::class, 'downloadTenantInfo']);
-
 Route::post('/manage-module', [ManagerController::class, 'createApplication']);
 Route::get('/up', function (){
     return response()->json([
@@ -19,6 +16,8 @@ Route::get('/up', function (){
 });
 
 // Tenant Site API - No access token required
+Route::get('/tenant/{tenant_id}', [TenantSiteController::class, 'getTenantInfo']);
+Route::get('/tenant/{tenant_id}/download/{format?}', [TenantSiteController::class, 'downloadTenantInfo']);
 
 // Deployment Routes
 Route::prefix('deployment')->group(function () {

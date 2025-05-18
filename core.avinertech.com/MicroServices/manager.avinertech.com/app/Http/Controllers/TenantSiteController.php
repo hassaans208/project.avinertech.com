@@ -19,10 +19,9 @@ class TenantSiteController extends Controller
     public function getTenantInfo(Request $request, $tenant_id): JsonResponse
     {
         try {
-            dd($tenant_id);
             // Find the tenant by tenant_id (not the primary key)
             $tenant = Tenant::where('tenant_id', $tenant_id)->first();
-            dd($tenant);
+
             if (!$tenant) {
                 return response()->json([
                     'success' => false,
