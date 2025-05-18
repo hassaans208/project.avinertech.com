@@ -9,7 +9,7 @@ return new class extends Migration
 {
     public function up()
     {
-        Schema::connection('main')->create('Tenant', function (Blueprint $table) {
+        Schema::create('Tenant', function (Blueprint $table) {
             $table->id();
             $table->string('host', 255);
             $table->string('username', 255);
@@ -37,12 +37,12 @@ return new class extends Migration
         });
 
         // Add encryption for sensitive fields
-        DB::connection('main')->statement('ALTER TABLE Tenant MODIFY password VARBINARY(255)');
-        DB::connection('main')->statement('ALTER TABLE Tenant MODIFY database_password VARBINARY(255)');
+        DB::statement('ALTER TABLE Tenant MODIFY password VARBINARY(255)');
+        DB::statement('ALTER TABLE Tenant MODIFY database_password VARBINARY(255)');
     }
 
     public function down()
     {
-        Schema::connection('main')->dropIfExists('tenants');
+        Schema::dropIfExists('tenants');
     }
 };

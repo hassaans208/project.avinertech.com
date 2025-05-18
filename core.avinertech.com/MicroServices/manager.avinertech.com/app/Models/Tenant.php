@@ -10,7 +10,7 @@ class Tenant extends Model
 {
     use SoftDeletes;
 
-    protected $connection = 'main';
+    // protected $connection = 'main';
     protected $table = 'Tenant';
 
     protected $fillable = [
