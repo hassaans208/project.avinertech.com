@@ -47,7 +47,7 @@ if [ $? -ne 0 ]; then
 fi
 
 # Restart nginx
-systemctl restart nginx
+# systemctl restart nginx
 if [ $? -eq 0 ]; then
     echo -e "${GREEN}Success: Nginx configuration deployed and service restarted${NC}"
     echo -e "${YELLOW}Site available at: ${APP_NAME}.avinertech.com${NC}"
