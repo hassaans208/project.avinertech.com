@@ -22,6 +22,8 @@ return new class extends Migration
             $table->string('database_user', 255);
             $table->string('database_password', 255);
             $table->boolean('is_active')->default(true);
+            $table->boolean('paid')->default(true);
+            $table->boolean('blocked')->default(false);
             $table->timestamp('last_connection_at')->nullable();
             $table->text('connection_log')->nullable();
             $table->timestamps();
@@ -29,6 +31,8 @@ return new class extends Migration
 
             // Indexes
             $table->index('is_active');
+            $table->index('paid');
+            $table->index('blocked');
             $table->index('last_connection_at');
         });
 
