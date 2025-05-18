@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;   // For File::exists(), File::copyDirectory(), etc.
+use Illuminate\Support\Facades\Process;
 
 class MicroServiceCommand extends Command
 {
@@ -97,25 +98,28 @@ class MicroServiceCommand extends Command
             . trim($basicBuild, DIRECTORY_SEPARATOR);
 
         try {
-            File::makeDirectory($filePath, 0755, true);
+            // Get SSH connection details
+            $sshConnection = config('sshpass.connection.main');
 
-            if (! File::exists($basicPath)) {
-                throw new \Exception("Source path [{$basicPath}] does not exist!");
+            // Execute the shell script
+            $process = Process::run([
+                base_path('app/Console/Commands/create-module.sh'),
+                $module,
+                $submodule, 
+                $appName,
+                $sshConnection['ip'],
+                base64_decode($sshConnection['password'])
+            ]);
+
+            if (!$process->successful()) {
+                throw new \Exception("Failed to create module structure: " . $process->errorOutput());
             }
-
-            File::copyDirectory($basicPath, $filePath);
 
             $this->info("New project [{$appName}] has been built successfully!");
             return 0;
 
         } catch (\Exception $e) {
-            // Cleanup (remove the newly created directory)
-            if (is_dir($filePath)) {
-                File::deleteDirectory($filePath);
-            }
-
             $this->error("Error: " . $e->getMessage());
-            $this->info("Rolled back creation of [{$appName}] safely.");
             return 1;
         }
     }

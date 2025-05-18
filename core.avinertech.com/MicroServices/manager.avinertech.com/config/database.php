@@ -31,6 +31,26 @@ return [
 
     'connections' => [
 
+        'main' => [
+            'driver' => 'mysql',
+            'url' => env('MAIN_DB_URL'),
+            'host' => env('MAIN_DB_HOST', '127.0.0.1'),
+            'port' => env('MAIN_DB_PORT', '3306'),
+            'database' => env('MAIN_DB_DATABASE', 'laravel'),
+            'username' => env('MAIN_DB_USERNAME', 'root'),
+            'password' => env('MAIN_DB_PASSWORD', ''),
+            'unix_socket' => env('MAIN_DB_SOCKET', ''),
+            'charset' => env('MAIN_DB_CHARSET', 'utf8mb4'),
+            'collation' => env('MAIN_DB_COLLATION', 'utf8mb4_unicode_ci'),
+            'prefix' => '',
+            'prefix_indexes' => true,
+            'strict' => true,
+            'engine' => null,
+            'options' => extension_loaded('pdo_mysql') ? array_filter([
+                PDO::MYSQL_ATTR_SSL_CA => env('MAIN_MYSQL_ATTR_SSL_CA'),
+            ]) : [],
+        ],
+
         'sqlite' => [
             'driver' => 'sqlite',
             'url' => env('DB_URL'),

@@ -1,4 +1,7 @@
 <?php
 
 $base = __DIR__;
-require  "$base/../../../global-autoloader.php";
+
+$loaderBinding = [];
+
+require __DIR__.'/../../../global-autoloader.php';

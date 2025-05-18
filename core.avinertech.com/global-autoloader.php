@@ -26,7 +26,7 @@ $defaultLoaderBinding = [
 
 $loaderBinding = array_merge($loaderBinding, $defaultLoaderBinding);
 foreach ($loaderBinding as $class => $dir) $loader->addPsr4($class,  "$base$dir");
-$loader->addPsr4('App\\Models\\',  __DIR__."/Services/migrator.avinertech.com/app/Models");
+// $loader->addPsr4('App\\Models\\',  __DIR__."/Services/migrator.avinertech.com/app/Models");
 $loader->register();
 
 // Bootstrap Laravel and handle the request...
