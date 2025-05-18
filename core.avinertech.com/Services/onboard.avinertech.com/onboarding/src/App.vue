@@ -285,7 +285,7 @@ export default {
     }
 
     const makeApiCall = async (endpoint, data) => {
-      const response = await fetch(`http://manager.avinertech.local/api/deployment/${endpoint}?token=aGFzc2FhblNoYXJpcTI3OTAx`, {
+      const response = await fetch(`https://manager.avinertech.com/api/deployment/${endpoint}?token=aGFzc2FhblNoYXJpcTI3OTAx`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -354,7 +354,7 @@ export default {
       }
 
       try {
-        const response = await fetch('http://manager.avinertech.local/api/deployment/create-tenant?token=aGFzc2FhblNoYXJpcTI3OTAx', {
+        const response = await fetch('https://manager.avinertech.com/api/deployment/create-tenant?token=aGFzc2FhblNoYXJpcTI3OTAx', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
