@@ -28,23 +28,23 @@ Route::post('/api/modules', [DeploymentController::class, 'createModule'])->name
 // Main routes protected by access token
 Route::middleware([CheckAccessToken::class])->group(function () {
     // Dashboard
-    Route::get('/', [TenantController::class, 'index'])->name('index');
+    Route::get('/', [TenantController::class, 'index']);
     
     // Tenant CRUD Routes
-    Route::get('/tenants', [TenantController::class, 'index'])->name('tenants.index');
-    Route::get('/tenants/create', [TenantController::class, 'create'])->name('tenants.create');
-    Route::post('/tenants', [TenantController::class, 'store'])->name('tenants.store');
-    Route::get('/tenants/{tenant}/edit', [TenantController::class, 'edit'])->name('tenants.edit');
-    Route::put('/tenants/{tenant}', [TenantController::class, 'update'])->name('tenants.update');
-    Route::delete('/tenants/{tenant}', [TenantController::class, 'destroy'])->name('tenants.destroy');
+    Route::get('/tenants', [TenantController::class, 'index']);
+    Route::get('/tenants/create', [TenantController::class, 'create']);
+    Route::post('/tenants', [TenantController::class, 'store']);
+    Route::get('/tenants/{tenant}/edit', [TenantController::class, 'edit']);
+    Route::put('/tenants/{tenant}', [TenantController::class, 'update']);
+    Route::delete('/tenants/{tenant}', [TenantController::class, 'destroy']);
     
     // Tenant Status Actions
-    Route::post('/tenants/{tenant}/toggle-payment', [TenantController::class, 'togglePayment'])->name('tenants.toggle-payment');
-    Route::post('/tenants/{tenant}/toggle-block', [TenantController::class, 'toggleBlock'])->name('tenants.toggle-block');
+    Route::post('/tenants/{tenant}/toggle-payment', [TenantController::class, 'togglePayment']);
+    Route::post('/tenants/{tenant}/toggle-block', [TenantController::class, 'toggleBlock']);
     
     // Deployment Actions
-    Route::post('/tenants/{tenant}/create-module', [DeploymentController::class, 'createModule'])->name('tenants.create-module');
-    Route::post('/tenants/{tenant}/deploy-module', [DeploymentController::class, 'deployModule'])->name('tenants.deploy-module');
-    Route::post('/tenants/{tenant}/ssl-cert', [DeploymentController::class, 'sslCert'])->name('tenants.ssl-cert');
-    Route::post('/tenants/{tenant}/create-database', [DeploymentController::class, 'createDatabase'])->name('tenants.create-database');
+    Route::post('/tenants/{tenant}/create-module', [DeploymentController::class, 'createModule']);
+    Route::post('/tenants/{tenant}/deploy-module', [DeploymentController::class, 'deployModule']);
+    Route::post('/tenants/{tenant}/ssl-cert', [DeploymentController::class, 'sslCert']);
+    Route::post('/tenants/{tenant}/create-database', [DeploymentController::class, 'createDatabase']);
 });
