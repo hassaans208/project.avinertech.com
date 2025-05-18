@@ -3,12 +3,15 @@ import { fileURLToPath, URL } from 'node:url'
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import vueDevTools from 'vite-plugin-vue-devtools'
+import tailwindcss from '@tailwindcss/vite'
 
 // https://vite.dev/config/
+
 export default defineConfig({
   plugins: [
     vue(),
-    vueDevTools(),
+    tailwindcss()
+    // vueDevTools(),
   ],
   resolve: {
     alias: {
@@ -16,6 +19,6 @@ export default defineConfig({
     },
   },
   server: {
-    allowedHosts: ['onboard.avinertech.com', 'avinertech.com'],
+    allowedHosts: ['onboard.avinertech.com', 'avinertech.com', 'localhost', '127.0.0.1']
   },
 })

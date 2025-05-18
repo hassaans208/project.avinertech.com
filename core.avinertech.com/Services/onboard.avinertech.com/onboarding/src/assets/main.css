@@ -1,1 +1,4 @@
 @import './base.css';
+/* @tailwind base; */
+/* @tailwind components; */
+@import 'tailwindcss';
