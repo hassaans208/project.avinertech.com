@@ -25,6 +25,7 @@ class Tenant extends Model
         'database_name',
         'database_user',
         'database_password',
+        'application_path',
         'is_active',
         'last_connection_at',
         'connection_log'

@@ -285,6 +285,7 @@ class SshService
                     }
 
                     if(!$tenant) {
+                        $request['application_path'] = $this->getSourceAndTargetPaths('tenant', 'custom-app', $request['host'])['target_path'];
                         $tenant = Tenant::create($request);
                     }
 

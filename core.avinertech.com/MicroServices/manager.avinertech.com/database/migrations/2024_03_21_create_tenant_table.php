@@ -26,6 +26,7 @@ return new class extends Migration
             $table->boolean('blocked')->default(false);
             $table->timestamp('last_connection_at')->nullable();
             $table->text('connection_log')->nullable();
+            $table->string('application_path', 255);
             $table->timestamps();
             $table->softDeletes();
 

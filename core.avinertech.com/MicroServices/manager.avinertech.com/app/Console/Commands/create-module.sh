@@ -33,10 +33,14 @@ mkdir -p "$TARGET_PATH"
 # Copy files with error handling
 if cp -R "$SOURCE_PATH"/* "$TARGET_PATH"/; then
     cp "$SOURCE_PATH/.env.example" "$TARGET_PATH/.env"
-    cd "$TARGET_PATH" && php artisan key:generate && php artisan optimize
+    cd "$TARGET_PATH" && php artisan key:generate && php artisan optimize:clear && php artisan optimize
     chown -R www-data:www-data "$TARGET_PATH/storage"
     chown -R www-data:www-data "$TARGET_PATH/storage/framework/views"
     chown -R www-data:www-data "$TARGET_PATH/bootstrap/cache"
+    chown -R www-data:root "$TARGET_PATH/database/database.sqlite"
+    chmod -R 664 "$TARGET_PATH/database/database.sqlite"
+    chmod -R 775 "$TARGET_PATH/database"
+    cd "$TARGET_PATH" && php artisan migrate:fresh --seed
     echo -e "${GREEN}Success: Files copied successfully!${NC}"
     echo -e "${YELLOW}Location: $TARGET_PATH${NC}"
     exit 0
