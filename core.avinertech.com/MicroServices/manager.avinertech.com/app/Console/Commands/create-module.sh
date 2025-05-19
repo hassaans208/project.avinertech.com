@@ -40,8 +40,10 @@ if cp -R "$SOURCE_PATH"/* "$TARGET_PATH"/; then
     chown -R www-data:root "$TARGET_PATH/database/database.sqlite"
     chmod -R 664 "$TARGET_PATH/database/database.sqlite"
     chmod -R 775 "$TARGET_PATH/database"
+    chown -R www-data:root "$TARGET_PATH/database"
     cd "$TARGET_PATH" && php artisan migrate:fresh --seed
     echo -e "${GREEN}Success: Files copied successfully!${NC}"
+    echo -e "${GREEN}Success: Database migrated and seeded successfully!${NC}"
     echo -e "${YELLOW}Location: $TARGET_PATH${NC}"
     exit 0
 else
