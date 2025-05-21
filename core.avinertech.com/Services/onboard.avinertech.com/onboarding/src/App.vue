@@ -346,6 +346,11 @@ export default {
 
     const submitForm = async () => {
       // Create separate payload with email and username
+      if (formData.value.host === '') {
+        tenantError.value = 'Host is required'
+        return
+      }
+
       const fullFormData = {
         ...formData.value,
         host: formData.value.host + '.avinertech.com',
