@@ -347,7 +347,8 @@ export default {
     const submitForm = async () => {
       // Create separate payload with email and username
       if (formData.value.host === '') {
-        tenantError.value = 'Host is required'
+        tenantError.value = 'Host is required';
+        currentStep.value = 1;
         return
       }
 
