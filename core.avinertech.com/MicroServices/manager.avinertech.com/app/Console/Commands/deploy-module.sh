@@ -36,7 +36,7 @@ sed -i "s|root .*;|root ${APP_PATH}/public;|g" "$CONFIG_FILE"
 
 # Create symbolic link if it doesn't exist
 if [ ! -L "${SITES_ENABLED}/${APP_NAME}" ]; then
-    ln -s "$CONFIG_FILE" "${SITES_ENABLED}/${APP_NAME}.avinertech.com"
+    ln -s "$CONFIG_FILE" "${SITES_ENABLED}/${APP_NAME}"
 fi
 
 # Test nginx configuration
@@ -50,7 +50,7 @@ fi
 # systemctl restart nginx
 if [ $? -eq 0 ]; then
     echo -e "${GREEN}Success: Nginx configuration deployed and service restarted${NC}"
-    echo -e "${YELLOW}Site available at: ${APP_NAME}.avinertech.com${NC}"
+    echo -e "${YELLOW}Site available at: ${APP_NAME}${NC}"
     exit 0
 else
     echo -e "${RED}Error: Failed to restart nginx${NC}"
