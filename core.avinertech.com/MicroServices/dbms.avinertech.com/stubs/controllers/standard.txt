@@ -1,0 +1,21 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\ColumnType;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
+
+class {{CONTROLLER_NAME}} extends Controller
+{
+    public function index()
+    {
+        return view('{{RESOURCE_NAME}}.index');
+    }
+
+    public function create()
+    {
+        return view('{{RESOURCE_NAME}}.index');
+    }
+  
+} 

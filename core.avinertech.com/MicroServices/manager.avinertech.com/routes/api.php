@@ -33,6 +33,7 @@ Route::middleware([CheckAccessToken::class])->group(function () {
     
     // Tenant CRUD Routes
     Route::get('/tenants', [TenantController::class, 'index']);
+    Route::get('/tenants/host/{host}', [TenantController::class, 'index']);
     Route::get('/tenants/create', [TenantController::class, 'create']);
     Route::post('/tenants', [TenantController::class, 'store']);
     Route::get('/tenants/{tenant}/edit', [TenantController::class, 'edit']);

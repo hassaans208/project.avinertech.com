@@ -1,0 +1,57 @@
+#!/usr/bin/env php
+<?php
+
+use Symfony\Component\Console\Input\ArgvInput;
+require __DIR__.'/vendor/autoload.php';
+use Composer\Autoload\ClassLoader;
+
+$base = '';
+$system = '';
+$loaderBinding = [];
+
+define('LARAVEL_START', microtime(true));
+
+if (!isset($loader)) {
+    $loader = new ClassLoader();
+}
+
+$defaultLoaderBinding = [
+    'App\\' => '/app/',
+    'Database\\Factories\\' => '/database/factories/',
+    'Database\\Seeders\\' => '/database/seeders/',
+];
+
+// Define available modules and their paths
+$modules = [
+    'dbms' => '/core.avinertech.com/MicroServices/dbms.avinertech.com',
+    'migrator' => '/core.avinertech.com/Services/migrator.avinertech.com',
+    'tenant-stubs' => '/tenant.avinertech.com/Stubs/demo.avinertech.com',
+    // Add other modules as needed
+];
+
+$input = new ArgvInput;
+$args = $_SERVER['argv'];
+$moduleArg = end($args); // Get last argument as module name
+
+// Validate module exists
+if (!isset($modules[$moduleArg])) {
+    die("Error: Module '$moduleArg' not found. Available modules: " . implode(', ', array_keys($modules)) . "\n");
+}
+
+$system = $modules[$moduleArg];
+$base = __DIR__;
+
+$loaderBinding = array_merge($loaderBinding, $defaultLoaderBinding);
+foreach ($loaderBinding as $class => $dir) {
+    $loader->addPsr4($class, "$base$system$dir");
+}
+$loader->register();
+
+// Remove module argument before passing to Laravel
+array_pop($_SERVER['argv']);
+$input = new ArgvInput($_SERVER['argv']);
+
+$app = require_once "$base$system/bootstrap/app.php";
+$status = $app->handleCommand($input);
+
+exit($status);

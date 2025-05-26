@@ -33,6 +33,17 @@ mkdir -p "$TARGET_PATH"
 # Copy files with error handling
 if cp -R "$SOURCE_PATH"/* "$TARGET_PATH"/; then
     cp "$SOURCE_PATH/.env.example" "$TARGET_PATH/.env"
+    # Extract app name and domain from target path using regex
+    DOMAIN=$(echo "$TARGET_PATH" | grep -oP '[^\/]+\.[^\/]+$')
+    
+    # Replace localhost with appname.domain in .env file
+    if [ -n "$DOMAIN" ]; then
+        sed -i "s|http://localhost|https://${DOMAIN}|g" "$TARGET_PATH/.env"
+        echo -e "${GREEN}Updated APP_URL in .env to https://${DOMAIN}${NC}"
+    else
+        echo -e "${YELLOW}Warning: Could not extract domain from target path${NC}"
+    fi
+
     cd "$TARGET_PATH" && php artisan key:generate && php artisan optimize:clear && php artisan optimize
     chown -R www-data:www-data "$TARGET_PATH/storage"
     chown -R www-data:www-data "$TARGET_PATH/storage/framework/views"
@@ -41,9 +52,11 @@ if cp -R "$SOURCE_PATH"/* "$TARGET_PATH"/; then
     chmod -R 664 "$TARGET_PATH/database/database.sqlite"
     chmod -R 775 "$TARGET_PATH/database"
     chown -R www-data:root "$TARGET_PATH/database"
-    cd "$TARGET_PATH" && php artisan migrate:fresh --seed
+    cd "$TARGET_PATH" && php artisan migrate:fresh --seed && php artisan ziggy:generate && npm run build
     echo -e "${GREEN}Success: Files copied successfully!${NC}"
     echo -e "${GREEN}Success: Database migrated and seeded successfully!${NC}"
+    echo -e "${GREEN}Success: Ziggy generated successfully!${NC}"
+    echo -e "${GREEN}Success: NPM build successfully!${NC}"
     echo -e "${YELLOW}Location: $TARGET_PATH${NC}"
     exit 0
 else

@@ -235,4 +235,35 @@ class TenantController extends Controller
             return back()->with('error', 'Failed to update block status.');
         }
     }
+
+    /**
+     * Get tenant details by host domain.
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getTenantByHost()
+    {
+        try {
+            $host = request()->getHost();
+            
+            $tenant = Tenant::where('host', $host)->firstOrFail();
+
+            return response()->json([
+                'status' => 'success',
+                'data' => $tenant
+            ]);
+
+        } catch (ModelNotFoundException $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Tenant not found'
+            ], 404);
+        } catch (\Exception $e) {
+            Log::error('Failed to fetch tenant by host: ' . $e->getMessage());
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Failed to fetch tenant details'
+            ], 500);
+        }
+    }
 } 
