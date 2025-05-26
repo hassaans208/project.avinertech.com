@@ -241,10 +241,10 @@ class TenantController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function getTenantByHost()
+    public function getTenantByHost(Request $request, $host)
     {
         try {
-            $host = request()->getHost();
+            // $host = request()->getHost();
             
             $tenant = Tenant::where('host', $host)->firstOrFail();
 
