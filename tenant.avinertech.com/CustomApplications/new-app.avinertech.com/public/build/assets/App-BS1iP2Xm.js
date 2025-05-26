@@ -1,1 +1,0 @@
-import{u as t}from"./auth-By0yUZmG.js";import{o as r,r as s,c as n,a,b as c}from"./app-Ccdyq44E.js";/* empty css            */const i={class:"min-h-screen bg-gray-900"},h={__name:"App",setup(_){const e=t();return r(()=>{e.initialize()}),(p,m)=>{const o=s("router-view");return a(),n("div",i,[c(o)])}}};export{h as default};

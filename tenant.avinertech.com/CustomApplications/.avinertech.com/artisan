@@ -1,7 +1,0 @@
-#!/usr/bin/env php
-<?php
-
-$base = __DIR__;
-$system = '';
-$loaderBinding = [];
-require_once $base . '/../../global-artisan.php';
