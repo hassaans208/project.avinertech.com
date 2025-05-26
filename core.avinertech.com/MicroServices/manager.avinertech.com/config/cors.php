@@ -22,7 +22,8 @@ return [
         'http://localhost:3000',
         'http://localhost:3001',
         'https://onboard.avinertech.com',
-        'http://demo.avinertech.local'
+        'http://demo.avinertech.local',
+        'http://*.avinertech.local',
     ],
 
     'allowed_origins_patterns' => [],
