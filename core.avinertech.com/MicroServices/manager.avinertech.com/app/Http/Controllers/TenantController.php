@@ -276,7 +276,7 @@ class TenantController extends Controller
                 'phone' => 'required|string|max:20',
                 'address' => 'nullable|string|max:500',
                 'username' => 'required|string|max:255',
-                'password' => 'required|string|min:8',
+                // 'password' => 'required|string|min:8',
             ]);
 
             $tenant = Tenant::where('host', $host)->firstOrFail();
