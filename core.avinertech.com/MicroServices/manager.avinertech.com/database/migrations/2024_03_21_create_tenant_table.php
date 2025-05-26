@@ -12,6 +12,9 @@ return new class extends Migration
         Schema::create('Tenant', function (Blueprint $table) {
             $table->id();
             $table->string('host', 255);
+            $table->string('company_name', 255);
+            $table->string('address', 255);
+            $table->string('phone', 255);
             $table->string('username', 255);
             $table->string('email', 255);
             $table->string('password', 255);
