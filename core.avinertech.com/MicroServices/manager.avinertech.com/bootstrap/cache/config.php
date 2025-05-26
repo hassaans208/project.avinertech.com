@@ -1,6 +1,5 @@
 <?php return array (
   1 => 'hashing',
-  2 => 'cors',
   5 => 'concurrency',
   12 => 'broadcasting',
   'app' => 
@@ -205,6 +204,38 @@
     ),
     'prefix' => '',
     'cache' => '/var/www/sites/project.avinertech.com/core.avinertech.com/MicroServices/manager.avinertech.com/storage/framework/cache',
+  ),
+  'cors' => 
+  array (
+    'paths' => 
+    array (
+      0 => 'api/*',
+      1 => 'tenant/*',
+      2 => 'sanctum/csrf-cookie',
+    ),
+    'allowed_methods' => 
+    array (
+      0 => '*',
+    ),
+    'allowed_origins' => 
+    array (
+      0 => 'http://localhost:3000',
+      1 => 'http://localhost:3001',
+      2 => 'https://onboard.avinertech.com',
+      3 => 'http://demo.avinertech.local',
+    ),
+    'allowed_origins_patterns' => 
+    array (
+    ),
+    'allowed_headers' => 
+    array (
+      0 => '*',
+    ),
+    'exposed_headers' => 
+    array (
+    ),
+    'max_age' => 0,
+    'supports_credentials' => false,
   ),
   'database' => 
   array (
@@ -705,34 +736,6 @@
       'verify' => true,
     ),
     'rehash_on_login' => true,
-  ),
-  'cors' => 
-  array (
-    'paths' => 
-    array (
-      0 => 'api/*',
-      1 => 'sanctum/csrf-cookie',
-    ),
-    'allowed_methods' => 
-    array (
-      0 => '*',
-    ),
-    'allowed_origins' => 
-    array (
-      0 => '*',
-    ),
-    'allowed_origins_patterns' => 
-    array (
-    ),
-    'allowed_headers' => 
-    array (
-      0 => '*',
-    ),
-    'exposed_headers' => 
-    array (
-    ),
-    'max_age' => 0,
-    'supports_credentials' => false,
   ),
   'concurrency' => 
   array (

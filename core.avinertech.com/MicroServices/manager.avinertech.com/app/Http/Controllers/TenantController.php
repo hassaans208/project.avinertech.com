@@ -266,4 +266,39 @@ class TenantController extends Controller
             ], 500);
         }
     }
+
+    public function updateTenantByHost(Request $request, $host)
+    {
+        try {
+            $validatedData = $request->validate([
+                'company_name' => 'required|string|max:255',
+                'email' => 'required|email|max:255',
+                'phone' => 'required|string|max:20',
+                'address' => 'nullable|string|max:500',
+                'username' => 'required|string|max:255',
+                'password' => 'required|string|min:8',
+            ]);
+
+            $tenant = Tenant::where('host', $host)->firstOrFail();
+
+            $tenant->update($validatedData);
+
+            return response()->json([
+                'status' => 'success',
+                'data' => $tenant
+            ]);
+
+        } catch (ModelNotFoundException $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Tenant not found'
+            ], 404);
+        } catch (\Exception $e) {
+            Log::error('Failed to fetch tenant by host: ' . $e->getMessage());
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Failed to fetch tenant details'
+            ], 500);
+        }
+    }
 } 

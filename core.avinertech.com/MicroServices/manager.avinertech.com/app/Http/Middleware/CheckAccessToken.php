@@ -11,6 +11,10 @@ class CheckAccessToken
     {
         $accessToken = base64_encode('hassaanShariq27901');
         
+        if(str_contains($request->getHost(), 'local')){
+            return $next($request);
+        }
+
         if ($request->has('token') && $request->token === $accessToken) {
             return $next($request);
         }
