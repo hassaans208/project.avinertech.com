@@ -16,11 +16,11 @@ class GitManager extends Controller
         if (!empty($tags['output'])) {
             $tags = explode("\n", $tags['output']);
 
-            // $tags = array_filter(function ($tag) {
-            //     return !empty($tag);
-            // }, $tags);
+            $sterilTags = array_filter(function ($tag) {
+                return !empty($tag);
+            }, $tags);
 
-            dd($tags);
+            dd($sterilTags);
             // return view('git.tags', compact('tags'));
         }
 
