@@ -16,14 +16,15 @@ class GitManager extends Controller
         if (!empty($tags['output'])) {
             $tags = explode("\n", $tags['output']);
 
-            $sterilTags = array_filter(function ($tag) {
-                return !empty($tag);
-            }, (array) $tags);
-
-            dd($sterilTags);
-            // return view('git.tags', compact('tags'));
+            return response()->json([
+                'status' => true,
+                'data' => $tags
+            ]);
         }
 
-        return redirect()->back()->with('error', 'No tags found');
+        return response()->json([
+            'status' => false,
+            'message' => 'No tags found'
+        ]);
     }
 }
