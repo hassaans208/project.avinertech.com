@@ -12,7 +12,13 @@ class GitManager extends Controller
     {
         $sshService = new SshService();
         $tags = $sshService->getGitTags();
-        dd($tags);
-        // return view('git.tags', compact('tags'));
+
+        if (!empty($tags['output'])) {
+            $tags = explode("\n", $tags['output']);
+            dd($tags);
+            // return view('git.tags', compact('tags'));
+        }
+
+        return redirect()->back()->with('error', 'No tags found');
     }
 }
