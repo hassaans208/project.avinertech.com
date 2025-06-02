@@ -10,7 +10,8 @@ class GitManager extends Controller
 {
     public function showTags()
     {
-        $tags = SshService::getGitTags();
+        $sshService = new SshService();
+        $tags = $sshService->getGitTags();
         dd($tags);
         // return view('git.tags', compact('tags'));
     }
