@@ -34,7 +34,8 @@ class SshService
         self::ACTION_SSL_CERT => 'ssl-cert.sh',
         self::ACTION_GET_LOG => 'get-log.sh',
         self::ACTION_CREATE_TENANT_DB => 'create-tenant-db.sh',
-        self::ACTION_CREATE_TENANT => 'create-tenant'
+        self::ACTION_CREATE_TENANT => 'create-tenant',
+        self::ACTION_GET_GIT_TAGS => 'git-tag.sh'
     ];
 
     // Map actions to their streaming requirements
@@ -295,6 +296,12 @@ class SshService
                         'message' => 'Tenant created successfully',
                         'data' => $tenant
                     ];
+            case self::ACTION_GET_GIT_TAGS:
+                return $this->buildSshCommand(
+                    $scriptContent,
+                    [],
+                    $options['use_heredoc'] ?? false
+                );
             default:
                 return $result;
         }
@@ -382,5 +389,10 @@ class SshService
             self::ACTION_CREATE_MODULE,
             [$paths['source_path'], $paths['target_path']]
         );
+    }
+
+    public function getGitTags()
+    {
+        return $this->executeAction(self::ACTION_GET_GIT_TAGS, [], [], []);
     }
 }

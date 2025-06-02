@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\ManagerController;
+use App\Http\Controllers\{ManagerController, GitManager};
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TenantController;
 use App\Http\Controllers\TenantSiteController;
@@ -50,4 +50,8 @@ Route::middleware([CheckAccessToken::class])->group(function () {
     Route::post('/tenants/{tenant}/deploy-module', [DeploymentController::class, 'deployModule']);
     Route::post('/tenants/{tenant}/ssl-cert', [DeploymentController::class, 'sslCert']);
     Route::post('/tenants/{tenant}/create-database', [DeploymentController::class, 'createDatabase']);
+});
+
+Route::prefix('git')->group(function () {
+    Route::get('/tags', [GitManager::class, 'showTags']);
 });
