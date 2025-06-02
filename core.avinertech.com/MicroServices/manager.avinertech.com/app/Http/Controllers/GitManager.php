@@ -18,7 +18,7 @@ class GitManager extends Controller
 
             $sterilTags = array_filter(function ($tag) {
                 return !empty($tag);
-            }, $tags);
+            }, (array) $tags);
 
             dd($sterilTags);
             // return view('git.tags', compact('tags'));
