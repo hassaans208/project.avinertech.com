@@ -25,6 +25,7 @@ class SshService
     const ACTION_GET_LOG = 'get-log';
     const ACTION_CREATE_TENANT_DB = 'create-tenant-db';
     const ACTION_CREATE_TENANT = 'create-tenant';
+    const ACTION_GET_GIT_TAGS = 'get-tags';
 
     // Map actions to their script files
     private $actionScripts = [
