@@ -24,6 +24,8 @@ return [
         'https://onboard.avinertech.com',
         'http://demo.avinertech.local',
         'http://*.avinertech.local',
+        'https://prototype.avinertech.com',
+        'https://*.avinertech.com',
     ],
 
     'allowed_origins_patterns' => [],
