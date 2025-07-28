@@ -24,7 +24,7 @@ class SignalService
     /**
      * Handle the signal processing
      */
-    public function handle(string $encryptedHostId, string $hash): array
+    public function handle(string $encryptedHostId, ?string $hash = null): array
     {
         $signalLog = new SignalLog([
             'encrypted_host_id' => $encryptedHostId,
@@ -44,27 +44,35 @@ class SignalService
             // Step 3: Validate tenant status
             $this->validateTenant($tenant);
 
-            // Check if hash is empty (first-time connection)
-            if (empty($hash)) {
-                return $this->handleFirstTimeConnection($tenant, $signalLog);
+            if(empty($hash)) {
+                $hash = $tenant->createHash();
+
+                return [
+                    'success' => true,
+                    'action' => 'create_hash',
+                    'action_data' => $hash
+                ];
             }
 
-            // Step 4: Parse and validate hash (subsequent connections)
-            $hashData = $this->parseHash($hash, $host);
+            // Step 4: Parse and validate hash
+            $hashData = $this->parseHash($hash, $host, $tenant);
             $signalLog->package_name = $hashData['package_name'];
             $signalLog->signal_timestamp = $hashData['timestamp'];
-
             // Step 5: Load package details
             $package = $this->loadPackage($hashData['package_name']);
 
-            // Step 6: Generate response for established connection
-            $response = $this->generateEstablishedResponse($tenant, $package, $hashData['timestamp']);
+            // Step 6: Generate response
+            $response = $this->generateResponse($tenant, $package, $hashData['timestamp']);
             
             $signalLog->status = 'success';
             $signalLog->response_data = $response;
             $signalLog->save();
 
-            return $response;
+            return [
+                'success' => true,
+                'action' => 'generate_response',
+                'action_data' => $response['signature']
+            ];
 
         } catch (\Exception $e) {
             $signalLog->status = 'failed';
@@ -76,88 +84,13 @@ class SignalService
     }
 
     /**
-     * Handle first-time connection (empty hash)
-     */
-    private function handleFirstTimeConnection(Tenant $tenant, SignalLog $signalLog): array
-    {
-        // Get the tenant's current package (should be free package for new tenants)
-        $package = $tenant->getCurrentPackage();
-        
-        if (!$package) {
-            // Assign free package if none exists
-            $freePackage = $this->packageRepository->getFreePackage();
-            if ($freePackage) {
-                $this->tenantRepository->assignPackage($tenant, $freePackage);
-                $package = $freePackage;
-            } else {
-                throw new InvalidTenantException('No package assigned to tenant');
-            }
-        }
-
-        // Generate hash for the client to store
-        $timestamp = now();
-        $hashData = sprintf(
-            '%s:%s:%s:%s:%s',
-            $package->name,
-            $timestamp->format('Y'),
-            $timestamp->format('m-d'),
-            $timestamp->format('H'),
-            $tenant->host
-        );
-
-        $response = [
-            'success' => true,
-            'action' => 'create_hash',
-            'action_data' => $hashData,
-            'message' => 'Secret hash generated for new connection'
-        ];
-
-        $signalLog->status = 'success';
-        $signalLog->response_data = $response;
-        $signalLog->save();
-
-        return $response;
-    }
-
-    /**
-     * Generate response for established connections
-     */
-    private function generateEstablishedResponse(Tenant $tenant, Package $package, Carbon $signalTimestamp): array
-    {
-        $data = [
-            'tenant_id' => $tenant->id,
-            'tenant_host' => $tenant->host,
-            'tenant_name' => $tenant->name,
-            'package_id' => $package->id,
-            'package_name' => $package->name,
-            'package_cost' => number_format($package->cost, 2),
-            'package_currency' => $package->currency,
-            'package_tax_rate' => number_format($package->tax_rate, 4),
-            'package_modules' => $package->modules ?? [],
-            'signal_timestamp' => $signalTimestamp->toISOString(),
-            'processed_at' => now()->toISOString(),
-            'expires_at' => now()->addHour()->toISOString(),
-        ];
-
-        // Generate HMAC signature
-        $signature = hash_hmac('sha256', json_encode($data), config('app.key'));
-
-        return [
-            'success' => true,
-            'action' => 'generate_response',
-            'data' => $data,
-            'signature' => $signature
-        ];
-    }
-
-    /**
      * Decrypt the host ID using custom encryption
      */
     private function decryptHostId(string $encryptedHostId): string
     {
         try {
-            $decrypted = EncryptionHelper::decryptAlphaNumeric($encryptedHostId);
-            
+            $decrypted = decryptAlphaNumeric($encryptedHostId);
+
             if ($decrypted === false) {
                 throw new DecryptionException('Failed to decrypt host ID');
             }
@@ -182,7 +115,9 @@ class SignalService
                 'host' => $host,
                 'status' => 'active',
             ]);
+        }
 
+        if(empty($tenant->getCurrentPackage())) {
             // Assign free package
             $freePackage = $this->packageRepository->getFreePackage();
             if ($freePackage) {
@@ -206,19 +141,26 @@ class SignalService
     /**
      * Parse and validate hash format
      */
-    private function parseHash(string $hash, string $host): array
+    private function parseHash(string $hash, string $host, Tenant $tenant): array
     {
-        $parts = explode(':', $hash);
+        $decryptedHash = decryptAlphaNumeric($hash);
+        $parts = explode(':', $decryptedHash);
 
-        if (count($parts) !== 5) {
+        if (count($parts) !== 6) {
             throw new InvalidHashFormatException('Invalid hash format');
         }
 
-        [$packageName, $year, $monthDay, $hour, $hashHost] = $parts;
+        [$packageName, $year, $month, $day, $hour, $hashHost] = $parts;
 
         // Validate package name format (snake_case)
         if (!preg_match('/^[a-z0-9_]+$/', $packageName)) {
             throw new InvalidHashFormatException('Invalid package name format');
+        }
+
+        $package = $tenant->getCurrentPackage();
+
+        if(!$package) {
+            throw new InvalidHashFormatException('Package not found');
         }
 
         // Validate host matches
@@ -228,11 +170,12 @@ class SignalService
 
         // Parse and validate timestamp
         try {
-            $timestamp = Carbon::createFromFormat('Y-m-d-H', "{$year}-{$monthDay}-{$hour}");
+            // Use 24-hour format (H) for hour validation
+            $timestamp = Carbon::createFromFormat('Y-m-d H', "{$year}-{$month}-{$day} {$hour}");
             
-            // Check if token is within 1 hour
-            if ($timestamp->diffInHours(now()) > 1) {
-                throw new TokenExpiredException('Token has expired (older than 1 hour)');
+            // Check if token is within 3 hours
+            if ($timestamp->diffInHours(now()) > 3 || $timestamp->diffInHours(now()) < 0) {
+                throw new TokenExpiredException('Token has expired (older than 3 hours)');
             }
         } catch (\Exception $e) {
             if ($e instanceof TokenExpiredException) {
@@ -243,7 +186,7 @@ class SignalService
 
         return [
             'package_name' => $packageName,
-            'timestamp' => $timestamp,
+            'timestamp' => $timestamp->year . '-' . $timestamp->month . '-' . $timestamp->day . ' ' . $timestamp->hour . ':00:00',
             'host' => $hashHost
         ];
     }
@@ -260,5 +203,34 @@ class SignalService
         }
 
         return $package;
+    }
+
+    /**
+     * Generate response with signature
+     */
+    private function generateResponse(Tenant $tenant, Package $package, string $signalTimestamp): array
+    {
+        $data = [
+            'tenant_id' => $tenant->id,
+            'tenant_host' => $tenant->host,
+            'tenant_name' => $tenant->name,
+            'package_id' => $package->id,
+            'package_name' => $package->name,
+            'package_cost' => number_format($package->cost, 2),
+            'package_currency' => $package->currency,
+            'package_tax_rate' => number_format($package->tax_rate, 4),
+            'package_modules' => $package->modules ?? [],
+            'signal_timestamp' => "$signalTimestamp:00:00",
+            // 'processed_at' => now()->toISOString(),
+            // 'expires_at' => now()->addHours(3)->toISOString(),
+        ];
+
+        // Generate HMAC signature
+        $signature = encryptAlphaNumeric(json_encode($data));
+
+        return [
+            'data' => $data,
+            'signature' => $signature
+        ];
     }
 } 
