@@ -6,6 +6,7 @@ use App\Models\Package;
 use App\Repositories\Contracts\PackageRepositoryInterface;
 use App\Http\Requests\PackageRequest;
 use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
 use Illuminate\View\View;
 use Illuminate\Http\RedirectResponse;
 
@@ -21,6 +22,45 @@ class PackageController extends Controller
     private function getAccessToken(Request $request): string
     {
         return $request->header('Authorization', $request->query('access_token', ''));
+    }
+
+    /**
+     * Get all packages with their modules (API endpoint)
+     */
+    public function getPackages(Request $request): JsonResponse
+    {
+        try {
+            $packages = $this->packageRepository->getAll();
+            
+            $packagesData = $packages->map(function ($package) {
+                return [
+                    'id' => $package->id,
+                    'name' => $package->name,
+                    'cost' => number_format($package->cost, 2),
+                    'currency' => $package->currency,
+                    'tax_rate' => number_format($package->tax_rate, 4),
+                    'modules' => $package->modules ?? [],
+                    'is_free' => $package->isFree(),
+                    'formatted_cost' => $package->getFormattedCostAttribute(),
+                    'available_modules' => Package::getAvailableModules(),
+                    'created_at' => $package->created_at->toISOString(),
+                    'updated_at' => $package->updated_at->toISOString(),
+                ];
+            });
+
+            return response()->json([
+                'success' => true,
+                'data' => $packagesData,
+                'total_packages' => $packages->count(),
+                'available_modules' => Package::getAvailableModules(),
+                'message' => 'Packages retrieved successfully'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'error' => 'Failed to retrieve packages: ' . $e->getMessage()
+            ], 500);
+        }
     }
 
     /**

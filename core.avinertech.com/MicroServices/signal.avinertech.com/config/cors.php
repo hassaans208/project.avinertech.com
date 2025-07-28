@@ -26,6 +26,8 @@ return [
         'http://*.avinertech.local',
         'https://prototype.avinertech.com',
         'https://*.avinertech.com',
+        'https://id-preview--68d3841c-9bcc-40d0-8d36-e5fdbb4e963f.lovable.app',
+        'https://*.lovable.app',
     ],
 
     'allowed_origins_patterns' => [],
