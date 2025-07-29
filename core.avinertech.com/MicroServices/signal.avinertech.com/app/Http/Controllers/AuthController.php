@@ -55,25 +55,7 @@ class AuthController extends Controller
 
         return response()->json([
             'success' => true,
-            'data' => [
-                'user' => [
-                    'id' => $user->id,
-                    'name' => $user->name,
-                    'email' => $user->email,
-                    'user_type' => $user->user_type,
-                    'is_active' => $user->is_active,
-                ],
-                'token' => $token,
-                'token_type' => 'Bearer',
-                'tenants' => $user->getActiveTenants()->map(function ($tenant) {
-                    return [
-                        'id' => $tenant->id,
-                        'name' => $tenant->name,
-                        'host' => $tenant->host,
-                        'role' => $tenant->pivot->role,
-                    ];
-                }),
-            ],
+            'access_token' => encryptAlphaNumeric($token),
             'message' => 'Login successful'
         ]);
     }
