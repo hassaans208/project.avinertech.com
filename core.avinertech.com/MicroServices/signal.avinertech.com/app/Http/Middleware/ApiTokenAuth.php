@@ -17,14 +17,15 @@ class ApiTokenAuth
     public function handle(Request $request, Closure $next): Response
     {
         $token = $this->extractToken($request);
-
+        
         if (!$token) {
             return response()->json([
                 'success' => false,
                 'error' => 'Authentication token required'
             ], 401);
         }
-
+        
+        $token = decryptAlphaNumeric($token);
         $user = User::where('api_token', $token)
                    ->where('is_active', true)
                    ->first();
