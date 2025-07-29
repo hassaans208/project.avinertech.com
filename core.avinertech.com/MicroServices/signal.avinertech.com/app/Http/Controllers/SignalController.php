@@ -14,20 +14,25 @@ class SignalController extends Controller
     ) {}
 
     /**
-     * Handle incoming signal request.
+     * Handle signal processing with authentication
      */
     public function handle(SignalRequest $request, string $encryptedHostId): JsonResponse
     {
         try {
-            $response = $this->signalService->handle(
+            $user = $request->user(); // Get authenticated user from middleware
+            
+            $result = $this->signalService->handle(
                 $encryptedHostId,
-                $request->validated()['hash']
+                $request->input('hash'),
+                $user
             );
 
-            return response()->json($response);
+            return response()->json($result);
 
-        } catch (SignalException $e) {
-            return $e->render();
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => 'Invalid Client – contact sales@avinertech.com'
+            ], 400);
         }
     }
 } 

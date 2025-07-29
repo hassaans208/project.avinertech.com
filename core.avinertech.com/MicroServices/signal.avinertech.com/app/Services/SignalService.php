@@ -2,10 +2,10 @@
 
 namespace App\Services;
 
-use App\Helpers\EncryptionHelper;
 use App\Models\Tenant;
 use App\Models\Package;
 use App\Models\SignalLog;
+use App\Models\User;
 use App\Repositories\Contracts\TenantRepositoryInterface;
 use App\Repositories\Contracts\PackageRepositoryInterface;
 use App\Exceptions\DecryptionException;
@@ -22,9 +22,9 @@ class SignalService
     ) {}
 
     /**
-     * Handle the signal processing
+     * Handle the signal processing with user authentication
      */
-    public function handle(string $encryptedHostId, ?string $hash = null): array
+    public function handle(string $encryptedHostId, ?string $hash = null, ?User $user = null): array
     {
         $signalLog = new SignalLog([
             'encrypted_host_id' => $encryptedHostId,
@@ -44,6 +44,13 @@ class SignalService
             // Step 3: Validate tenant status
             $this->validateTenant($tenant);
 
+            // Step 4: Validate user authentication and tenant access
+            if ($user) {
+                $this->validateUserAccess($user, $tenant);
+                $signalLog->user_id = $user->id;
+                $signalLog->auth_user_email = $user->email;
+            }
+
             if(empty($hash)) {
                 $hash = $tenant->createHash();
 
@@ -54,15 +61,16 @@ class SignalService
                 ];
             }
 
-            // Step 4: Parse and validate hash
+            // Step 5: Parse and validate hash
             $hashData = $this->parseHash($hash, $host, $tenant);
             $signalLog->package_name = $hashData['package_name'];
             $signalLog->signal_timestamp = $hashData['timestamp'];
-            // Step 5: Load package details
+
+            // Step 6: Load package details
             $package = $this->loadPackage($hashData['package_name']);
 
-            // Step 6: Generate response
-            $response = $this->generateResponse($tenant, $package, $hashData['timestamp']);
+            // Step 7: Generate response
+            $response = $this->generateResponse($tenant, $package, $hashData['timestamp'], $user);
             
             $signalLog->status = 'success';
             $signalLog->response_data = $response;
@@ -80,6 +88,20 @@ class SignalService
             $signalLog->save();
 
             throw $e;
+        }
+    }
+
+    /**
+     * Validate user access to tenant
+     */
+    private function validateUserAccess(User $user, Tenant $tenant): void
+    {
+        if (!$user->isActive()) {
+            throw new InvalidTenantException('User account is inactive');
+        }
+
+        if (!$user->hasAccessToTenant($tenant->id)) {
+            throw new InvalidTenantException('User does not have access to this tenant');
         }
     }
 
@@ -146,11 +168,11 @@ class SignalService
         $decryptedHash = decryptAlphaNumeric($hash);
         $parts = explode(':', $decryptedHash);
 
-        if (count($parts) !== 6) {
+        if (count($parts) !== 9) {
             throw new InvalidHashFormatException('Invalid hash format');
         }
 
-        [$packageName, $year, $month, $day, $hour, $hashHost] = $parts;
+        [$packageName, $year, $month, $day, $hour, $hashHost, $userId, $userEmail, $packageId] = $parts;
 
         // Validate package name format (snake_case)
         if (!preg_match('/^[a-z0-9_]+$/', $packageName)) {
@@ -187,7 +209,10 @@ class SignalService
         return [
             'package_name' => $packageName,
             'timestamp' => $timestamp->year . '-' . $timestamp->month . '-' . $timestamp->day . ' ' . $timestamp->hour . ':00:00',
-            'host' => $hashHost
+            'host' => $hashHost,
+            'user_id' => $userId,
+            'user_email' => $userEmail,
+            'package_id' => $packageId
         ];
     }
 
@@ -208,7 +233,7 @@ class SignalService
     /**
      * Generate response with signature
      */
-    private function generateResponse(Tenant $tenant, Package $package, string $signalTimestamp): array
+    private function generateResponse(Tenant $tenant, Package $package, string $signalTimestamp, User $user): array
     {
         $data = [
             'tenant_id' => $tenant->id,
@@ -221,8 +246,9 @@ class SignalService
             'package_tax_rate' => number_format($package->tax_rate, 4),
             'package_modules' => $package->modules ?? [],
             'signal_timestamp' => "$signalTimestamp:00:00",
-            // 'processed_at' => now()->toISOString(),
-            // 'expires_at' => now()->addHours(3)->toISOString(),
+            'user_id' => $user->id,
+            'user_email' => $user->email,
+            'user_api_token' => $user->api_token
         ];
 
         // Generate HMAC signature

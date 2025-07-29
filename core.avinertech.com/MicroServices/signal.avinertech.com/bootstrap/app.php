@@ -16,7 +16,10 @@ return $app::configure(basePath: dirname(__DIR__))
         apiPrefix: 'api',
     )
     ->withMiddleware(function (Middleware $middleware) {
-        //
+        $middleware->alias([
+            'auth.api' => \App\Http\Middleware\ApiTokenAuth::class,
+            'super.admin' => \App\Http\Middleware\SuperAdminAuth::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //

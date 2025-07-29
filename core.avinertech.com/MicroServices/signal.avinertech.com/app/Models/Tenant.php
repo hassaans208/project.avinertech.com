@@ -19,21 +19,32 @@ class Tenant extends Model
     ];
 
     protected $casts = [
-        'status' => 'string',
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
     ];
 
     /**
-     * Get the packages associated with this tenant.
+     * Tenant can have many packages
      */
     public function packages(): BelongsToMany
     {
         return $this->belongsToMany(Package::class, 'tenant_package')
-            ->withPivot('registered_at')
-            ->withTimestamps();
+                    ->withPivot('registered_at')
+                    ->withTimestamps();
     }
 
     /**
-     * Get the signal logs for this tenant.
+     * Tenant can have many users
+     */
+    public function users(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class, 'user_tenant')
+                    ->withPivot(['role', 'is_active'])
+                    ->withTimestamps();
+    }
+
+    /**
+     * Tenant has many signal logs
      */
     public function signalLogs(): HasMany
     {
@@ -41,7 +52,7 @@ class Tenant extends Model
     }
 
     /**
-     * Check if tenant is active and not blocked.
+     * Check if tenant is active
      */
     public function isActive(): bool
     {
@@ -49,7 +60,7 @@ class Tenant extends Model
     }
 
     /**
-     * Check if tenant is blocked.
+     * Check if tenant is blocked
      */
     public function isBlocked(): bool
     {
@@ -57,17 +68,17 @@ class Tenant extends Model
     }
 
     /**
-     * Get the current active package for this tenant.
+     * Get current package for tenant
      */
     public function getCurrentPackage(): ?Package
     {
         return $this->packages()
-            ->orderByPivot('registered_at', 'desc')
-            ->first();
+                    ->orderBy('tenant_package.created_at', 'desc')
+                    ->first();
     }
 
     /**
-     * Assign a package to this tenant.
+     * Assign package to tenant
      */
     public function assignPackage(Package $package): void
     {
@@ -76,6 +87,9 @@ class Tenant extends Model
         ]);
     }
 
+    /**
+     * Create hash for tenant (used in signal processing)
+     */
     public function createHash(): string
     {
         $package = $this->getCurrentPackage();
@@ -86,7 +100,50 @@ class Tenant extends Model
         }
 
         $timestamp = now();
-        $hash = encryptAlphaNumeric("{$package->name}:{$timestamp->year}:{$timestamp->month}:{$timestamp->day}:{$timestamp->hour}:{$this->host}");
-        return $hash;
+        return encryptAlphaNumeric(sprintf(
+            '%s:%s:%s:%s:%s:%s:%s:%s:%s',
+            $package->name,
+            $timestamp->format('Y'),
+            $timestamp->format('m'),
+            $timestamp->format('d'),
+            $timestamp->format('H'),
+            $this->host,
+            auth()->user()->id,
+            auth()->user()->email,
+            $package->id
+        ));
+    }
+
+    /**
+     * Get tenant admins
+     */
+    public function getAdmins()
+    {
+        return $this->users()
+                    ->wherePivot('role', 'admin')
+                    ->wherePivot('is_active', true)
+                    ->get();
+    }
+
+    /**
+     * Get tenant members
+     */
+    public function getMembers()
+    {
+        return $this->users()
+                    ->wherePivot('role', 'member')
+                    ->wherePivot('is_active', true)
+                    ->get();
+    }
+
+    /**
+     * Check if user has access to this tenant
+     */
+    public function hasUser(User $user): bool
+    {
+        return $this->users()
+                    ->where('user_id', $user->id)
+                    ->wherePivot('is_active', true)
+                    ->exists();
     }
 } 

@@ -17,6 +17,9 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->string('user_type')->default('TENANT_ADMIN');
+            $table->boolean('is_active')->default(true);
+            $table->string('api_token', 80)->nullable()->unique();
             $table->rememberToken();
             $table->timestamps();
         });

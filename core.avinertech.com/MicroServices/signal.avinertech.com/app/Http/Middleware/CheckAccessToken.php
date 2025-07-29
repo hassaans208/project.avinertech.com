@@ -11,14 +11,16 @@ class CheckAccessToken
     {
         $host = $request->getHost();
         $date = date('Y:m:d');
-        $token = 'hassaanShariq27901:'. $host.':'.$date;
+        $token = 'hassaanShariq27901' . ':' . $host . ':' . $date;
         $accessToken = base64_encode($token);
 
         if(str_contains($request->getHost(), 'local')){
             return $next($request);
         }
 
-        if ($request->has('access_token') && $request->access_token === $accessToken) {
+        if ($request->has('access_token') && $request->access_token === $accessToken && request()->routeIs('login')) {
+            return $next($request);
+        } else if(auth()->check() && auth()->user()->user_type == 'SUPER_ADMIN'){
             return $next($request);
         }
 

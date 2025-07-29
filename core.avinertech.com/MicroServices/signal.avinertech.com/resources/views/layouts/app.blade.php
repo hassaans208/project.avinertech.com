@@ -40,6 +40,13 @@
                             </a>
                         </div>
                     </div>
+                    <div class="flex items-center space-x-4">
+                        <span class="text-sm text-gray-500">Super Admin</span>
+                        <a href="{{ route('logout', ['access_token' => request()->get('access_token', '')]) }}" 
+                           class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+                            Logout
+                        </a>
+                    </div>
                 </div>
             </div>
         </nav>
@@ -54,21 +61,23 @@
         @endif
 
         <!-- Page Content -->
-        <main class="py-12">
+        <main class="py-6">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                <!-- Flash Messages -->
+                <!-- Success Messages -->
                 @if (session('success'))
                     <div class="mb-4 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative" role="alert">
                         <span class="block sm:inline">{{ session('success') }}</span>
                     </div>
                 @endif
 
+                <!-- Error Messages -->
                 @if (session('error'))
                     <div class="mb-4 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
                         <span class="block sm:inline">{{ session('error') }}</span>
                     </div>
                 @endif
 
+                <!-- Validation Errors -->
                 @if ($errors->any())
                     <div class="mb-4 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
                         <ul class="list-disc list-inside">
@@ -84,71 +93,47 @@
         </main>
     </div>
 
+    <!-- JavaScript for handling access token in headers -->
     <script>
-        // Set up global access token handling
-        document.addEventListener('DOMContentLoaded', function() {
-            const accessToken = document.querySelector('meta[name="access-token"]').getAttribute('content');
+        // Get access token from meta tag
+        const accessToken = document.querySelector('meta[name="access-token"]').getAttribute('content');
+        
+        if (accessToken) {
+            // Set up global AJAX interceptors to include Authorization header
             
-            if (accessToken) {
-                // Set up XMLHttpRequest interceptor
-                const originalOpen = XMLHttpRequest.prototype.open;
-                XMLHttpRequest.prototype.open = function(method, url, async, user, pass) {
-                    this.addEventListener('readystatechange', function() {
-                        if (this.readyState === 1) { // OPENED
-                            this.setRequestHeader('Authorization', accessToken);
-                        }
-                    });
-                    return originalOpen.call(this, method, url, async, user, pass);
-                };
-
-                // Set up fetch interceptor
-                const originalFetch = window.fetch;
-                window.fetch = function(input, init = {}) {
-                    init.headers = init.headers || {};
-                    if (typeof init.headers.append === 'function') {
-                        init.headers.append('Authorization', accessToken);
-                    } else {
-                        init.headers['Authorization'] = accessToken;
-                    }
-                    return originalFetch.call(this, input, init);
-                };
-
-                // Add access token to all forms as hidden input
-                const forms = document.querySelectorAll('form');
-                forms.forEach(function(form) {
-                    // Check if form already has access_token input
-                    if (!form.querySelector('input[name="access_token"]')) {
-                        const tokenInput = document.createElement('input');
-                        tokenInput.type = 'hidden';
-                        tokenInput.name = 'access_token';
-                        tokenInput.value = accessToken;
-                        form.appendChild(tokenInput);
-                    }
-                });
-
-                // Add access token to dynamically created forms
-                const observer = new MutationObserver(function(mutations) {
-                    mutations.forEach(function(mutation) {
-                        mutation.addedNodes.forEach(function(node) {
-                            if (node.nodeType === 1) { // Element node
-                                const forms = node.querySelectorAll ? node.querySelectorAll('form') : [];
-                                forms.forEach(function(form) {
-                                    if (!form.querySelector('input[name="access_token"]')) {
-                                        const tokenInput = document.createElement('input');
-                                        tokenInput.type = 'hidden';
-                                        tokenInput.name = 'access_token';
-                                        tokenInput.value = accessToken;
-                                        form.appendChild(tokenInput);
-                                    }
-                                });
-                            }
-                        });
-                    });
-                });
-
-                observer.observe(document.body, { childList: true, subtree: true });
+            // For Axios (if used)
+            if (window.axios) {
+                window.axios.defaults.headers.common['Authorization'] = 'Bearer ' + accessToken;
             }
-        });
+            
+            // For jQuery AJAX (if used)
+            if (window.$) {
+                $.ajaxSetup({
+                    beforeSend: function(xhr) {
+                        xhr.setRequestHeader('Authorization', 'Bearer ' + accessToken);
+                    }
+                });
+            }
+            
+            // For native XMLHttpRequest
+            const originalOpen = XMLHttpRequest.prototype.open;
+            XMLHttpRequest.prototype.open = function(method, url, async, user, password) {
+                this.addEventListener('readystatechange', function() {
+                    if (this.readyState === 1) { // OPENED
+                        this.setRequestHeader('Authorization', 'Bearer ' + accessToken);
+                    }
+                });
+                return originalOpen.apply(this, arguments);
+            };
+            
+            // For fetch API
+            const originalFetch = window.fetch;
+            window.fetch = function(url, options = {}) {
+                options.headers = options.headers || {};
+                options.headers['Authorization'] = 'Bearer ' + accessToken;
+                return originalFetch(url, options);
+            };
+        }
     </script>
 </body>
 </html> 
