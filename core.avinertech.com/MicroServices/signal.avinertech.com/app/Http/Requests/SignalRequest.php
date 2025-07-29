@@ -22,7 +22,7 @@ class SignalRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'hash' => 'nullable|string|min:10|max:255',
+            'hash' => 'nullable|string|min:10',
         ];
     }
 
@@ -35,7 +35,7 @@ class SignalRequest extends FormRequest
             'hash.required' => 'Hash parameter is required',
             'hash.string' => 'Hash must be a string',
             'hash.min' => 'Hash is too short',
-            'hash.max' => 'Hash is too long',
+            // 'hash.max' => 'Hash is too long',
         ];
     }
 
