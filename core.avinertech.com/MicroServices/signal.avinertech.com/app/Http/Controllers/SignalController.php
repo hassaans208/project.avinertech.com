@@ -31,7 +31,7 @@ class SignalController extends Controller
 
         } catch (\Exception $e) {
             return response()->json([
-                'error' => 'Invalid Client – contact sales@avinertech.com'
+                'error' => 'Network Error – contact sales@avinertech.com'
             ], 400);
         }
     }
