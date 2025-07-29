@@ -52,7 +52,7 @@ class SignalService
             }
 
             if(empty($hash)) {
-                $hash = $tenant->createHash();
+                $hash = $tenant->createHash($user);
 
                 return [
                     'success' => true,

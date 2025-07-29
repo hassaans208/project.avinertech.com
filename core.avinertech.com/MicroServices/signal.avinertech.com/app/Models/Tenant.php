@@ -90,7 +90,7 @@ class Tenant extends Model
     /**
      * Create hash for tenant (used in signal processing)
      */
-    public function createHash(): string
+    public function createHash(User $user): string
     {
         $package = $this->getCurrentPackage();
 
@@ -108,9 +108,9 @@ class Tenant extends Model
             $timestamp->format('d'),
             $timestamp->format('H'),
             $this->host,
-            auth()->user()->id,
-            auth()->user()->email,
-            $package->id
+            (string) $user->id,
+            $user->email,
+            (string) $package->id
         ));
     }
 

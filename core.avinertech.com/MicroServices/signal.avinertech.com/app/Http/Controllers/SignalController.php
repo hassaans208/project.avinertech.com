@@ -20,7 +20,7 @@ class SignalController extends Controller
     {
         try {
             $user = $request->user(); // Get authenticated user from middleware
-            
+
             $result = $this->signalService->handle(
                 $encryptedHostId,
                 $request->input('hash'),
