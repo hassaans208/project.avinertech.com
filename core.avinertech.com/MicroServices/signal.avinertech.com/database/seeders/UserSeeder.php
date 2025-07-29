@@ -53,7 +53,7 @@ class UserSeeder extends Seeder
         if ($tenants->count() > 0) {
             // Assign first tenant admin to first tenant
             if ($tenants->count() >= 1) {
-                $tenantAdmin1->assignToTenant($tenants->first(), 'admin');
+                $tenantAdmin1->assignToTenant($tenants->where('id', 2)->first(), 'admin');
             }
             
             // Assign second tenant admin to second tenant (if exists)
