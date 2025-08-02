@@ -153,7 +153,7 @@ class UniverseController extends Controller
 
             return response()->json([
                 'draw' => $draw,
-                'recordsTotal' => $csvData['total_rows'],
+                'recordsTotal' => $csvData['total'],
                 'recordsFiltered' => count($filteredData),
                 'data' => array_values($paginatedData),
                 'headers' => $csvData['headers']

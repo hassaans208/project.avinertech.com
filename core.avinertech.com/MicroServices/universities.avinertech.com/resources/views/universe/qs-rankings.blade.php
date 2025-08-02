@@ -102,13 +102,8 @@
                     </div>
                     <h3 class="text-xl font-bold text-gray-900 mb-2">No Rankings Data Available</h3>
                     <p class="text-gray-600 mb-4">
-                        We couldn't find any data to display. Please ensure the CSV file is properly uploaded.
+                        We couldn't find any data to display. Please ensure the CSV file is properly uploaded to the system.
                     </p>
-                    <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
-                        <p class="text-sm text-blue-700">
-                            <strong>Expected file:</strong> {{ $filename ?? 'qs-rankings.csv' }}
-                        </p>
-                    </div>
                 </div>
             </div>
         </div>
@@ -210,7 +205,15 @@ $(document).ready(function() {
                         title: '{{ $header }}',
                         defaultContent: '-',
                         orderable: true,
-                        searchable: true
+                        searchable: true,
+                        @if($header === 'University Path')
+                        render: function(data, type, row) {
+                            if (type === 'display' && data && data.includes('<a href=')) {
+                                return data; // Return HTML as-is for display
+                            }
+                            return data || '-';
+                        }
+                        @endif
                     },
                 @endforeach
             ],
@@ -249,9 +252,14 @@ $(document).ready(function() {
                 const info = this.api().page.info();
                 $('#table-container').attr('aria-live', 'polite');
                 
-                // Update statistics
-                $('#total-displayed').text(info.recordsDisplay.toLocaleString());
-                $('#total-filtered').text(info.recordsFiltered.toLocaleString());
+                // Update statistics with null checks
+                if (info && typeof info.recordsDisplay !== 'undefined' && typeof info.recordsFiltered !== 'undefined') {
+                    $('#total-displayed').text(info.recordsDisplay.toLocaleString());
+                    $('#total-filtered').text(info.recordsFiltered.toLocaleString());
+                } else {
+                    $('#total-displayed').text('0');
+                    $('#total-filtered').text('0');
+                }
                 
                 // Add hover effects to rows
                 $('#qs-rankings-table tbody tr').hover(
@@ -292,8 +300,13 @@ $(document).ready(function() {
                 
                 // Initial stats update
                 const info = this.api().page.info();
-                $('#total-displayed').text(info.recordsDisplay.toLocaleString());
-                $('#total-filtered').text(info.recordsFiltered.toLocaleString());
+                if (info && typeof info.recordsDisplay !== 'undefined' && typeof info.recordsFiltered !== 'undefined') {
+                    $('#total-displayed').text(info.recordsDisplay.toLocaleString());
+                    $('#total-filtered').text(info.recordsFiltered.toLocaleString());
+                } else {
+                    $('#total-displayed').text('0');
+                    $('#total-filtered').text('0');
+                }
             }
         });
 

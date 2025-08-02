@@ -9,55 +9,86 @@ use Exception;
 class CsvReaderService
 {
     /**
-     * Read CSV file and return structured data with headers
-     *
-     * @param string $filename - The CSV filename (should be in storage/app/csv/)
-     * @return array
-     * @throws Exception
+     * Read CSV file and return data with headers
      */
     public function readCsv(string $filename): array
     {
-        $filePath = storage_path("app/csv/{$filename}");
+        $filePath = $this->getFilePath($filename);
         
-        if (!File::exists($filePath)) {
-            throw new Exception("CSV file not found: {$filename}");
+        if (!file_exists($filePath)) {
+            throw new \Exception("CSV file not found: {$filename}");
         }
-
-        try {
-            $csvData = [];
-            $headers = [];
-            $rowIndex = 0;
-
-            // Open and read the CSV file
-            if (($handle = fopen($filePath, 'r')) !== false) {
-                while (($row = fgetcsv($handle, 0, ',')) !== false) {
-                    if ($rowIndex === 0) {
-                        // First row is headers
-                        $headers = array_map('trim', $row);
-                    } else {
-                        // Data rows - create associative array with headers as keys
-                        $rowData = [];
-                        foreach ($headers as $index => $header) {
-                            $rowData[$header] = isset($row[$index]) ? trim($row[$index]) : '';
-                        }
-                        $csvData[] = $rowData;
+        
+        $data = [];
+        $headers = [];
+        
+        if (($handle = fopen($filePath, 'r')) !== false) {
+            // Read header row
+            if (($headerRow = fgetcsv($handle)) !== false) {
+                // Filter out NID columns and clean headers
+                $filteredHeaders = [];
+                $headerIndexMap = [];
+                
+                foreach ($headerRow as $index => $header) {
+                    $cleanHeader = trim($header, '"');
+                    // Skip columns that contain 'NID' or 'Logo' (case insensitive)
+                    if (stripos($cleanHeader, 'nid') === false && stripos($cleanHeader, 'logo') === false) {
+                        $filteredHeaders[] = $cleanHeader;
+                        $headerIndexMap[] = $index;
                     }
-                    $rowIndex++;
                 }
-                fclose($handle);
+                $headers = $filteredHeaders;
             }
-
-            return [
-                'headers' => $headers,
-                'data' => $csvData,
-                'total_rows' => count($csvData),
-                'filename' => $filename
-            ];
-
-        } catch (Exception $e) {
-            Log::error("CSV Reader Error: " . $e->getMessage());
-            throw new Exception("Error reading CSV file: " . $e->getMessage());
+            
+            // Read data rows
+            while (($row = fgetcsv($handle)) !== false) {
+                $filteredRow = [];
+                
+                // Only include columns that are not filtered out
+                foreach ($headerIndexMap as $originalIndex) {
+                    $value = isset($row[$originalIndex]) ? trim($row[$originalIndex], '"') : '';
+                    $filteredRow[] = $value;
+                }
+                
+                if (count($filteredRow) === count($headers)) {
+                    $associativeRow = array_combine($headers, $filteredRow);
+                    
+                    // Transform university path to clickable link if it exists
+                    if (isset($associativeRow['University Path']) && !empty($associativeRow['University Path'])) {
+                        $universityPath = $associativeRow['University Path'];
+                        // Ensure path starts with /
+                        if (!str_starts_with($universityPath, '/')) {
+                            $universityPath = '/' . $universityPath;
+                        }
+                        $fullUrl = 'https://www.topuniversities.com' . $universityPath;
+                        $associativeRow['University Path'] = '<a href="' . htmlspecialchars($fullUrl) . '" target="_blank" class="text-blue-600 hover:text-blue-800 underline font-medium">Visit University</a>';
+                    }
+                    
+                    $data[] = $associativeRow;
+                }
+            }
+            
+            fclose($handle);
+        } else {
+            throw new \Exception("Failed to open CSV file: {$filename}");
         }
+        
+        return [
+            'headers' => $headers,
+            'data' => $data,
+            'total' => count($data)
+        ];
+    }
+
+    /**
+     * Get the full file path for a CSV file
+     * 
+     * @param string $filename
+     * @return string
+     */
+    private function getFilePath(string $filename): string
+    {
+        return storage_path("app/csv/{$filename}");
     }
 
     /**
@@ -75,10 +106,10 @@ class CsvReaderService
         return [
             'headers' => $csvData['headers'],
             'data' => $csvData['data'],
-            'recordsTotal' => $csvData['total_rows'],
-            'recordsFiltered' => $csvData['total_rows'],
+            'recordsTotal' => $csvData['total'],
+            'recordsFiltered' => $csvData['total'],
             'searchableColumns' => empty($searchableColumns) ? $csvData['headers'] : $searchableColumns,
-            'filename' => $csvData['filename']
+            'filename' => $filename
         ];
     }
 

@@ -102,13 +102,8 @@
                     </div>
                     <h3 class="text-xl font-bold text-gray-900 mb-2">No Programs Data Available</h3>
                     <p class="text-gray-600 mb-4">
-                        We couldn't find any program data to display. Please ensure the CSV file is properly uploaded.
+                        We couldn't find any program data to display. Please ensure the CSV file is properly uploaded to the system.
                     </p>
-                    <div class="bg-green-50 border border-green-200 rounded-lg p-4">
-                        <p class="text-sm text-green-700">
-                            <strong>Expected file:</strong> {{ $filename ?? 'programs-database.csv' }}
-                        </p>
-                    </div>
                 </div>
             </div>
         </div>
@@ -249,7 +244,15 @@ $(document).ready(function() {
                         title: '{{ $header }}',
                         defaultContent: '-',
                         orderable: true,
-                        searchable: true
+                        searchable: true,
+                        @if($header === 'University Path')
+                        render: function(data, type, row) {
+                            if (type === 'display' && data && data.includes('<a href=')) {
+                                return data; // Return HTML as-is for display
+                            }
+                            return data || '-';
+                        }
+                        @endif
                     },
                 @endforeach
             ],
@@ -347,15 +350,25 @@ $(document).ready(function() {
 
         // Function to calculate and display statistics
         function calculateStatistics(data, updateAll = true) {
-            if (!data || data.length === 0) return;
+            if (!data || data.length === 0) {
+                $('#unique-universities').text('0');
+                $('#unique-categories').text('0');
+                return;
+            }
             
-            // Calculate unique universities
-            const uniqueUniversities = [...new Set(data.map(item => item['University Name']).filter(Boolean))];
-            $('#unique-universities').text(uniqueUniversities.length.toLocaleString());
-            
-            // Calculate unique categories  
-            const uniqueCategories = [...new Set(data.map(item => item['Program Category']).filter(Boolean))];
-            $('#unique-categories').text(uniqueCategories.length.toLocaleString());
+            try {
+                // Calculate unique universities
+                const uniqueUniversities = [...new Set(data.map(item => item['University Name']).filter(Boolean))];
+                $('#unique-universities').text(uniqueUniversities.length.toLocaleString());
+                
+                // Calculate unique categories  
+                const uniqueCategories = [...new Set(data.map(item => item['Program Category']).filter(Boolean))];
+                $('#unique-categories').text(uniqueCategories.length.toLocaleString());
+            } catch (error) {
+                console.warn('Error calculating statistics:', error);
+                $('#unique-universities').text('0');
+                $('#unique-categories').text('0');
+            }
         }
 
         // Add custom search functionality
