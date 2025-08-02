@@ -30,17 +30,27 @@
                             @endif
                         </div>
 
-                        <!-- Modules -->
-                        @if($package->modules && count($package->modules) > 0)
+                        <!-- Service Modules -->
+                        @if($package->serviceModules && $package->serviceModules->count() > 0)
                             <div class="mb-4">
-                                <h4 class="text-sm font-medium text-gray-700 mb-2">Modules:</h4>
+                                <h4 class="text-sm font-medium text-gray-700 mb-2">Service Modules:</h4>
                                 <div class="flex flex-wrap gap-1">
-                                    @foreach($package->modules as $module)
+                                    @foreach($package->serviceModules as $module)
                                         <span class="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded">
-                                            {{ str_replace('_', ' ', ucfirst($module)) }}
+                                            {{ $module->display_name }}
                                         </span>
                                     @endforeach
                                 </div>
+                                <div class="mt-2 text-xs text-gray-500">
+                                    Total: ${{ number_format($package->total_sale_price, 2) }}
+                                    @if($package->total_tax > 0)
+                                        (+${{ number_format($package->total_tax, 2) }} tax)
+                                    @endif
+                                </div>
+                            </div>
+                        @else
+                            <div class="mb-4">
+                                <p class="text-sm text-gray-500 italic">No service modules assigned</p>
                             </div>
                         @endif
 

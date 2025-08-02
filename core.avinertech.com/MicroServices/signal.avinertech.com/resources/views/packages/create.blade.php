@@ -81,27 +81,21 @@
                     </div>
                 </div>
 
-                <!-- Modules -->
-                <div class="mt-6">
-                    <label class="block text-sm font-medium text-gray-700 mb-3">
-                        Package Modules
-                    </label>
-                    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
-                        @foreach($availableModules as $module)
-                            <div class="flex items-center">
-                                <input type="checkbox" name="modules[]" value="{{ $module }}" id="module_{{ $module }}"
-                                       class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
-                                       {{ in_array($module, old('modules', [])) ? 'checked' : '' }}>
-                                <label for="module_{{ $module }}" class="ml-2 text-sm text-gray-700">
-                                    {{ str_replace('_', ' ', ucwords($module)) }}
-                                </label>
+                <!-- Note about Service Modules -->
+                <div class="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                    <div class="flex">
+                        <div class="flex-shrink-0">
+                            <svg class="h-5 w-5 text-blue-400" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
+                            </svg>
+                        </div>
+                        <div class="ml-3">
+                            <h3 class="text-sm font-medium text-blue-800">Service Modules</h3>
+                            <div class="mt-2 text-sm text-blue-700">
+                                <p>Service modules are now managed separately. After creating this package, you can associate it with service modules through the package management interface.</p>
                             </div>
-                        @endforeach
+                        </div>
                     </div>
-                    @error('modules')
-                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                    @enderror
-                    <p class="mt-2 text-sm text-gray-500">Select the modules/features included in this package</p>
                 </div>
 
                 <!-- Preview -->
@@ -147,6 +141,7 @@
             const currency = document.getElementById('currency').value || 'USD';
             const taxRate = document.getElementById('tax_rate').value || '0';
             
+            document.getElementById('preview_name').textContent = name;
             const checkedModules = Array.from(document.querySelectorAll('input[name="modules[]"]:checked'))
                 .map(cb => cb.value.replace('_', ' '))
                 .map(module => module.charAt(0).toUpperCase() + module.slice(1));

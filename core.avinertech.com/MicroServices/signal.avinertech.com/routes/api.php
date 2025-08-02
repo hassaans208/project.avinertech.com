@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SignalController;
 use App\Http\Controllers\EncryptionController;
 use App\Http\Controllers\PackageController;
+use App\Http\Controllers\ServiceModuleController;
 use App\Http\Controllers\AuthController;
 
 // Public routes (no authentication required)
@@ -18,6 +19,10 @@ Route::post('/decrypt', [EncryptionController::class, 'decrypt']);
 // Package API routes (public)
 Route::get('/packages', [PackageController::class, 'getPackages']);
 
+// Service Module API routes (public)
+Route::get('/service-modules', [ServiceModuleController::class, 'index']);
+Route::get('/service-modules/{id}', [ServiceModuleController::class, 'show']);
+
 // Protected routes (require authentication)
 Route::middleware(['auth.api'])->group(function () {
     // Authentication routes
@@ -27,6 +32,11 @@ Route::middleware(['auth.api'])->group(function () {
     
     // Signal handling route (requires authentication)
     Route::post('{encryptedHostId}/signal', [SignalController::class, 'handle']);
+    
+    // Service Module management routes (protected)
+    Route::post('/service-modules', [ServiceModuleController::class, 'store']);
+    Route::put('/service-modules/{id}', [ServiceModuleController::class, 'update']);
+    Route::delete('/service-modules/{id}', [ServiceModuleController::class, 'destroy']);
 });
 
 // Health check route

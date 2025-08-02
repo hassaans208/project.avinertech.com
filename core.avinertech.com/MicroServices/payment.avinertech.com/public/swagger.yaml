@@ -1,0 +1,280 @@
+openapi: 3.0.0
+info:
+  title: Aviner Tech Tenant Manager API
+  description: API for managing tenants, deployments, and infrastructure operations
+  version: 1.0.0
+  contact:
+    email: support@avinertech.com
+
+servers:
+  - url: /api
+    description: API base URL
+
+paths:
+  /deployment/{action}:
+    post:
+      summary: Handle different deployment actions
+      description: Endpoint for handling various deployment operations like creating modules, deploying modules, and SSL certificate installation
+      parameters:
+        - name: action
+          in: path
+          required: true
+          description: The deployment action to perform
+          schema:
+            type: string
+            enum:
+              - create-module
+              - deploy-module
+              - ssl-cert
+              - get-log
+              - create-tenant-db
+              - create-tenant
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              oneOf:
+                - $ref: '#/components/schemas/CreateModuleRequest'
+                - $ref: '#/components/schemas/DeployModuleRequest'
+                - $ref: '#/components/schemas/SslCertRequest'
+                - $ref: '#/components/schemas/GetLogRequest'
+                - $ref: '#/components/schemas/CreateTenantDbRequest'
+                - $ref: '#/components/schemas/CreateTenantRequest'
+      responses:
+        '200':
+          description: Operation completed successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        '400':
+          description: Invalid action specified
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '422':
+          description: Validation failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationErrorResponse'
+        '500':
+          description: Operation failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+components:
+  schemas:
+    CreateModuleRequest:
+      type: object
+      required:
+        - module
+        - submodule
+        - app_name
+      properties:
+        module:
+          type: string
+          enum:
+            - core
+            - tenant
+          description: The module type (core or tenant)
+        submodule:
+          type: string
+          description: The submodule type (e.g., micro, service, app)
+        app_name:
+          type: string
+          pattern: '^[a-z0-9-]+$'
+          description: The application name (lowercase letters, numbers, and hyphens only)
+      example:
+        module: tenant
+        submodule: app
+        app_name: client-portal
+
+    DeployModuleRequest:
+      type: object
+      required:
+        - module
+        - submodule
+        - app_name
+      properties:
+        module:
+          type: string
+          enum:
+            - core
+            - tenant
+          description: The module type (core or tenant)
+        submodule:
+          type: string
+          description: The submodule type (e.g., micro, service, app)
+        app_name:
+          type: string
+          pattern: '^[a-z0-9-]+$'
+          description: The application name (lowercase letters, numbers, and hyphens only)
+      example:
+        module: tenant
+        submodule: app
+        app_name: client-portal
+
+    SslCertRequest:
+      type: object
+      required:
+        - app_name
+      properties:
+        app_name:
+          type: string
+          description: The application name to install SSL certificate for
+      example:
+        app_name: client-portal
+
+    GetLogRequest:
+      type: object
+      required:
+        - app_domain
+      properties:
+        app_domain:
+          type: string
+          pattern: '^[a-z0-9-]+\.[a-z0-9-.]+$'
+          description: The application domain to retrieve logs for
+      example:
+        app_domain: client-portal.avinertech.com
+
+    CreateTenantDbRequest:
+      type: object
+      required:
+        - database_name
+        - database_user
+        - database_password
+      properties:
+        database_name:
+          type: string
+          pattern: '^[a-zA-Z0-9_]+$'
+          description: The database name (letters, numbers, and underscores only)
+        database_user:
+          type: string
+          pattern: '^[a-zA-Z0-9_]+$'
+          description: The database user (letters, numbers, and underscores only)
+        database_password:
+          type: string
+          minLength: 8
+          description: The database password (minimum 8 characters)
+        database_host:
+          type: string
+          default: localhost
+          description: The database host (defaults to localhost)
+      example:
+        database_name: client_db
+        database_user: client_user
+        database_password: SecurePassword123
+        database_host: localhost
+
+    CreateTenantRequest:
+      type: object
+      required:
+        - host
+        - username
+        - password
+        - database_name
+        - database_user
+        - database_password
+      properties:
+        host:
+          type: string
+          description: The host for the tenant
+        username:
+          type: string
+          description: SSH username for the tenant
+        password:
+          type: string
+          description: SSH password for the tenant
+        port:
+          type: integer
+          description: SSH port for the tenant
+        database_host:
+          type: string
+          description: Database host for the tenant
+        database_port:
+          type: integer
+          description: Database port for the tenant
+        database_name:
+          type: string
+          description: Database name for the tenant
+        database_user:
+          type: string
+          description: Database username for the tenant
+        database_password:
+          type: string
+          description: Database password for the tenant
+      example:
+        host: tenant.avinertech.com
+        username: tenant_user
+        password: SecurePassword123
+        port: 22
+        database_host: localhost
+        database_port: 3306
+        database_name: tenant_db
+        database_user: tenant_db_user
+        database_password: SecureDbPassword123
+
+    SuccessResponse:
+      type: object
+      properties:
+        status:
+          type: boolean
+          description: Status of the operation (true for success)
+        message:
+          type: string
+          description: Success message
+        data:
+          type: object
+          description: Response data that varies based on the action
+      example:
+        status: true
+        message: Create module completed successfully
+        data:
+          module: tenant
+          submodule: app
+          app_name: client-portal
+          app_domain: client-portal.avinertech.com
+
+    ErrorResponse:
+      type: object
+      properties:
+        status:
+          type: boolean
+          description: Status of the operation (false for error)
+        message:
+          type: string
+          description: Error message
+        error:
+          type: string
+          description: Detailed error information
+      example:
+        status: false
+        message: Failed to create module
+        error: Unable to connect to remote server
+
+    ValidationErrorResponse:
+      type: object
+      properties:
+        status:
+          type: boolean
+          description: Status of the operation (false for validation error)
+        message:
+          type: string
+          description: Error message
+        errors:
+          type: object
+          description: Validation error details
+          additionalProperties:
+            type: array
+            items:
+              type: string
+      example:
+        status: false
+        message: Validation failed
+        errors:
+          app_name: ["The app name can only contain lowercase letters, numbers, and hyphens"] 

@@ -2,7 +2,6 @@
 
 namespace App\Http\Requests;
 
-use App\Models\Package;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -34,11 +33,6 @@ class PackageRequest extends FormRequest
             'cost' => 'required|numeric|min:0|max:999999.99',
             'currency' => 'required|string|size:3|regex:/^[A-Z]{3}$/', // ISO currency codes
             'tax_rate' => 'required|numeric|min:0|max:1', // 0 to 100% as decimal
-            'modules' => 'nullable|array',
-            'modules.*' => [
-                'string',
-                Rule::in(Package::getAvailableModules()),
-            ],
         ];
     }
 
@@ -62,8 +56,6 @@ class PackageRequest extends FormRequest
             'tax_rate.numeric' => 'Tax rate must be a number',
             'tax_rate.min' => 'Tax rate cannot be negative',
             'tax_rate.max' => 'Tax rate cannot exceed 100%',
-            'modules.array' => 'Modules must be an array',
-            'modules.*.in' => 'Invalid module selected',
         ];
     }
 

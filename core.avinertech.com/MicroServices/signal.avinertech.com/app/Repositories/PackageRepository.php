@@ -32,6 +32,14 @@ class PackageRepository implements PackageRepositoryInterface
     }
 
     /**
+     * Get all packages with service modules.
+     */
+    public function getAllWithServiceModules()
+    {
+        return Package::with('serviceModules')->orderBy('cost')->get();
+    }
+
+    /**
      * Create a new package.
      */
     public function create(array $data): Package
@@ -53,5 +61,13 @@ class PackageRepository implements PackageRepositoryInterface
     public function findById(int $id): ?Package
     {
         return Package::find($id);
+    }
+
+    /**
+     * Find package by ID with service modules.
+     */
+    public function findByIdWithServiceModules(int $id): ?Package
+    {
+        return Package::with('serviceModules')->find($id);
     }
 } 

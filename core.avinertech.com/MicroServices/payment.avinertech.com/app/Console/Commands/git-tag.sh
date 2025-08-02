@@ -1,0 +1,1 @@
+cd /var/www/sites/Project/tenant.avinertech.com/Stubs/demo.avinertech.com && git tag

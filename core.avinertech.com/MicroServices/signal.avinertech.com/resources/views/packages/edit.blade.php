@@ -87,27 +87,78 @@
                     </div>
                 </div>
 
-                <!-- Modules -->
-                <div class="mt-6">
-                    <label class="block text-sm font-medium text-gray-700 mb-3">
-                        Package Modules
-                    </label>
-                    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
-                        @foreach($availableModules as $module)
-                            <div class="flex items-center">
-                                <input type="checkbox" name="modules[]" value="{{ $module }}" id="module_{{ $module }}"
-                                       class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
-                                       {{ in_array($module, old('modules', $package->modules ?? [])) ? 'checked' : '' }}>
-                                <label for="module_{{ $module }}" class="ml-2 text-sm text-gray-700">
-                                    {{ str_replace('_', ' ', ucwords($module)) }}
-                                </label>
+                <!-- Service Modules Management -->
+                <div class="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                    <div class="flex">
+                        <div class="flex-shrink-0">
+                            <svg class="h-5 w-5 text-blue-400" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
+                            </svg>
+                        </div>
+                        <div class="ml-3 flex-grow">
+                            <h3 class="text-sm font-medium text-blue-800">Service Modules Management</h3>
+                            <div class="mt-2 text-sm text-blue-700">
+                                <p>Current modules associated with this package:</p>
+                                @if($package->serviceModules->count() > 0)
+                                    <div class="mt-3 space-y-2">
+                                        @foreach($package->serviceModules as $module)
+                                            <div class="flex items-center justify-between bg-white rounded p-3">
+                                                <div class="flex-grow">
+                                                    <div class="font-medium">{{ $module->display_name }}</div>
+                                                    <div class="text-xs text-gray-600">
+                                                        Sale: ${{ number_format($module->sale_price, 2) }} | 
+                                                        Cost: ${{ number_format($module->cost_price, 2) }} | 
+                                                        Profit: ${{ number_format($module->profit, 2) }}
+                                                    </div>
+                                                </div>
+                                                <form action="{{ route('packages.detach-module', ['id' => $package->id, 'moduleId' => $module->id, 'access_token' => $accessToken]) }}" method="POST" class="ml-2">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" class="text-red-600 hover:text-red-800 text-sm" onclick="return confirm('Remove this module from the package?')">
+                                                        Remove
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                    <div class="mt-3 p-2 bg-white rounded text-xs">
+                                        <div class="grid grid-cols-2 gap-4">
+                                            <div><strong>Total Cost:</strong> ${{ number_format($package->total_cost_price, 2) }}</div>
+                                            <div><strong>Total Sale:</strong> ${{ number_format($package->total_sale_price, 2) }}</div>
+                                            <div><strong>Total Tax:</strong> ${{ number_format($package->total_tax, 2) }}</div>
+                                            <div><strong>Total with Tax:</strong> ${{ number_format($package->total_sale_price_incl_tax, 2) }}</div>
+                                        </div>
+                                    </div>
+                                @else
+                                    <p class="mt-2 text-sm italic">No service modules currently associated with this package.</p>
+                                @endif
+                                
+                                <!-- Add Module Form -->
+                                <div class="mt-4 p-3 bg-white rounded">
+                                    <h4 class="text-sm font-medium text-gray-900 mb-2">Add Service Module</h4>
+                                    <form action="{{ route('packages.attach-module', ['id' => $package->id, 'access_token' => $accessToken]) }}" method="POST" class="flex gap-2">
+                                        @csrf
+                                        <select name="service_module_id" class="flex-grow text-sm border border-gray-300 rounded px-2 py-1">
+                                            <option value="">Select a module to add...</option>
+                                            @php
+                                                $availableModules = \App\Models\ServiceModule::active()
+                                                    ->whereNotIn('id', $package->serviceModules->pluck('id'))
+                                                    ->get();
+                                            @endphp
+                                            @foreach($availableModules as $module)
+                                                <option value="{{ $module->id }}">
+                                                    {{ $module->display_name }} - ${{ number_format($module->sale_price, 2) }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                        <button type="submit" class="bg-blue-600 text-white px-3 py-1 rounded text-sm hover:bg-blue-700">
+                                            Add
+                                        </button>
+                                    </form>
+                                </div>
                             </div>
-                        @endforeach
+                        </div>
                     </div>
-                    @error('modules')
-                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                    @enderror
-                    <p class="mt-2 text-sm text-gray-500">Select the modules/features included in this package</p>
                 </div>
 
                 <!-- Current Subscriptions Warning -->
@@ -148,14 +199,8 @@
                             <span id="preview_tax" class="ml-2 font-medium">{{ ($package->tax_rate * 100) }}%</span>
                         </div>
                         <div>
-                            <span class="text-gray-600">Modules:</span>
-                            <span id="preview_modules" class="ml-2">
-                                @if($package->modules && count($package->modules) > 0)
-                                    {{ implode(', ', array_map(fn($m) => ucwords(str_replace('_', ' ', $m)), $package->modules)) }}
-                                @else
-                                    None selected
-                                @endif
-                            </span>
+                            <span class="text-gray-600">Service Modules:</span>
+                            <span class="ml-2">{{ $package->serviceModules->count() }} modules</span>
                         </div>
                     </div>
                 </div>
@@ -179,15 +224,10 @@
             const cost = document.getElementById('cost').value || '0';
             const currency = document.getElementById('currency').value || 'USD';
             const taxRate = document.getElementById('tax_rate').value || '0';
-            
-            const checkedModules = Array.from(document.querySelectorAll('input[name="modules[]"]:checked'))
-                .map(cb => cb.value.replace('_', ' '))
-                .map(module => module.charAt(0).toUpperCase() + module.slice(1));
 
             document.getElementById('preview_name').textContent = name;
             document.getElementById('preview_cost').textContent = `$${cost} ${currency}`;
             document.getElementById('preview_tax').textContent = `${(parseFloat(taxRate) * 100).toFixed(2)}%`;
-            document.getElementById('preview_modules').textContent = checkedModules.length > 0 ? checkedModules.join(', ') : 'None selected';
         }
 
         // Add event listeners
@@ -195,11 +235,5 @@
         document.getElementById('cost').addEventListener('input', updatePreview);
         document.getElementById('currency').addEventListener('change', updatePreview);
         document.getElementById('tax_rate').addEventListener('input', updatePreview);
-        
-        document.querySelectorAll('input[name="modules[]"]').forEach(checkbox => {
-            checkbox.addEventListener('change', updatePreview);
-        });
-
-        // Initial preview is already set from server data
     </script>
 </x-app-layout> 

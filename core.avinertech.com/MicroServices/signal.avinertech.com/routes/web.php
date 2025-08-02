@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TenantController;
 use App\Http\Controllers\PackageController;
+use App\Http\Controllers\ServiceModuleController;
 use App\Http\Controllers\EncryptionController;
 use App\Http\Controllers\LoginController;
 use App\Http\Middleware\SuperAdminAuth;
@@ -42,6 +43,19 @@ Route::middleware([SuperAdminAuth::class])->group(function () {
     Route::get('/packages/{id}', [PackageController::class, 'show'])->name('packages.show');
     Route::get('/packages/{id}/edit', [PackageController::class, 'edit'])->name('packages.edit');
     Route::put('/packages/{id}', [PackageController::class, 'update'])->name('packages.update');
+
+    // Service Module Management Routes
+    Route::get('/service-modules', [ServiceModuleController::class, 'webIndex'])->name('service-modules.index');
+    Route::get('/service-modules/create', [ServiceModuleController::class, 'webCreate'])->name('service-modules.create');
+    Route::post('/service-modules', [ServiceModuleController::class, 'webStore'])->name('service-modules.store');
+    Route::get('/service-modules/{id}', [ServiceModuleController::class, 'webShow'])->name('service-modules.show');
+    Route::get('/service-modules/{id}/edit', [ServiceModuleController::class, 'webEdit'])->name('service-modules.edit');
+    Route::put('/service-modules/{id}', [ServiceModuleController::class, 'webUpdate'])->name('service-modules.update');
+    Route::delete('/service-modules/{id}', [ServiceModuleController::class, 'webDestroy'])->name('service-modules.destroy');
+
+    // Package Service Module Association Routes
+    Route::post('/packages/{id}/modules', [PackageController::class, 'attachModule'])->name('packages.attach-module');
+    Route::delete('/packages/{id}/modules/{moduleId}', [PackageController::class, 'detachModule'])->name('packages.detach-module');
 
     // Legacy routes for backward compatibility
     Route::post('/tenants/{tenant}/toggle-payment', [TenantController::class, 'togglePayment'])->name('tenants.toggle-payment');

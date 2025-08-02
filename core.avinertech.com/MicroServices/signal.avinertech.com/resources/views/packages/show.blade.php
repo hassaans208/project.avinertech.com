@@ -66,23 +66,60 @@
                             <dd class="mt-1 text-sm text-gray-900">{{ $package->updated_at->format('M d, Y \a\t g:i A') }}</dd>
                         </div>
                     </dl>
-
-                    <!-- Modules -->
-                    <div>
-                        <h4 class="text-lg font-medium text-gray-900 mb-3">Package Modules</h4>
-                        @if($package->modules && count($package->modules) > 0)
-                            <div class="grid grid-cols-2 md:grid-cols-3 gap-2">
-                                @foreach($package->modules as $module)
-                                    <div class="flex items-center p-3 bg-blue-50 rounded-lg">
-                                        <div class="w-2 h-2 bg-blue-500 rounded-full mr-3"></div>
-                                        <span class="text-sm font-medium text-blue-900">
-                                            {{ str_replace('_', ' ', ucwords($module)) }}
-                                        </span>
+                    
+                    <!-- Service Modules -->
+                    <div class="mt-6">
+                        <h4 class="text-lg font-medium text-gray-900 mb-3">Service Modules</h4>
+                        @if($package->serviceModules && $package->serviceModules->count() > 0)
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                @foreach($package->serviceModules as $module)
+                                    <div class="bg-gray-50 rounded-lg p-4">
+                                        <div class="flex justify-between items-start">
+                                            <div>
+                                                <h5 class="font-medium text-gray-900">{{ $module->display_name }}</h5>
+                                                @if($module->description)
+                                                    <p class="text-sm text-gray-600 mt-1">{{ $module->description }}</p>
+                                                @endif
+                                            </div>
+                                            <div class="text-right">
+                                                <div class="text-sm font-medium text-gray-900">${{ number_format($module->sale_price, 2) }}</div>
+                                                @if($module->tax_rate > 0)
+                                                    <div class="text-xs text-gray-500">+${{ number_format($module->tax_amount, 2) }} tax</div>
+                                                @endif
+                                            </div>
+                                        </div>
+                                        <div class="mt-2 flex justify-between text-xs text-gray-500">
+                                            <span>Cost: ${{ number_format($module->cost_price, 2) }}</span>
+                                            <span>Profit: ${{ number_format($module->profit, 2) }}</span>
+                                        </div>
                                     </div>
                                 @endforeach
                             </div>
+                            
+                            <!-- Package Totals -->
+                            <div class="mt-4 bg-indigo-50 rounded-lg p-4">
+                                <h5 class="font-medium text-indigo-900 mb-2">Package Totals</h5>
+                                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+                                    <div>
+                                        <span class="text-indigo-600">Total Cost:</span>
+                                        <div class="font-medium">${{ number_format($package->total_cost_price, 2) }}</div>
+                                    </div>
+                                    <div>
+                                        <span class="text-indigo-600">Total Sale:</span>
+                                        <div class="font-medium">${{ number_format($package->total_sale_price, 2) }}</div>
+                                    </div>
+                                    <div>
+                                        <span class="text-indigo-600">Total Tax:</span>
+                                        <div class="font-medium">${{ number_format($package->total_tax, 2) }}</div>
+                                    </div>
+                                    <div>
+                                        <span class="text-indigo-600">Total with Tax:</span>
+                                        <div class="font-medium">${{ number_format($package->total_sale_price_incl_tax, 2) }}</div>
+                                    </div>
+                                </div>
+                            </div>
                         @else
-                            <p class="text-gray-500 italic">No modules assigned to this package.</p>
+                            <p class="text-gray-500 italic">No service modules assigned to this package.</p>
                         @endif
                     </div>
                 </div>
@@ -183,37 +220,6 @@
                                 </div>
                             </div>
                         @endif
-                    </div>
-                </div>
-            </div>
-
-            <!-- Available Modules Reference -->
-            <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
-                <div class="p-6">
-                    <h3 class="text-lg font-medium text-gray-900 mb-4">Available Modules</h3>
-                    
-                    <div class="space-y-2">
-                        @foreach(\App\Models\Package::getAvailableModules() as $module)
-                            <div class="flex items-center justify-between py-2">
-                                <span class="text-sm text-gray-700">
-                                    {{ str_replace('_', ' ', ucwords($module)) }}
-                                </span>
-                                @if(in_array($module, $package->modules ?? []))
-                                    <span class="w-2 h-2 bg-green-500 rounded-full"></span>
-                                @else
-                                    <span class="w-2 h-2 bg-gray-300 rounded-full"></span>
-                                @endif
-                            </div>
-                        @endforeach
-                    </div>
-                    
-                    <div class="mt-4 pt-4 border-t border-gray-200">
-                        <div class="flex items-center text-xs text-gray-500">
-                            <span class="w-2 h-2 bg-green-500 rounded-full mr-2"></span>
-                            <span class="mr-4">Included</span>
-                            <span class="w-2 h-2 bg-gray-300 rounded-full mr-2"></span>
-                            <span>Not included</span>
-                        </div>
                     </div>
                 </div>
             </div>

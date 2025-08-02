@@ -30,7 +30,7 @@ class PackageController extends Controller
     public function getPackages(Request $request): JsonResponse
     {
         try {
-            $packages = $this->packageRepository->getAll();
+            $packages = $this->packageRepository->getAllWithServiceModules();
             
             $packagesData = $packages->map(function ($package) {
                 return [
@@ -39,10 +39,37 @@ class PackageController extends Controller
                     'cost' => number_format($package->cost, 2),
                     'currency' => $package->currency,
                     'tax_rate' => number_format($package->tax_rate, 4),
-                    'modules' => $package->modules ?? [],
+                    'service_modules' => $package->serviceModules->map(function ($module) {
+                        return [
+                            'id' => $module->id,
+                            'name' => $module->name,
+                            'display_name' => $module->display_name,
+                            'description' => $module->description,
+                            'cost_price' => number_format($module->cost_price, 2),
+                            'sale_price' => number_format($module->sale_price, 2),
+                            'tax_rate' => number_format($module->tax_rate, 4),
+                            'tax_amount' => number_format($module->tax_amount, 2),
+                            'sale_price_incl_tax' => number_format($module->sale_price_incl_tax, 2),
+                            'profit' => number_format($module->profit, 2),
+                            'currency' => $module->currency,
+                            'is_active' => $module->is_active,
+                            'formatted_cost_price' => $module->formatted_cost_price,
+                            'formatted_sale_price' => $module->formatted_sale_price,
+                            'formatted_sale_price_incl_tax' => $module->formatted_sale_price_incl_tax,
+                        ];
+                    }),
+                    'totals' => [
+                        'total_cost_price' => number_format($package->total_cost_price, 2),
+                        'total_sale_price' => number_format($package->total_sale_price, 2),
+                        'total_tax' => number_format($package->total_tax, 2),
+                        'total_sale_price_incl_tax' => number_format($package->total_sale_price_incl_tax, 2),
+                        'total_profit' => number_format($package->total_profit, 2),
+                        'formatted_total_cost_price' => $package->formatted_total_cost_price,
+                        'formatted_total_sale_price' => $package->formatted_total_sale_price,
+                        'formatted_total_sale_price_incl_tax' => $package->formatted_total_sale_price_incl_tax,
+                    ],
                     'is_free' => $package->isFree(),
                     'formatted_cost' => $package->getFormattedCostAttribute(),
-                    'available_modules' => Package::getAvailableModules(),
                     'created_at' => $package->created_at->toISOString(),
                     'updated_at' => $package->updated_at->toISOString(),
                 ];
@@ -52,7 +79,6 @@ class PackageController extends Controller
                 'success' => true,
                 'data' => $packagesData,
                 'total_packages' => $packages->count(),
-                'available_modules' => Package::getAvailableModules(),
                 'message' => 'Packages retrieved successfully'
             ]);
         } catch (\Exception $e) {
@@ -68,7 +94,7 @@ class PackageController extends Controller
      */
     public function index(Request $request): View
     {
-        $packages = $this->packageRepository->getAll();
+        $packages = $this->packageRepository->getAllWithServiceModules();
         $accessToken = $this->getAccessToken($request);
         
         return view('packages.index', compact('packages', 'accessToken'));
@@ -79,10 +105,9 @@ class PackageController extends Controller
      */
     public function create(Request $request): View
     {
-        $availableModules = Package::getAvailableModules();
         $accessToken = $this->getAccessToken($request);
         
-        return view('packages.create', compact('availableModules', 'accessToken'));
+        return view('packages.create', compact('accessToken'));
     }
 
     /**
@@ -103,7 +128,7 @@ class PackageController extends Controller
      */
     public function show(Request $request, int $id): View
     {
-        $package = $this->packageRepository->findById($id);
+        $package = $this->packageRepository->findByIdWithServiceModules($id);
         $accessToken = $this->getAccessToken($request);
         
         if (!$package) {
@@ -118,15 +143,14 @@ class PackageController extends Controller
      */
     public function edit(Request $request, int $id): View
     {
-        $package = $this->packageRepository->findById($id);
-        $availableModules = Package::getAvailableModules();
+        $package = $this->packageRepository->findByIdWithServiceModules($id);
         $accessToken = $this->getAccessToken($request);
         
         if (!$package) {
             abort(404);
         }
 
-        return view('packages.edit', compact('package', 'availableModules', 'accessToken'));
+        return view('packages.edit', compact('package', 'accessToken'));
     }
 
     /**
@@ -146,5 +170,52 @@ class PackageController extends Controller
 
         return redirect()->route('packages.index', ['access_token' => $accessToken])
             ->with('success', 'Package updated successfully.');
+    }
+
+    /**
+     * Attach a service module to a package
+     */
+    public function attachModule(Request $request, int $id): RedirectResponse
+    {
+        $package = $this->packageRepository->findByIdWithServiceModules($id);
+        
+        if (!$package) {
+            abort(404);
+        }
+
+        $request->validate([
+            'service_module_id' => 'required|exists:service_modules,id'
+        ]);
+
+        $moduleId = $request->input('service_module_id');
+        
+        // Check if module is already attached
+        if (!$package->serviceModules()->where('service_module_id', $moduleId)->exists()) {
+            $package->serviceModules()->attach($moduleId);
+        }
+
+        $accessToken = $this->getAccessToken($request);
+
+        return redirect()->route('packages.edit', ['id' => $id, 'access_token' => $accessToken])
+            ->with('success', 'Service module attached successfully.');
+    }
+
+    /**
+     * Detach a service module from a package
+     */
+    public function detachModule(Request $request, int $id, int $moduleId): RedirectResponse
+    {
+        $package = $this->packageRepository->findByIdWithServiceModules($id);
+        
+        if (!$package) {
+            abort(404);
+        }
+
+        $package->serviceModules()->detach($moduleId);
+
+        $accessToken = $this->getAccessToken($request);
+
+        return redirect()->route('packages.edit', ['id' => $id, 'access_token' => $accessToken])
+            ->with('success', 'Service module detached successfully.');
     }
 } 

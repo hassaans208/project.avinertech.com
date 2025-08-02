@@ -22,6 +22,11 @@ interface PackageRepositoryInterface
     public function getAll();
 
     /**
+     * Get all packages with service modules.
+     */
+    public function getAllWithServiceModules();
+
+    /**
      * Create a new package.
      */
     public function create(array $data): Package;
@@ -35,4 +40,9 @@ interface PackageRepositoryInterface
      * Find package by ID.
      */
     public function findById(int $id): ?Package;
+
+    /**
+     * Find package by ID with service modules.
+     */
+    public function findByIdWithServiceModules(int $id): ?Package;
 } 
