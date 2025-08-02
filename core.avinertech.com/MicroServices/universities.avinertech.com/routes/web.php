@@ -11,4 +11,9 @@ Route::get('/qs-rankings', [UniverseController::class, 'qsRankings'])->name('qs-
 Route::get('/programs-database', [UniverseController::class, 'programsDatabase'])->name('programs-database');
 Route::get('/api/csv-files', [UniverseController::class, 'getAvailableFiles'])->name('api.csv-files');
 
+// Chatbot UI Route
+Route::get('/chatbot', function () {
+    return view('chatbot');
+})->name('chatbot');
+
 require __DIR__.'/auth.php';
