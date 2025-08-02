@@ -565,15 +565,87 @@ $(document).on('keydown', function(e) {
 /* Mobile responsive improvements */
 @media (max-width: 768px) {
     .dataTables_filter input.search-enhanced {
-        @apply w-full;
+        @apply w-full mb-4;
+        font-size: 16px; /* Prevent zoom on iOS */
     }
     
     .dataTables_wrapper {
-        padding: 1rem;
+        padding: 0.5rem;
+        overflow-x: auto;
+    }
+    
+    .dataTables_wrapper .dataTables_length,
+    .dataTables_wrapper .dataTables_filter,
+    .dataTables_wrapper .dataTables_info,
+    .dataTables_wrapper .dataTables_paginate {
+        @apply text-sm;
+    }
+    
+    .dataTables_length select {
+        @apply text-sm;
+        font-size: 16px; /* Prevent zoom on iOS */
+    }
+    
+    #programs-table {
+        @apply text-xs;
+        min-width: 100%;
     }
     
     #programs-table tbody td {
-        @apply px-3 py-3 text-xs;
+        @apply px-2 py-2 text-xs;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 150px;
+    }
+    
+    #programs-table thead th {
+        @apply px-2 py-2 text-xs;
+        white-space: nowrap;
+    }
+    
+    /* Improve pagination on mobile */
+    .dataTables_paginate .paginate_button {
+        @apply px-2 py-1 text-xs;
+        margin: 0 1px;
+    }
+    
+    /* Stack DataTable controls vertically on mobile */
+    .dataTables_wrapper .dataTables_length,
+    .dataTables_wrapper .dataTables_filter {
+        @apply block w-full mb-3;
+    }
+    
+    .dataTables_wrapper .dataTables_filter {
+        @apply text-right;
+    }
+    
+    .dataTables_wrapper .dataTables_info,
+    .dataTables_wrapper .dataTables_paginate {
+        @apply block w-full text-center mt-3;
+    }
+}
+
+/* Extra small screens */
+@media (max-width: 480px) {
+    .dataTables_wrapper {
+        padding: 0.25rem;
+    }
+    
+    #programs-table tbody td {
+        @apply px-1 py-1;
+        max-width: 100px;
+        font-size: 11px;
+    }
+    
+    #programs-table thead th {
+        @apply px-1 py-1;
+        font-size: 11px;
+    }
+    
+    .dataTables_paginate .paginate_button {
+        @apply px-1;
+        font-size: 11px;
     }
 }
 </style>

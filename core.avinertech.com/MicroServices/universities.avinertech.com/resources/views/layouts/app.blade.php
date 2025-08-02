@@ -59,28 +59,55 @@
                     </div>
 
                     <!-- Mobile menu button -->
-                    <div class="sm:hidden flex items-center">
-                        <button type="button" class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 focus:text-gray-500 transition duration-150 ease-in-out" x-data="{ open: false }" @click="open = !open">
+                    <div class="sm:hidden flex items-center" x-data="{ mobileMenuOpen: false }">
+                        <button type="button" 
+                                class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 focus:text-gray-500 transition duration-150 ease-in-out" 
+                                @click="mobileMenuOpen = !mobileMenuOpen"
+                                :aria-expanded="mobileMenuOpen"
+                                aria-label="Toggle mobile menu">
                             <svg class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
-                                <path :class="{'hidden': open, 'inline-flex': !open }" class="inline-flex" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-                                <path :class="{'hidden': !open, 'inline-flex': open }" class="hidden" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                <path :class="{'hidden': mobileMenuOpen, 'inline-flex': !mobileMenuOpen }" class="inline-flex" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                                <path :class="{'hidden': !mobileMenuOpen, 'inline-flex': mobileMenuOpen }" class="hidden" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                             </svg>
                         </button>
-                    </div>
-                </div>
-
-                <!-- Mobile Navigation Menu -->
-                <div class="sm:hidden" x-data="{ open: false }" x-show="open" @click.away="open = false">
-                    <div class="pt-2 pb-3 space-y-1">
-                        <a href="{{ route('home') }}" class="block pl-3 pr-4 py-2 border-l-4 {{ request()->routeIs('home') ? 'border-blue-500 text-blue-700 bg-blue-50' : 'border-transparent text-gray-500' }} text-base font-medium hover:text-gray-700 hover:bg-gray-50 hover:border-gray-300 focus:outline-none focus:text-gray-700 focus:bg-gray-50 focus:border-gray-300 transition duration-150 ease-in-out">
-                            Home
-                        </a>
-                        <a href="{{ route('qs-rankings') }}" class="block pl-3 pr-4 py-2 border-l-4 {{ request()->routeIs('qs-rankings') ? 'border-blue-500 text-blue-700 bg-blue-50' : 'border-transparent text-gray-500' }} text-base font-medium hover:text-gray-700 hover:bg-gray-50 hover:border-gray-300 focus:outline-none focus:text-gray-700 focus:bg-gray-50 focus:border-gray-300 transition duration-150 ease-in-out">
-                            QS Rankings
-                        </a>
-                        <a href="{{ route('programs-database') }}" class="block pl-3 pr-4 py-2 border-l-4 {{ request()->routeIs('programs-database') ? 'border-green-500 text-green-700 bg-green-50' : 'border-transparent text-gray-500' }} text-base font-medium hover:text-gray-700 hover:bg-gray-50 hover:border-gray-300 focus:outline-none focus:text-gray-700 focus:bg-gray-50 focus:border-gray-300 transition duration-150 ease-in-out">
-                            Programs Database
-                        </a>
+                        
+                        <!-- Mobile Navigation Menu -->
+                        <div class="absolute top-16 left-0 right-0 bg-white shadow-lg border-t border-gray-200 z-50" 
+                             x-show="mobileMenuOpen" 
+                             @click.away="mobileMenuOpen = false"
+                             x-transition:enter="transition ease-out duration-200"
+                             x-transition:enter-start="opacity-0 transform scale-95"
+                             x-transition:enter-end="opacity-100 transform scale-100"
+                             x-transition:leave="transition ease-in duration-75"
+                             x-transition:leave-start="opacity-100 transform scale-100"
+                             x-transition:leave-end="opacity-0 transform scale-95">
+                            <div class="px-4 py-3 space-y-1">
+                                <a href="{{ route('home') }}" 
+                                   class="block px-3 py-2 rounded-md text-base font-medium {{ request()->routeIs('home') ? 'bg-blue-50 text-blue-700 border-l-4 border-blue-500' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50' }} transition duration-150 ease-in-out"
+                                   @click="mobileMenuOpen = false">
+                                    Home
+                                </a>
+                                <a href="{{ route('qs-rankings') }}" 
+                                   class="block px-3 py-2 rounded-md text-base font-medium {{ request()->routeIs('qs-rankings') ? 'bg-blue-50 text-blue-700 border-l-4 border-blue-500' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50' }} transition duration-150 ease-in-out"
+                                   @click="mobileMenuOpen = false">
+                                    QS Rankings
+                                </a>
+                                <a href="{{ route('programs-database') }}" 
+                                   class="block px-3 py-2 rounded-md text-base font-medium {{ request()->routeIs('programs-database') ? 'bg-green-50 text-green-700 border-l-4 border-green-500' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50' }} transition duration-150 ease-in-out"
+                                   @click="mobileMenuOpen = false">
+                                    Programs Database
+                                </a>
+                                @auth
+                                    <form method="POST" action="{{ route('logout') }}" class="mt-2">
+                                        @csrf
+                                        <button type="submit" 
+                                                class="w-full text-left block px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-50 transition duration-150 ease-in-out">
+                                            Logout
+                                        </button>
+                                    </form>
+                                @endauth
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
