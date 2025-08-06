@@ -4,15 +4,17 @@ Here’s a professional and structured **README** template for your Laravel proj
 
 # **AvinerTech** Project
 
-Welcome to the **AvinerTech** project! This project is built using **Laravel**, employing a **microservices monolithic architecture**. It's designed to be scalable, maintainable, and easily extendable. This code is not industry prepared and needs to have alot more changes, if you find credentials in the Repo they are masked or of a dev environement.
-
-Still can see Design pattern implementation in `project.avinertech.com/core.avinertech.com/MicroServices/signal.avinertech.com/`
+Welcome to the **AvinerTech** project! This project is built using **Laravel**, employing a **microservices monolithic architecture**. It's designed to be scalable, maintainable, and easily extendable.
 
 ---
 
-## Pre-requisite
+## Please Read
 
 It is still underdevelopment, and will become fully scaffolded including setting up Nginx or Apache configurations. A few projects are live.
+
+This code is not industry prepared and needs to have alot more changes, if you find credentials in the Repo they are masked or of a dev environement.
+
+Still can see Design pattern implementation in `project.avinertech.com/core.avinertech.com/MicroServices/signal.avinertech.com/`
 
 ## **Overview**
 
