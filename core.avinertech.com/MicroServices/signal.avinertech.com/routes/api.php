@@ -7,10 +7,15 @@ use App\Http\Controllers\EncryptionController;
 use App\Http\Controllers\PackageController;
 use App\Http\Controllers\ServiceModuleController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\RegisterApplicationController;
 
 // Public routes (no authentication required)
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/register', [AuthController::class, 'register']);
+
+// Application registration routes (public)
+Route::post('/register-application', [RegisterApplicationController::class, 'register']);
+Route::get('/registration-status/{email}', [RegisterApplicationController::class, 'getRegistrationStatus']);
 
 // Encryption/Decryption utility routes (public)
 Route::post('/encrypt', [EncryptionController::class, 'encrypt']);
