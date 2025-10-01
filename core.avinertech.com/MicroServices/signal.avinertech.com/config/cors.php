@@ -21,6 +21,7 @@ return [
     'allowed_origins' => [
         'http://localhost:3000',
         'http://localhost:3001',
+        'http://localhost:5173',
         'https://onboard.avinertech.com',
         'http://demo.avinertech.local',
         'http://*.avinertech.local',
