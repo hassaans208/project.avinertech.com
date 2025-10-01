@@ -67,7 +67,7 @@
             <!-- Progress bar -->
             <div class="w-full bg-white/20 rounded-full h-3">
               <div class="bg-gradient-to-r from-pink-500 to-purple-600 h-3 rounded-full transition-all duration-500" 
-                   :style="{ width: currentStep === 1 ? '16%' : currentStep === 2 ? '33%' : currentStep === 3 ? '50%' : currentStep === 4 ? '66%' : currentStep === 5 ? '83%' : currentStep === 6 ? '100%' : '100%' }"></div>
+                   :style="{ width: currentStep === 1 ? '14%' : currentStep === 2 ? '28%' : currentStep === 3 ? '42%' : currentStep === 4 ? '57%' : currentStep === 5 ? '71%' : currentStep === 6 ? '85%' : currentStep === 7 ? '100%' : '100%' }"></div>
             </div>
             
             <!-- Step indicator -->
@@ -78,6 +78,7 @@
               <span :class="{'font-bold text-white': currentStep === 4}">Processing</span>
               <span :class="{'font-bold text-white': currentStep === 5}">Complete</span>
               <span :class="{'font-bold text-white': currentStep === 6}">Deploy</span>
+              <span :class="{'font-bold text-white': currentStep === 7}">Register</span>
             </div>
 
             <!-- Package Selection Step -->
@@ -204,7 +205,7 @@
                   <label class="block text-sm font-bold mb-2 text-white group-hover:text-pink-300 transition-colors">Password</label>
                   <input v-model="formData.password" type="password" 
                          class="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-pink-400 focus:border-transparent transition-all" 
-                         placeholder="••••••••">
+                         placeholder="••••••••" minlength="8">
                   <span v-if="errors?.password" class="text-red-400 text-sm">{{ errors.password[0] }}</span>
                 </div>
                 
@@ -340,6 +341,133 @@
               </div>
             </div>
 
+            <!-- Registration Step -->
+            <div v-if="currentStep === 7" class="text-center py-8">
+              <div v-if="!registrationComplete" class="spin-animation inline-block w-16 h-16 border-4 border-white border-t-transparent rounded-full mb-6"></div>
+              <h3 class="text-2xl font-bold text-white mb-4">{{ registrationStatus }}</h3>
+              <div class="mt-4">
+                <p class="text-white/80">{{ registrationMessage }}</p>
+                <div v-if="registrationComplete" class="mt-8">
+                  <div class="text-6xl mb-6">🎉</div>
+                  <h3 class="text-3xl font-bold text-white mb-6">Registration Complete!</h3>
+                  
+                  <!-- Registration Details -->
+                  <div class="bg-white/10 backdrop-blur-sm border border-white/20 p-8 rounded-2xl mt-6 text-left max-w-4xl mx-auto">
+                    <h4 class="text-xl font-semibold mb-6 text-white text-center">Registration Details</h4>
+                    
+                    <!-- User Information -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                      <div class="space-y-4">
+                        <h5 class="text-lg font-semibold text-pink-400 mb-3">User Information</h5>
+                        <!-- <div>
+                          <p class="font-medium text-white/80">User ID:</p>
+                          <p class="text-white">{{ registrationData?.user?.id }}</p>
+                        </div> -->
+                        <div>
+                          <p class="font-medium text-white/80">Name:</p>
+                          <p class="text-white">{{ registrationData?.user?.name }}</p>
+                        </div>
+                        <div>
+                          <p class="font-medium text-white/80">Email:</p>
+                          <p class="text-white">{{ registrationData?.user?.email }}</p>
+                        </div>
+                        <!-- <div>
+                          <p class="font-medium text-white/80">User Type:</p>
+                          <p class="text-white">{{ registrationData?.user?.user_type }}</p>
+                        </div> -->
+                        <div>
+                          <p class="font-medium text-white/80">Status:</p>
+                          <p class="text-white">{{ registrationData?.user?.is_active ? 'Active' : 'Inactive' }}</p>
+                        </div>
+                      </div>
+                      
+                      <div class="space-y-4">
+                        <h5 class="text-lg font-semibold text-blue-400 mb-3">Tenant Information</h5>
+                        <div>
+                          <p class="font-medium text-white/80">Tenant ID:</p>
+                          <p class="text-white">{{ registrationData?.tenant?.id }}</p>
+                        </div>
+                        <div>
+                          <p class="font-medium text-white/80">Name:</p>
+                          <p class="text-white">{{ registrationData?.tenant?.name }}</p>
+                        </div>
+                        <div>
+                          <p class="font-medium text-white/80">Host:</p>
+                          <p class="text-white">{{ registrationData?.tenant?.host }}</p>
+                        </div>
+                        <div>
+                          <p class="font-medium text-white/80">Status:</p>
+                          <p class="text-white">{{ registrationData?.tenant?.status }}</p>
+                        </div>
+                        <div>
+                          <p class="font-medium text-white/80">Website URL:</p>
+                          <a :href="'https://' + registrationData?.tenant?.host" target="_blank" 
+                             class="text-pink-400 hover:text-pink-300 underline text-lg font-medium">
+                            {{ registrationData?.tenant?.host }}
+                          </a>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <!-- Package Information -->
+                    <div class="mt-8 pt-6 border-t border-white/20">
+                      <h5 class="text-lg font-semibold text-green-400 mb-3">Package Information</h5>
+                      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div>
+                          <p class="font-medium text-white/80">Package ID:</p>
+                          <p class="text-white">{{ registrationData?.package?.id }}</p>
+                        </div>
+                        <div>
+                          <p class="font-medium text-white/80">Package Name:</p>
+                          <p class="text-white">{{ registrationData?.package?.name }}</p>
+                        </div>
+                        <div>
+                          <p class="font-medium text-white/80">Cost:</p>
+                          <p class="text-white">{{ registrationData?.package?.formatted_cost }}</p>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <!-- API Token -->
+                    <!-- <div class="mt-8 pt-6 border-t border-white/20">
+                      <h5 class="text-lg font-semibold text-yellow-400 mb-3">API Access</h5>
+                      <div>
+                        <p class="font-medium text-white/80">API Token:</p>
+                        <p class="text-white font-mono bg-white/10 p-2 rounded break-all">{{ registrationData?.api_token }}</p>
+                      </div>
+                    </div> -->
+                    
+                    <!-- Database Configuration -->
+                    <div class="mt-8 pt-6 border-t border-white/20">
+                      <h5 class="text-lg font-semibold text-purple-400 mb-3">Database Configuration</h5>
+                      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                          <p class="font-medium text-white/80">Database Name:</p>
+                          <p class="text-white">{{ registrationData?.database_config?.database_name }}</p>
+                        </div>
+                        <div>
+                          <p class="font-medium text-white/80">Database User:</p>
+                          <p class="text-white">{{ registrationData?.database_config?.database_user }}</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <!-- Action Buttons -->
+                  <div class="flex flex-wrap justify-center gap-4 mt-8">
+                    <a :href="'https://' + registrationData?.tenant?.host" target="_blank"
+                       class="px-8 py-3 bg-gradient-to-r from-pink-500 to-purple-600 text-white font-bold rounded-lg shadow-lg hover:shadow-pink-500/30 transition-all">
+                      Visit Your Application
+                    </a>
+                    <!-- <button @click="currentStep = 1" 
+                            class="px-8 py-3 bg-white/20 text-white font-bold rounded-lg shadow-lg hover:bg-white/30 transition-all">
+                      Start Over
+                    </button> -->
+                  </div>
+                </div>
+              </div>
+            </div>
+
             <!-- Navigation buttons -->
             <div class="flex justify-between pt-8">
               <button v-if="currentStep > 1 && currentStep < 4"
@@ -391,6 +519,10 @@ export default {
     const deploymentStatus = ref('')
     const deploymentMessage = ref('')
     const deploymentComplete = ref(false)
+    const registrationStatus = ref('')
+    const registrationMessage = ref('')
+    const registrationComplete = ref(false)
+    const registrationData = ref({})
     const packages = ref([])
     const selectedPackage = ref(null)
     const loading = ref(false)
@@ -525,10 +657,69 @@ export default {
         deploymentMessage.value = "Your application has been successfully deployed!"
         deploymentComplete.value = true
 
+        // Start registration process
+        await startRegistration()
+
       } catch (error) {
         console.error('Deployment error:', error)
         deploymentStatus.value = "Deployment Error"
         deploymentMessage.value = "An error occurred during deployment. Please try again."
+      }
+    }
+
+    const startRegistration = async () => {
+      currentStep.value = 7
+      registrationComplete.value = false
+
+      try {
+        registrationStatus.value = "Registering Application"
+        registrationMessage.value = "Registering your application in the central system..."
+
+        const registrationPayload = {
+          package_id: selectedPackage.value.id,
+          package_name: selectedPackage.value.name.replace('_', ' '),
+          package_price_per_month: parseFloat(selectedPackage.value.cost),
+          total_price: parseFloat(selectedPackage.value.cost),
+          company_name: formData.value.company_name,
+          email: formData.value.email,
+          password: formData.value.password,
+          password_confirmation: formData.value.password,
+          address: formData.value.address,
+          host: formData.value.host,
+          username: formData.value.username,
+          phone: formData.value.phone,
+          database_name: formData.value.database_name,
+          database_user: formData.value.database_user,
+          database_password: formData.value.database_password
+        }
+
+        console.log('Registration payload:', registrationPayload)
+
+        const response = await fetch('https://signal.avinertech.com/api/register-application', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          },
+          body: JSON.stringify(registrationPayload)
+        })
+
+        const data = await response.json()
+        console.log('Registration response:', data)
+
+        if (data.success) {
+          registrationData.value = data.data
+          registrationStatus.value = "Registration Complete"
+          registrationMessage.value = "Your application has been successfully registered!"
+          registrationComplete.value = true
+        } else {
+          throw new Error(data.message || 'Registration failed')
+        }
+
+      } catch (error) {
+        console.error('Registration error:', error)
+        registrationStatus.value = "Registration Error"
+        registrationMessage.value = "An error occurred during registration. Please try again."
       }
     }
 
@@ -601,6 +792,10 @@ export default {
       deploymentStatus,
       deploymentMessage,
       deploymentComplete,
+      registrationStatus,
+      registrationMessage,
+      registrationComplete,
+      registrationData,
       packages,
       selectedPackage,
       loading,
