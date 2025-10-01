@@ -19,7 +19,7 @@ APP_PATH=$2
 SITES_AVAILABLE="/etc/nginx/sites-available"
 SITES_ENABLED="/etc/nginx/sites-enabled"
 CONFIG_FILE="${SITES_AVAILABLE}/${APP_NAME}"
-TEMPLATE_FILE="${SITES_AVAILABLE}/demo.avinertech.com"
+TEMPLATE_FILE="${SITES_AVAILABLE}/prototype.avinertech.com"
 
 # Check if template exists
 if [ ! -f "$TEMPLATE_FILE" ]; then
