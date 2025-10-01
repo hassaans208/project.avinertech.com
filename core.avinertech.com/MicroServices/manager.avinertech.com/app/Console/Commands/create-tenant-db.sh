@@ -32,7 +32,7 @@ fi
 
 # Create database and user
 echo -e "${YELLOW}Creating database '$DB_NAME' and user '$DB_USER' on host '$DB_HOST'...${NC}"
-mysql -u root <<EOF
+mysql -u root -p27901 <<EOF
 CREATE DATABASE IF NOT EXISTS \`$DB_NAME\`;
 CREATE USER IF NOT EXISTS '$DB_USER'@'$DB_HOST' IDENTIFIED BY '$DB_PASS';
 GRANT ALL PRIVILEGES ON \`$DB_NAME\`.* TO '$DB_USER'@'$DB_HOST';
