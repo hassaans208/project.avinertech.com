@@ -32,7 +32,7 @@ cp "$TEMPLATE_FILE" "$CONFIG_FILE"
 
 # Replace placeholders in the copied file
 sed -i "s|server_name .*;|server_name ${APP_NAME};|g" "$CONFIG_FILE"
-sed -i "s|root .*;|root ${APP_PATH}/public;|g" "$CONFIG_FILE"
+# sed -i "s|root .*;|root ${APP_PATH}/public;|g" "$CONFIG_FILE"
 
 # Create symbolic link if it doesn't exist
 if [ ! -L "${SITES_ENABLED}/${APP_NAME}" ]; then
