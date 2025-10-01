@@ -24,6 +24,7 @@ class RegisterApplicationRequest extends FormRequest
     {
         return [
             // Package information
+            'package_id' => ['nullable', 'integer', 'exists:packages,id'],
             'package_name' => ['required', 'string', 'max:255'],
             'package_price_per_month' => ['required', 'numeric', 'min:0'],
             'total_price' => ['required', 'numeric', 'min:0'],
@@ -32,7 +33,7 @@ class RegisterApplicationRequest extends FormRequest
             'company_name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'email', 'unique:users,email'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
-            'password_confirmation' => ['required', 'string', 'min:8'],
+            // 'password_confirmation' => ['required', 'string', 'min:8'],
             'address' => ['required', 'string', 'max:500'],
             'host' => ['required', 'string', 'max:100', 'unique:tenants,host'],
             'username' => ['required', 'string', 'max:100'],
@@ -53,6 +54,8 @@ class RegisterApplicationRequest extends FormRequest
     public function messages(): array
     {
         return [
+            'package_id.integer' => 'Package ID must be a valid integer.',
+            'package_id.exists' => 'The selected package does not exist.',
             'package_name.required' => 'Package name is required.',
             'package_price_per_month.required' => 'Package price is required.',
             'package_price_per_month.numeric' => 'Package price must be a valid number.',
@@ -65,7 +68,7 @@ class RegisterApplicationRequest extends FormRequest
             'email.unique' => 'This email address is already registered.',
             'password.required' => 'Password is required.',
             'password.min' => 'Password must be at least 8 characters long.',
-            'password.confirmed' => 'Password confirmation does not match.',
+            // 'password.confirmed' => 'Password confirmation does not match.',
             'address.required' => 'Address is required.',
             'host.required' => 'Host name is required.',
             'host.unique' => 'This host name is already taken.',
@@ -82,6 +85,7 @@ class RegisterApplicationRequest extends FormRequest
     public function attributes(): array
     {
         return [
+            'package_id' => 'package ID',
             'package_name' => 'package name',
             'package_price_per_month' => 'package price',
             'total_price' => 'total price',

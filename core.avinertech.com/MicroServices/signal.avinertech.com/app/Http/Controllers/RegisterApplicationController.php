@@ -90,22 +90,35 @@ class RegisterApplicationController extends Controller
      */
     private function findOrCreatePackage(RegisterApplicationRequest $request): Package
     {
-        $packageName = strtolower(str_replace(' ', '_', $request->package_name));
-        
-        // Try to find existing package by name
-        $package = Package::where('name', $packageName)->first();
-        
-        if (!$package) {
-            // Create new package if it doesn't exist
-            $package = Package::create([
-                'name' => $packageName,
-                'cost' => $request->package_price_per_month,
-                'currency' => 'USD',
-                'tax_rate' => 0.0,
-            ]);
+        // First, try to find by package_id if provided
+        if ($request->has('package_id') && $request->package_id) {
+            $package = Package::find($request->package_id);
+            if ($package) {
+                return $package;
+            }
         }
         
-        return $package;
+        // If no package_id or not found, try to find by name
+        $packageName = strtolower(str_replace(' ', '_', $request->package_name));
+        $package = Package::where('name', $packageName)->first();
+        
+        if ($package) {
+            // Update package cost if it's different (in case pricing changed)
+            if ($package->cost != $request->package_price_per_month) {
+                $package->update(['cost' => $request->package_price_per_month]);
+            }
+            return $package;
+        }
+        
+        // Create new package if it doesn't exist
+        // $package = Package::create([
+        //     'name' => $packageName,
+        //     'cost' => $request->package_price_per_month,
+        //     'currency' => 'USD',
+        //     'tax_rate' => 0.0,
+        // ]);
+        
+        return null;
     }
 
     /**
