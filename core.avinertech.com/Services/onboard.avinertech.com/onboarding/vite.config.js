@@ -19,6 +19,7 @@ export default defineConfig({
     },
   },
   server: {
-    allowedHosts: ['onboard.avinertech.com', 'avinertech.com', 'localhost', '127.0.0.1']
+    allowedHosts: ['onboard.avinertech.com', 'avinertech.com', 'localhost', '127.0.0.1'],
+    port: 3000
   },
 })
