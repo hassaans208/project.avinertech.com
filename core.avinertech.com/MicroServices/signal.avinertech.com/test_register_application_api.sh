@@ -8,7 +8,7 @@ echo "=================================="
 
 # Test 1: Successful registration with Professional Package
 echo "Test 1: Register Professional Package"
-curl -X POST http://localhost:8000/api/register-application \
+curl -X POST https://signal.avinertech.com/api/register-application \
   -H "Content-Type: application/json" \
   -H "Accept: application/json" \
   -d '{
@@ -32,7 +32,7 @@ echo -e "\n\n"
 
 # Test 2: Register Basic Package
 echo "Test 2: Register Basic Package"
-curl -X POST http://localhost:8000/api/register-application \
+curl -X POST https://signal.avinertech.com/api/register-application \
   -H "Content-Type: application/json" \
   -H "Accept: application/json" \
   -d '{
@@ -53,7 +53,7 @@ echo -e "\n\n"
 
 # Test 3: Register Free Package
 echo "Test 3: Register Free Package"
-curl -X POST http://localhost:8000/api/register-application \
+curl -X POST https://signal.avinertech.com/api/register-application \
   -H "Content-Type: application/json" \
   -H "Accept: application/json" \
   -d '{
@@ -74,7 +74,7 @@ echo -e "\n\n"
 
 # Test 4: Validation Error - Missing required fields
 echo "Test 4: Validation Error - Missing Required Fields"
-curl -X POST http://localhost:8000/api/register-application \
+curl -X POST https://signal.avinertech.com/api/register-application \
   -H "Content-Type: application/json" \
   -H "Accept: application/json" \
   -d '{
@@ -86,7 +86,7 @@ echo -e "\n\n"
 
 # Test 5: Validation Error - Password confirmation mismatch
 echo "Test 5: Validation Error - Password Mismatch"
-curl -X POST http://localhost:8000/api/register-application \
+curl -X POST https://signal.avinertech.com/api/register-application \
   -H "Content-Type: application/json" \
   -H "Accept: application/json" \
   -d '{
@@ -107,14 +107,14 @@ echo -e "\n\n"
 
 # Test 6: Check registration status
 echo "Test 6: Check Registration Status"
-curl -X GET http://localhost:8000/api/registration-status/test@example.com \
+curl -X GET https://signal.avinertech.com/api/registration-status/test@example.com \
   -H "Accept: application/json" | jq '.'
 
 echo -e "\n\n"
 
 # Test 7: Check non-existent user status
 echo "Test 7: Check Non-existent User Status"
-curl -X GET http://localhost:8000/api/registration-status/nonexistent@example.com \
+curl -X GET https://signal.avinertech.com/api/registration-status/nonexistent@example.com \
   -H "Accept: application/json" | jq '.'
 
 echo -e "\n"
