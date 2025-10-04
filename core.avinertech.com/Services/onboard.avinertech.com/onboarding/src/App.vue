@@ -376,8 +376,8 @@
                 <p class="text-white/80">{{ paymentMessage }}</p>
                 
                 <!-- Payment Modal -->
-                <div v-if="showPaymentModal" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-                  <div class="bg-white rounded-2xl w-full max-w-4xl h-[80vh] overflow-hidden">
+                <div v-if="showPaymentModal" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+                  <div class="bg-white rounded-2xl w-full h-full max-w-none max-h-none overflow-hidden">
                     <div class="flex justify-between items-center p-4 border-b">
                       <h3 class="text-lg font-semibold text-gray-900">Complete Payment</h3>
                       <button @click="closePaymentModal" class="text-gray-500 hover:text-gray-700">
@@ -389,7 +389,8 @@
                     <iframe 
                       :src="paymentData?.checkoutUrl" 
                       class="w-full h-full border-0"
-                      @load="checkPaymentStatus">
+                      @load="onIframeLoad"
+                      @error="onIframeError">
                     </iframe>
                   </div>
                 </div>
@@ -793,6 +794,11 @@ export default {
         console.error('Payment error:', error)
         paymentStatus.value = "Payment Error"
         paymentMessage.value = "An error occurred during payment setup. Please try again."
+        
+        // Redirect back to deployment step after 3 seconds
+        setTimeout(() => {
+          currentStep.value = 8 // Go to deployment step
+        }, 3000)
       }
     }
 
@@ -814,11 +820,29 @@ export default {
       }, 5000) // Simulate 5 second payment process
     }
 
+    const onIframeLoad = () => {
+      console.log('Iframe loaded successfully')
+      paymentStatus.value = "Payment Form Ready"
+      paymentMessage.value = "Please complete your payment in the form below"
+    }
+
+    const onIframeError = () => {
+      console.error('Iframe failed to load')
+      paymentStatus.value = "Payment Error"
+      paymentMessage.value = "Failed to load payment form. Please try again."
+      showPaymentModal.value = false
+      
+      // Redirect back to deployment step after 3 seconds
+      setTimeout(() => {
+        currentStep.value = 8
+      }, 3000)
+    }
+
     const closePaymentModal = () => {
       showPaymentModal.value = false
-      // If payment is not complete, go back to payment step
+      // If payment is not complete, go back to deployment step
       if (!paymentComplete.value) {
-        currentStep.value = 6
+        currentStep.value = 8 // Go to deployment step
       }
     }
 
@@ -1007,6 +1031,8 @@ export default {
       startDeployment,
       startPayment,
       checkPaymentStatus,
+      onIframeLoad,
+      onIframeError,
       closePaymentModal,
       selectPackage,
       scrollToFeatures
