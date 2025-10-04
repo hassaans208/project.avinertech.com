@@ -14,7 +14,7 @@ class EncryptionController extends Controller
     public function encrypt(Request $request): JsonResponse
     {
         $request->validate([
-            'value' => 'required|string|max:500'
+            'value' => 'required|string|max:2000'
         ]);
         
         try {
