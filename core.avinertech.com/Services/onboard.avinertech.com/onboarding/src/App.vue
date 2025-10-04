@@ -6,7 +6,28 @@
       <div class="absolute -left-24 top-1/3 w-80 h-80 rounded-full bg-gradient-to-r from-blue-500 to-teal-500 opacity-20 blur-3xl"></div>
       <div class="absolute right-1/4 bottom-0 w-64 h-64 rounded-full bg-gradient-to-r from-yellow-500 to-orange-500 opacity-20 blur-3xl"></div>
     </div>
-
+              
+                <!-- Payment Modal -->
+    <div v-if="showPaymentModal" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+      <div class="bg-white rounded-2xl w-full h-full max-w-none max-h-none overflow-hidden">
+        <div class="flex justify-between items-center p-4 border-b">
+          <h3 class="text-lg font-semibold text-gray-900">Complete Payment</h3>
+          <button @click="closePaymentModal" class="text-gray-500 hover:text-gray-700">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+            </svg>
+          </button>
+        </div>
+        <iframe 
+          :src="paymentData?.checkoutUrl" 
+          class="w-full h-full border-0"
+          sandbox="allow-top-navigation allow-scripts allow-forms allow-same-origin allow-popups allow-popups-to-escape-sandbox"
+          @load="onIframeLoad"
+          @error="onIframeError">
+        </iframe>
+      </div>
+    </div>
+    
     <!-- Initial Welcome Screen -->
     <div v-if="!showRegistration" class="min-h-screen flex items-center justify-center relative z-10">
       <div class="text-center max-w-4xl mx-auto px-6">
@@ -374,28 +395,7 @@
               <h3 class="text-2xl font-bold text-white mb-4">{{ paymentStatus }}</h3>
               <div class="mt-4">
                 <p class="text-white/80">{{ paymentMessage }}</p>
-                
-                <!-- Payment Modal -->
-                <div v-if="showPaymentModal" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-                  <div class="bg-white rounded-2xl w-full h-full max-w-none max-h-none overflow-hidden">
-                    <div class="flex justify-between items-center p-4 border-b">
-                      <h3 class="text-lg font-semibold text-gray-900">Complete Payment</h3>
-                      <button @click="closePaymentModal" class="text-gray-500 hover:text-gray-700">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                        </svg>
-                      </button>
-                    </div>
-                    <iframe 
-                      :src="paymentData?.checkoutUrl" 
-                      class="w-full h-full border-0"
-                      sandbox="allow-top-navigation allow-scripts allow-forms allow-same-origin allow-popups allow-popups-to-escape-sandbox"
-                      @load="onIframeLoad"
-                      @error="onIframeError">
-                    </iframe>
-                  </div>
-                </div>
-                
+  
                 <div v-if="paymentComplete" class="mt-8">
                   <div class="text-6xl mb-4">✅</div>
                   <h3 class="text-2xl font-bold text-white mb-4">Payment Successful!</h3>
