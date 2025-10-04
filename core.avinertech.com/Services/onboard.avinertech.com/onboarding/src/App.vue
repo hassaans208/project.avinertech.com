@@ -389,6 +389,7 @@
                     <iframe 
                       :src="paymentData?.checkoutUrl" 
                       class="w-full h-full border-0"
+                      sandbox="allow-top-navigation allow-scripts allow-forms allow-same-origin allow-popups allow-popups-to-escape-sandbox"
                       @load="onIframeLoad"
                       @error="onIframeError">
                     </iframe>
