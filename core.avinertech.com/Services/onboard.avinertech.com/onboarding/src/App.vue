@@ -773,7 +773,7 @@ export default {
             'X-ENC-SUB': 'test-subdomain'
           },
           body: JSON.stringify({
-            signature: `test-signature-12345-${encryptData.encrypted}`
+            signature: `${encryptData.encrypted}`
           })
         })
 
