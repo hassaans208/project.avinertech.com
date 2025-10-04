@@ -67,7 +67,7 @@
             <!-- Progress bar -->
             <div class="w-full bg-white/20 rounded-full h-3">
               <div class="bg-gradient-to-r from-pink-500 to-purple-600 h-3 rounded-full transition-all duration-500" 
-                   :style="{ width: currentStep === 1 ? '14%' : currentStep === 2 ? '28%' : currentStep === 3 ? '42%' : currentStep === 4 ? '57%' : currentStep === 5 ? '71%' : currentStep === 6 ? '85%' : currentStep === 7 ? '100%' : '100%' }"></div>
+                   :style="{ width: currentStep === 1 ? '12%' : currentStep === 2 ? '25%' : currentStep === 3 ? '37%' : currentStep === 4 ? '50%' : currentStep === 5 ? '62%' : currentStep === 6 ? '75%' : currentStep === 7 ? '87%' : currentStep === 8 ? '100%' : '100%' }"></div>
             </div>
             
             <!-- Step indicator -->
@@ -77,8 +77,9 @@
               <span :class="{'font-bold text-white': currentStep === 3}">Database</span>
               <span :class="{'font-bold text-white': currentStep === 4}">Processing</span>
               <span :class="{'font-bold text-white': currentStep === 5}">Complete</span>
-              <span :class="{'font-bold text-white': currentStep === 6}">Deploy</span>
-              <span :class="{'font-bold text-white': currentStep === 7}">Register</span>
+              <span :class="{'font-bold text-white': currentStep === 6}">Payment</span>
+              <span :class="{'font-bold text-white': currentStep === 7}">Deploy</span>
+              <span :class="{'font-bold text-white': currentStep === 8}">Register</span>
             </div>
 
             <!-- Package Selection Step -->
@@ -315,15 +316,94 @@
                         class="px-8 py-3 bg-white/20 text-white font-bold rounded-lg shadow-lg hover:bg-white/30 transition-all">
                   Update Information
                 </button>
-                <button @click="startDeployment" 
+                <button @click="startPayment" 
                         class="px-8 py-3 bg-gradient-to-r from-pink-500 to-purple-600 text-white font-bold rounded-lg shadow-lg hover:shadow-pink-500/30 transition-all">
-                  Start Deployment
+                  Pay Now - Start Free Trial
                 </button>
               </div>
             </div>
 
-            <!-- Deployment Step -->
+            <!-- Payment Step -->
             <div v-if="currentStep === 6" class="text-center py-8">
+              <div class="text-6xl mb-6">💳</div>
+              <h3 class="text-3xl font-bold text-white mb-6">Complete Your Payment</h3>
+              <p class="text-xl text-white/80 mb-8">Start your 30-day free trial today!</p>
+              
+              <div class="bg-white/10 backdrop-blur-sm border border-white/20 p-8 rounded-2xl mt-6 text-left max-w-2xl mx-auto">
+                <h4 class="text-xl font-semibold mb-6 text-white text-center">Payment Summary</h4>
+                
+                <div class="space-y-4">
+                  <div class="flex justify-between items-center">
+                    <span class="text-white/80">Package:</span>
+                    <span class="text-white font-semibold capitalize">{{ selectedPackage?.name?.replace('_', ' ') }}</span>
+                  </div>
+                  <div class="flex justify-between items-center">
+                    <span class="text-white/80">Company:</span>
+                    <span class="text-white font-semibold">{{ formData.company_name }}</span>
+                  </div>
+                  <div class="flex justify-between items-center">
+                    <span class="text-white/80">Host:</span>
+                    <span class="text-white font-semibold">{{ formData.host }}.avinertech.com</span>
+                  </div>
+                  <div class="flex justify-between items-center">
+                    <span class="text-white/80">Monthly Cost:</span>
+                    <span class="text-white font-semibold">{{ selectedPackage?.formatted_cost }}</span>
+                  </div>
+                  <div class="flex justify-between items-center border-t border-white/20 pt-4">
+                    <span class="text-green-400 font-semibold">30-Day Free Trial</span>
+                    <span class="text-green-400 font-bold">$0.00</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flex flex-wrap justify-center gap-4 mt-8">
+                <button @click="startPayment" 
+                        class="px-8 py-3 bg-gradient-to-r from-pink-500 to-purple-600 text-white font-bold rounded-lg shadow-lg hover:shadow-pink-500/30 transition-all">
+                  Pay Now - Start Free Trial
+                </button>
+                <button @click="currentStep = 1" 
+                        class="px-8 py-3 bg-white/20 text-white font-bold rounded-lg shadow-lg hover:bg-white/30 transition-all">
+                  Change Package
+                </button>
+              </div>
+            </div>
+
+            <!-- Payment Processing Step -->
+            <div v-if="currentStep === 7" class="text-center py-8">
+              <div v-if="!paymentComplete" class="spin-animation inline-block w-16 h-16 border-4 border-white border-t-transparent rounded-full mb-6"></div>
+              <h3 class="text-2xl font-bold text-white mb-4">{{ paymentStatus }}</h3>
+              <div class="mt-4">
+                <p class="text-white/80">{{ paymentMessage }}</p>
+                
+                <!-- Payment Modal -->
+                <div v-if="showPaymentModal" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+                  <div class="bg-white rounded-2xl w-full max-w-4xl h-[80vh] overflow-hidden">
+                    <div class="flex justify-between items-center p-4 border-b">
+                      <h3 class="text-lg font-semibold text-gray-900">Complete Payment</h3>
+                      <button @click="closePaymentModal" class="text-gray-500 hover:text-gray-700">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                      </button>
+                    </div>
+                    <iframe 
+                      :src="paymentData?.checkoutUrl" 
+                      class="w-full h-full border-0"
+                      @load="checkPaymentStatus">
+                    </iframe>
+                  </div>
+                </div>
+                
+                <div v-if="paymentComplete" class="mt-8">
+                  <div class="text-6xl mb-4">✅</div>
+                  <h3 class="text-2xl font-bold text-white mb-4">Payment Successful!</h3>
+                  <p class="text-white/80">Your 30-day free trial has started. Starting deployment now...</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Deployment Step -->
+            <div v-if="currentStep === 8" class="text-center py-8">
               <div v-if="!deploymentComplete" class="spin-animation inline-block w-16 h-16 border-4 border-white border-t-transparent rounded-full mb-6"></div>
               <h3 class="text-2xl font-bold text-white mb-4">{{ deploymentStatus }}</h3>
               <div class="mt-4">
@@ -342,7 +422,7 @@
             </div>
 
             <!-- Registration Step -->
-            <div v-if="currentStep === 7" class="text-center py-8">
+            <div v-if="currentStep === 9" class="text-center py-8">
               <div v-if="!registrationComplete" class="spin-animation inline-block w-16 h-16 border-4 border-white border-t-transparent rounded-full mb-6"></div>
               <h3 class="text-2xl font-bold text-white mb-4">{{ registrationStatus }}</h3>
               <div class="mt-4">
@@ -523,6 +603,11 @@ export default {
     const registrationMessage = ref('')
     const registrationComplete = ref(false)
     const registrationData = ref({})
+    const paymentStatus = ref('')
+    const paymentMessage = ref('')
+    const paymentComplete = ref(false)
+    const paymentData = ref({})
+    const showPaymentModal = ref(false)
     const packages = ref([])
     const selectedPackage = ref(null)
     const loading = ref(false)
@@ -624,8 +709,121 @@ export default {
       return await response.json()
     }
 
+    const startPayment = async () => {
+      currentStep.value = 7
+      paymentComplete.value = false
+
+      try {
+        paymentStatus.value = "Initializing Payment"
+        paymentMessage.value = "Setting up your payment process..."
+
+        // Step 1: Encrypt payment data
+        const paymentPayload = {
+          tenantId: responseData.value.id,
+          providerCode: "payoneer",
+          providerAccountId: "550e8400-e29b-41d4-a716-446655440000",
+          amountMinor: Math.round(parseFloat(selectedPackage.value.cost) * 100), // Convert to cents
+          currency: "USD",
+          method: "credit_card",
+          orderId: `ORDER-${Date.now()}`,
+          productName: selectedPackage.value.name.replace('_', ' '),
+          serviceName: "AvinerTech Application Service",
+          companyName: formData.value.company_name,
+          serviceHost: "https://avinertech.com",
+          clientDomain: `${formData.value.host}.avinertech.com`,
+          clientId: responseData.value.id,
+          clientReferenceId: `REF-${Date.now()}`,
+          callbackUrl: "https://webhook.site/test",
+          metadata: {
+            customerId: responseData.value.id,
+            subscriptionId: `sub_${Date.now()}`
+          }
+        }
+
+        console.log('Payment payload:', paymentPayload)
+
+        // Encrypt the data
+        const encryptResponse = await fetch('https://signal.avinertech.com/api/encrypt', {
+          method: 'POST',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            value: JSON.stringify(paymentPayload)
+          })
+        })
+
+        const encryptData = await encryptResponse.json()
+        console.log('Encrypt response:', encryptData)
+
+        if (!encryptData.success) {
+          throw new Error('Failed to encrypt payment data')
+        }
+
+        // Step 2: Create payment
+        paymentStatus.value = "Creating Payment"
+        paymentMessage.value = "Processing your payment request..."
+
+        const paymentResponse = await fetch('https://payments.avinertech.com/v1/payments', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-APP-SIGNATURE': 'test-signature',
+            'X-ENC-SUB': 'test-subdomain'
+          },
+          body: JSON.stringify({
+            signature: `test-signature-12345-${encryptData.encrypted}`
+          })
+        })
+
+        const paymentResult = await paymentResponse.json()
+        console.log('Payment response:', paymentResult)
+
+        if (paymentResult.checkoutUrl) {
+          paymentData.value = paymentResult
+          showPaymentModal.value = true
+          paymentStatus.value = "Payment Ready"
+          paymentMessage.value = "Complete your payment in the secure checkout form"
+        } else {
+          throw new Error('Failed to create payment')
+        }
+
+      } catch (error) {
+        console.error('Payment error:', error)
+        paymentStatus.value = "Payment Error"
+        paymentMessage.value = "An error occurred during payment setup. Please try again."
+      }
+    }
+
+    const checkPaymentStatus = () => {
+      // This would typically check the payment status via API
+      // For now, we'll simulate a successful payment after a delay
+      setTimeout(() => {
+        if (showPaymentModal.value) {
+          paymentComplete.value = true
+          paymentStatus.value = "Payment Successful"
+          paymentMessage.value = "Your payment has been processed successfully!"
+          showPaymentModal.value = false
+          
+          // Start deployment after successful payment
+          setTimeout(() => {
+            startDeployment()
+          }, 2000)
+        }
+      }, 5000) // Simulate 5 second payment process
+    }
+
+    const closePaymentModal = () => {
+      showPaymentModal.value = false
+      // If payment is not complete, go back to payment step
+      if (!paymentComplete.value) {
+        currentStep.value = 6
+      }
+    }
+
     const startDeployment = async () => {
-      currentStep.value = 6
+      currentStep.value = 8
       deploymentComplete.value = false
 
       try {
@@ -668,7 +866,7 @@ export default {
     }
 
     const startRegistration = async () => {
-      currentStep.value = 7
+      currentStep.value = 9
       registrationComplete.value = false
 
       try {
