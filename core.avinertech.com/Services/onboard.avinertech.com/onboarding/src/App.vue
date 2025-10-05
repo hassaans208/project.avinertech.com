@@ -585,6 +585,30 @@
       </div>
     </div>
   </div>
+
+  <!-- Toasts -->
+  <div class="fixed top-4 right-4 z-[100] space-y-3">
+    <div 
+      v-for="t in toasts" 
+      :key="t.id"
+      :class="[
+        'px-4 py-3 rounded-xl shadow-lg backdrop-blur-sm border w-80',
+        t.type === 'success' ? 'bg-green-500/15 text-green-200 border-green-400/30' : '',
+        t.type === 'error' ? 'bg-red-500/15 text-red-200 border-red-400/30' : '',
+        t.type === 'info' ? 'bg-blue-500/15 text-blue-200 border-blue-400/30' : ''
+      ]">
+      <div class="flex items-start gap-3">
+        <span v-if="t.type==='success'">✅</span>
+        <span v-else-if="t.type==='error'">⚠️</span>
+        <span v-else>ℹ️</span>
+        <div>
+          <div class="font-semibold">{{ t.title }}</div>
+          <div class="opacity-90 text-sm">{{ t.message }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
 </template>
 
 <script>
@@ -610,6 +634,9 @@ export default {
     const paymentComplete = ref(false)
     const paymentData = ref({})
     const showPaymentModal = ref(false)
+    const toasts = ref([])
+    const paymentPollTimer = ref(null)
+    const paymentPollStart = ref(null)
     const packages = ref([])
     const selectedPackage = ref(null)
     const loading = ref(false)
@@ -787,6 +814,8 @@ export default {
           showPaymentModal.value = true
           paymentStatus.value = "Payment Ready"
           paymentMessage.value = "Complete your payment in the secure checkout form"
+          addToast('info', 'Payment Started', 'Complete the payment in the secure modal.')
+          startPaymentStatusPolling()
         } else {
           throw new Error('Failed to create payment')
         }
@@ -795,6 +824,7 @@ export default {
         console.error('Payment error:', error)
         paymentStatus.value = "Payment Error"
         paymentMessage.value = "An error occurred during payment setup. Please try again."
+        addToast('error', 'Payment Error', 'Payment could not be initialized.')
         
         // Redirect back to deployment step after 3 seconds
         setTimeout(() => {
@@ -803,28 +833,79 @@ export default {
       }
     }
 
-    const checkPaymentStatus = () => {
-      // This would typically check the payment status via API
-      // For now, we'll simulate a successful payment after a delay
-      setTimeout(() => {
-        if (showPaymentModal.value) {
-          paymentComplete.value = true
-          paymentStatus.value = "Payment Successful"
-          paymentMessage.value = "Your payment has been processed successfully!"
-          showPaymentModal.value = false
-          
-          // Start deployment after successful payment
-          setTimeout(() => {
-            startDeployment()
-          }, 2000)
+    const startPaymentStatusPolling = () => {
+      stopPaymentStatusPolling()
+      paymentPollStart.value = Date.now()
+      // Determine paymentId
+      let paymentId = paymentData.value?.id || paymentData.value?.paymentId
+      if (!paymentId && paymentData.value?.checkoutUrl) {
+        try {
+          const u = new URL(paymentData.value.checkoutUrl)
+          paymentId = u.searchParams.get('paymentId')
+        } catch (_) {}
+      }
+      if (!paymentId) {
+        console.warn('No paymentId available for polling')
+        return
+      }
+
+      paymentPollTimer.value = setInterval(async () => {
+        try {
+          // Timeout after 5 minutes
+          if (paymentPollStart.value && Date.now() - paymentPollStart.value > 5 * 60 * 1000) {
+            stopPaymentStatusPolling()
+            addToast('error', 'Payment Timeout', 'Refreshing the page to restart payment.')
+            window.location.reload()
+            return
+          }
+
+          const res = await fetch(`https://payments.avinertech.com/v1/payments/${paymentId}/status`, {
+            headers: {
+              'X-APP-SIGNATURE': 'test-signature',
+              'X-ENC-SUB': 'test-subdomain'
+            }
+          })
+          if (!res.ok) throw new Error('Status check failed')
+          const data = await res.json()
+          const status = data?.status || data?.Status || ''
+          if (status === 'COMPLETED') {
+            stopPaymentStatusPolling()
+            paymentComplete.value = true
+            paymentStatus.value = 'Payment Successful'
+            paymentMessage.value = 'Your payment has been processed successfully!'
+            addToast('success', 'Payment Successful', 'We are starting deployment now.')
+            showPaymentModal.value = false
+            setTimeout(() => { startDeployment() }, 1000)
+          } else if (status === 'FAILED' || status === 'CANCELLED' || status === 'ERROR') {
+            stopPaymentStatusPolling()
+            paymentComplete.value = false
+            paymentStatus.value = 'Payment Failed'
+            paymentMessage.value = 'Payment failed. Returning to deployment step.'
+            addToast('error', 'Payment Failed', 'Please try again.')
+            showPaymentModal.value = false
+            setTimeout(() => { currentStep.value = 8 }, 1500)
+          } else {
+            // pending, initiated, processing
+            paymentStatus.value = `Payment ${status?.toLowerCase?.() || 'processing'}`
+          }
+        } catch (e) {
+          console.error('Polling error:', e)
         }
-      }, 5000) // Simulate 5 second payment process
+      }, 3000)
+    }
+
+    const stopPaymentStatusPolling = () => {
+      if (paymentPollTimer.value) {
+        clearInterval(paymentPollTimer.value)
+        paymentPollTimer.value = null
+      }
     }
 
     const onIframeLoad = () => {
       console.log('Iframe loaded successfully')
       paymentStatus.value = "Payment Form Ready"
       paymentMessage.value = "Please complete your payment in the form below"
+      addToast('info', 'Payment Form Ready', 'Please complete your payment in the modal.')
     }
 
     const onIframeError = () => {
@@ -832,6 +913,8 @@ export default {
       paymentStatus.value = "Payment Error"
       paymentMessage.value = "Failed to load payment form. Please try again."
       showPaymentModal.value = false
+      stopPaymentStatusPolling()
+      addToast('error', 'Payment Error', 'Payment form failed to load.')
       
       // Redirect back to deployment step after 3 seconds
       setTimeout(() => {
@@ -841,10 +924,20 @@ export default {
 
     const closePaymentModal = () => {
       showPaymentModal.value = false
+      stopPaymentStatusPolling()
+      addToast('info', 'Payment Closed', 'You closed the payment modal.')
       // If payment is not complete, go back to deployment step
       if (!paymentComplete.value) {
         currentStep.value = 8 // Go to deployment step
       }
+    }
+
+    const addToast = (type, title, message) => {
+      const id = `${Date.now()}-${Math.random()}`
+      toasts.value.push({ id, type, title, message })
+      setTimeout(() => {
+        toasts.value = toasts.value.filter(t => t.id !== id)
+      }, 4000)
     }
 
     const startDeployment = async () => {
@@ -1024,6 +1117,7 @@ export default {
       paymentComplete,
       paymentData,
       showPaymentModal,
+      toasts,
       packages,
       selectedPackage,
       loading,
@@ -1031,10 +1125,12 @@ export default {
       submitForm,
       startDeployment,
       startPayment,
-      checkPaymentStatus,
+      startPaymentStatusPolling,
+      stopPaymentStatusPolling,
       onIframeLoad,
       onIframeError,
       closePaymentModal,
+      addToast,
       selectPackage,
       scrollToFeatures
     }
