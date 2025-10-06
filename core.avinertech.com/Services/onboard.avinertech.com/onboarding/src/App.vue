@@ -10,14 +10,14 @@
                 <!-- Payment Modal -->
     <div v-if="showPaymentModal" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
       <div class="bg-white rounded-2xl w-full h-full max-w-none max-h-none overflow-hidden">
-        <div class="flex justify-between items-center p-4 border-b">
+        <!-- <div class="flex justify-between items-center p-4 border-b">
           <h3 class="text-lg font-semibold text-gray-900">Complete Payment</h3>
           <button @click="closePaymentModal" class="text-gray-500 hover:text-gray-700">
             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
             </svg>
           </button>
-        </div>
+        </div> -->
         <iframe 
           :src="paymentData?.checkoutUrl" 
           class="w-full h-full border-0"
