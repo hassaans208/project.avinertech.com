@@ -8,6 +8,7 @@ use App\Http\Controllers\PackageController;
 use App\Http\Controllers\ServiceModuleController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\RegisterApplicationController;
+use App\Http\Controllers\SignatureController;
 
 // Public routes (no authentication required)
 Route::post('/login', [AuthController::class, 'login']);
@@ -16,6 +17,10 @@ Route::post('/register', [AuthController::class, 'register']);
 // Application registration routes (public)
 Route::post('/register-application', [RegisterApplicationController::class, 'register']);
 Route::get('/registration-status/{email}', [RegisterApplicationController::class, 'getRegistrationStatus']);
+
+// Signature verification routes (public)
+Route::post('/signature/verify', [SignatureController::class, 'verify']);
+Route::get('/signature/status', [SignatureController::class, 'status']);
 
 // Encryption/Decryption utility routes (public)
 Route::post('/encrypt', [EncryptionController::class, 'encrypt']);
