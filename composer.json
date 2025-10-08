@@ -29,9 +29,11 @@
         "psr-4": {
             "App\\": "app/",
             "Database\\Factories\\": "database/factories/",
-            "Database\\Seeders\\": "database/seeders/",
-            "Helpers\\": "app/Helpers/"
-        }
+            "Database\\Seeders\\": "database/seeders/"
+        },
+        "files": [
+            "core.avinertech.com/MicroServices/signal.avinertech.com/app/helpers.php"
+        ]
     },
     "autoload-dev": {
         "psr-4": {
