@@ -15,6 +15,7 @@ class DatabaseSeeder extends Seeder
             ServiceModuleSeeder::class,
             PackageSeeder::class,
             TenantSeeder::class,
+            TenantDatabaseSeeder::class,
             UserSeeder::class,
         ]);
     }
