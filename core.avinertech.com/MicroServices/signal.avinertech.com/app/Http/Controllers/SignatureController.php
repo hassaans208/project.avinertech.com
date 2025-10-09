@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Tenant;
+use App\Models\TenantDatabase;
 use App\Helpers\EncryptionHelper;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -49,14 +50,23 @@ class SignatureController extends Controller
                 ], 400);
             }
 
-            // Extract tenantId from decrypted data
+            // Extract tenantId and schema_name from decrypted data
             $tenantId = $decryptedData['tenant_id'] ?? null;
+            $schemaName = $decryptedData['schema_name'] ?? null;
             
             if (!$tenantId) {
                 return response()->json([
                     'success' => false,
                     'message' => 'Tenant ID not found in signature',
                     'error' => 'MISSING_TENANT_ID',
+                ], 400);
+            }
+
+            if (!$schemaName) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Schema name not found in signature',
+                    'error' => 'MISSING_SCHEMA_NAME',
                 ], 400);
             }
 
@@ -101,6 +111,24 @@ class SignatureController extends Controller
                 ], 403);
             }
 
+            // Find the database for this tenant and schema
+            $tenantDatabase = $tenant->getDatabaseBySchemaName($schemaName);
+            
+            if (!$tenantDatabase) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Database not found for tenant and schema',
+                    'error' => 'DATABASE_NOT_FOUND',
+                    'data' => [
+                        'tenant_id' => $tenantId,
+                        'schema_name' => $schemaName,
+                    ],
+                ], 404);
+            }
+
+            // Get database name from decrypted details
+            $databaseName = $tenantDatabase->database_name;
+
             // Signature is valid and tenant is active
             return response()->json([
                 'success' => true,
@@ -110,9 +138,10 @@ class SignatureController extends Controller
                     'tenant_name' => $tenant->name,
                     'tenant_host' => $tenant->host,
                     'tenant_status' => $tenant->status,
+                    'schema_name' => $schemaName,
+                    'database_name' => $databaseName,
                     'signature_valid' => true,
                     'verified_at' => now()->toISOString(),
-                    'decrypted_data' => $decryptedData, // Include decrypted data for debugging
                 ],
             ], 200);
 
@@ -138,30 +167,32 @@ class SignatureController extends Controller
                 return $data;
             }
             
-            // Try to parse as colon-separated format: "tenant_id:timestamp:user_id:email:package_id"
+            // Try to parse as colon-separated format: "tenant_id:schema_name:timestamp:user_id:email:package_id"
             if (strpos($decryptedString, ':') !== false) {
                 $parts = explode(':', $decryptedString);
-                if (count($parts) >= 1 && is_numeric($parts[0])) {
+                if (count($parts) >= 2 && is_numeric($parts[0])) {
                     return [
                         'tenant_id' => (int) $parts[0],
-                        'timestamp' => $parts[1] ?? null,
-                        'user_id' => $parts[2] ?? null,
-                        'email' => $parts[3] ?? null,
-                        'package_id' => $parts[4] ?? null,
+                        'schema_name' => $parts[1] ?? null,
+                        'timestamp' => $parts[2] ?? null,
+                        'user_id' => $parts[3] ?? null,
+                        'email' => $parts[4] ?? null,
+                        'package_id' => $parts[5] ?? null,
                     ];
                 }
             }
             
-            // Try to parse as pipe-separated format: "tenant_id|timestamp|user_id|email|package_id"
+            // Try to parse as pipe-separated format: "tenant_id|schema_name|timestamp|user_id|email|package_id"
             if (strpos($decryptedString, '|') !== false) {
                 $parts = explode('|', $decryptedString);
-                if (count($parts) >= 1 && is_numeric($parts[0])) {
+                if (count($parts) >= 2 && is_numeric($parts[0])) {
                     return [
                         'tenant_id' => (int) $parts[0],
-                        'timestamp' => $parts[1] ?? null,
-                        'user_id' => $parts[2] ?? null,
-                        'email' => $parts[3] ?? null,
-                        'package_id' => $parts[4] ?? null,
+                        'schema_name' => $parts[1] ?? null,
+                        'timestamp' => $parts[2] ?? null,
+                        'user_id' => $parts[3] ?? null,
+                        'email' => $parts[4] ?? null,
+                        'package_id' => $parts[5] ?? null,
                     ];
                 }
             }

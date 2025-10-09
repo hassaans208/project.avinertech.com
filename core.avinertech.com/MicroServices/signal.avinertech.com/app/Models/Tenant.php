@@ -137,13 +137,29 @@ class Tenant extends Model
     }
 
     /**
-     * Check if user has access to this tenant
+     * Tenant has many databases
      */
-    public function hasUser(User $user): bool
+    public function databases(): HasMany
     {
-        return $this->users()
-                    ->where('user_id', $user->id)
-                    ->wherePivot('is_active', true)
-                    ->exists();
+        return $this->hasMany(TenantDatabase::class);
+    }
+
+    /**
+     * Get active databases for tenant
+     */
+    public function getActiveDatabases()
+    {
+        return $this->databases()->where('is_active', true)->get();
+    }
+
+    /**
+     * Get database by schema name
+     */
+    public function getDatabaseBySchemaName(string $schemaName): ?TenantDatabase
+    {
+        return $this->databases()
+                    ->where('schema_name', $schemaName)
+                    ->where('is_active', true)
+                    ->first();
     }
 } 
