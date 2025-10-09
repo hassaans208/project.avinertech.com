@@ -131,7 +131,7 @@ class TenantDatabase extends Model
     /**
      * Create database details for a tenant
      */
-    public static function createForTenant(int $tenantId, string $schemaName, array $databaseDetails): self
+    public static function createForTenant(int $tenantId, string $schemaName, string $databaseDetails): self
     {
         return self::create([
             'tenant_id' => $tenantId,
