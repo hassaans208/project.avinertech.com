@@ -42,7 +42,7 @@ class TenantDatabaseSeeder extends Seeder
         TenantDatabase::create([
             'tenant_id' => $tenant->id,
             'schema_name' => 'tenant_db',
-            'database_details' => $encryptedDetails,
+            'database_details' => $databaseDetails,
             'is_active' => true,
         ]);
 
