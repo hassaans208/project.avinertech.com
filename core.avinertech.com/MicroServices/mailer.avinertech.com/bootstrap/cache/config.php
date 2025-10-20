@@ -1,11 +1,112 @@
 <?php return array (
-  2 => 'broadcasting',
-  4 => 'concurrency',
-  5 => 'cors',
-  8 => 'hashing',
+  'broadcasting' => 
+  array (
+    'default' => 'log',
+    'connections' => 
+    array (
+      'reverb' => 
+      array (
+        'driver' => 'reverb',
+        'key' => NULL,
+        'secret' => NULL,
+        'app_id' => NULL,
+        'options' => 
+        array (
+          'host' => NULL,
+          'port' => 443,
+          'scheme' => 'https',
+          'useTLS' => true,
+        ),
+        'client_options' => 
+        array (
+        ),
+      ),
+      'pusher' => 
+      array (
+        'driver' => 'pusher',
+        'key' => NULL,
+        'secret' => NULL,
+        'app_id' => NULL,
+        'options' => 
+        array (
+          'cluster' => NULL,
+          'host' => 'api-mt1.pusher.com',
+          'port' => 443,
+          'scheme' => 'https',
+          'encrypted' => true,
+          'useTLS' => true,
+        ),
+        'client_options' => 
+        array (
+        ),
+      ),
+      'ably' => 
+      array (
+        'driver' => 'ably',
+        'key' => NULL,
+      ),
+      'log' => 
+      array (
+        'driver' => 'log',
+      ),
+      'null' => 
+      array (
+        'driver' => 'null',
+      ),
+    ),
+  ),
+  'concurrency' => 
+  array (
+    'default' => 'process',
+  ),
+  'cors' => 
+  array (
+    'paths' => 
+    array (
+      0 => 'api/*',
+      1 => 'sanctum/csrf-cookie',
+    ),
+    'allowed_methods' => 
+    array (
+      0 => '*',
+    ),
+    'allowed_origins' => 
+    array (
+      0 => '*',
+    ),
+    'allowed_origins_patterns' => 
+    array (
+    ),
+    'allowed_headers' => 
+    array (
+      0 => '*',
+    ),
+    'exposed_headers' => 
+    array (
+    ),
+    'max_age' => 0,
+    'supports_credentials' => false,
+  ),
+  'hashing' => 
+  array (
+    'driver' => 'bcrypt',
+    'bcrypt' => 
+    array (
+      'rounds' => '12',
+      'verify' => true,
+    ),
+    'argon' => 
+    array (
+      'memory' => 65536,
+      'threads' => 1,
+      'time' => 4,
+      'verify' => true,
+    ),
+    'rehash_on_login' => true,
+  ),
   'app' => 
   array (
-    'name' => 'Tenant Larevel',
+    'name' => 'Aviner Technologies',
     'env' => 'local',
     'debug' => true,
     'url' => 'http://localhost',
@@ -16,7 +117,7 @@
     'fallback_locale' => 'en',
     'faker_locale' => 'en_US',
     'cipher' => 'AES-256-CBC',
-    'key' => 'base64:RH0qASJKuEkpVrljdngDFceQ9AahKptCRkLc51bVAN8=',
+    'key' => '',
     'previous_keys' => 
     array (
     ),
@@ -50,6 +151,7 @@
       20 => 'Illuminate\\Translation\\TranslationServiceProvider',
       21 => 'Illuminate\\Validation\\ValidationServiceProvider',
       22 => 'Illuminate\\View\\ViewServiceProvider',
+      23 => 'App\\Providers\\AppServiceProvider',
     ),
     'aliases' => 
     array (
@@ -156,8 +258,8 @@
       'file' => 
       array (
         'driver' => 'file',
-        'path' => 'E:\\xampp-8\\htdocs\\Project\\tenant.avinertech.com\\Stubs\\demo.avinertech.com\\storage\\framework/cache/data',
-        'lock_path' => 'E:\\xampp-8\\htdocs\\Project\\tenant.avinertech.com\\Stubs\\demo.avinertech.com\\storage\\framework/cache/data',
+        'path' => 'D:\\project.avinertech.com\\core.avinertech.com\\MicroServices\\mailer.avinertech.com\\storage\\framework/cache/data',
+        'lock_path' => 'D:\\project.avinertech.com\\core.avinertech.com\\MicroServices\\mailer.avinertech.com\\storage\\framework/cache/data',
       ),
       'memcached' => 
       array (
@@ -202,18 +304,18 @@
       ),
     ),
     'prefix' => '',
-    'cache' => 'E:\\xampp-8\\htdocs\\Project\\tenant.avinertech.com\\Stubs\\demo.avinertech.com\\storage\\framework/cache',
+    'cache' => 'D:\\project.avinertech.com\\core.avinertech.com\\MicroServices\\mailer.avinertech.com\\storage\\framework/cache',
   ),
   'database' => 
   array (
-    'default' => 'sqlite',
+    'default' => 'mysql',
     'connections' => 
     array (
       'sqlite' => 
       array (
         'driver' => 'sqlite',
         'url' => NULL,
-        'database' => 'E:\\xampp-8\\htdocs\\Project\\tenant.avinertech.com\\Stubs\\demo.avinertech.com\\database\\database.sqlite',
+        'database' => 'mailer_db',
         'prefix' => '',
         'foreign_key_constraints' => true,
         'busy_timeout' => NULL,
@@ -226,7 +328,7 @@
         'url' => NULL,
         'host' => '127.0.0.1',
         'port' => '3306',
-        'database' => 'laravel',
+        'database' => 'mailer_db',
         'username' => 'root',
         'password' => '',
         'unix_socket' => '',
@@ -246,7 +348,7 @@
         'url' => NULL,
         'host' => '127.0.0.1',
         'port' => '3306',
-        'database' => 'laravel',
+        'database' => 'mailer_db',
         'username' => 'root',
         'password' => '',
         'unix_socket' => '',
@@ -265,8 +367,8 @@
         'driver' => 'pgsql',
         'url' => NULL,
         'host' => '127.0.0.1',
-        'port' => '5432',
-        'database' => 'laravel',
+        'port' => '3306',
+        'database' => 'mailer_db',
         'username' => 'root',
         'password' => '',
         'charset' => 'utf8',
@@ -279,9 +381,9 @@
       array (
         'driver' => 'sqlsrv',
         'url' => NULL,
-        'host' => 'localhost',
-        'port' => '1433',
-        'database' => 'laravel',
+        'host' => '127.0.0.1',
+        'port' => '3306',
+        'database' => 'mailer_db',
         'username' => 'root',
         'password' => '',
         'charset' => 'utf8',
@@ -300,7 +402,7 @@
       'options' => 
       array (
         'cluster' => 'redis',
-        'prefix' => 'tenant_larevel_database_',
+        'prefix' => 'aviner_technologies_database_',
       ),
       'default' => 
       array (
@@ -330,7 +432,7 @@
       'local' => 
       array (
         'driver' => 'local',
-        'root' => 'E:\\xampp-8\\htdocs\\Project\\tenant.avinertech.com\\Stubs\\demo.avinertech.com\\storage\\app/private',
+        'root' => 'D:\\project.avinertech.com\\core.avinertech.com\\MicroServices\\mailer.avinertech.com\\storage\\app/private',
         'serve' => true,
         'throw' => false,
         'report' => false,
@@ -338,7 +440,7 @@
       'public' => 
       array (
         'driver' => 'local',
-        'root' => 'E:\\xampp-8\\htdocs\\Project\\tenant.avinertech.com\\Stubs\\demo.avinertech.com\\storage\\app/public',
+        'root' => 'D:\\project.avinertech.com\\core.avinertech.com\\MicroServices\\mailer.avinertech.com\\storage\\app/public',
         'url' => 'http://localhost/storage',
         'visibility' => 'public',
         'throw' => false,
@@ -360,7 +462,7 @@
     ),
     'links' => 
     array (
-      'E:\\xampp-8\\htdocs\\Project\\tenant.avinertech.com\\Stubs\\demo.avinertech.com\\public\\storage' => 'E:\\xampp-8\\htdocs\\Project\\tenant.avinertech.com\\Stubs\\demo.avinertech.com\\storage\\app/public',
+      'D:\\project.avinertech.com\\core.avinertech.com\\MicroServices\\mailer.avinertech.com\\public\\storage' => 'D:\\project.avinertech.com\\core.avinertech.com\\MicroServices\\mailer.avinertech.com\\storage\\app/public',
     ),
   ),
   'logging' => 
@@ -385,14 +487,14 @@
       'single' => 
       array (
         'driver' => 'single',
-        'path' => 'E:\\xampp-8\\htdocs\\Project\\tenant.avinertech.com\\Stubs\\demo.avinertech.com\\storage\\logs/laravel.log',
+        'path' => 'D:\\project.avinertech.com\\core.avinertech.com\\MicroServices\\mailer.avinertech.com\\storage\\logs/laravel.log',
         'level' => 'debug',
         'replace_placeholders' => true,
       ),
       'daily' => 
       array (
         'driver' => 'daily',
-        'path' => 'E:\\xampp-8\\htdocs\\Project\\tenant.avinertech.com\\Stubs\\demo.avinertech.com\\storage\\logs/laravel.log',
+        'path' => 'D:\\project.avinertech.com\\core.avinertech.com\\MicroServices\\mailer.avinertech.com\\storage\\logs/laravel.log',
         'level' => 'debug',
         'days' => 14,
         'replace_placeholders' => true,
@@ -457,7 +559,7 @@
       ),
       'emergency' => 
       array (
-        'path' => 'E:\\xampp-8\\htdocs\\Project\\tenant.avinertech.com\\Stubs\\demo.avinertech.com\\storage\\logs/laravel.log',
+        'path' => 'D:\\project.avinertech.com\\core.avinertech.com\\MicroServices\\mailer.avinertech.com\\storage\\logs/laravel.log',
       ),
     ),
   ),
@@ -471,10 +573,10 @@
         'transport' => 'smtp',
         'scheme' => NULL,
         'url' => NULL,
-        'host' => '127.0.0.1',
-        'port' => '2525',
-        'username' => NULL,
-        'password' => NULL,
+        'host' => 'pop.hostinger.com',
+        'port' => '995',
+        'username' => 'sales@avinertech.com',
+        'password' => 'Hassaan*27901',
         'timeout' => NULL,
         'local_domain' => 'localhost',
       ),
@@ -525,15 +627,15 @@
     ),
     'from' => 
     array (
-      'address' => 'hello@example.com',
-      'name' => 'Tenant Larevel',
+      'address' => 'sales@avinertech.com',
+      'name' => 'Aviner Technologies',
     ),
     'markdown' => 
     array (
       'theme' => 'default',
       'paths' => 
       array (
-        0 => 'E:\\xampp-8\\htdocs\\Project\\tenant.avinertech.com\\Stubs\\demo.avinertech.com\\resources\\views/vendor/mail',
+        0 => 'D:\\project.avinertech.com\\core.avinertech.com\\MicroServices\\mailer.avinertech.com\\resources\\views/vendor/mail',
       ),
     ),
   ),
@@ -587,13 +689,13 @@
     ),
     'batching' => 
     array (
-      'database' => 'sqlite',
+      'database' => 'mysql',
       'table' => 'job_batches',
     ),
     'failed' => 
     array (
       'driver' => 'database-uuids',
-      'database' => 'sqlite',
+      'database' => 'mysql',
       'table' => 'failed_jobs',
     ),
   ),
@@ -628,7 +730,7 @@
     'lifetime' => 120,
     'expire_on_close' => false,
     'encrypt' => false,
-    'files' => 'E:\\xampp-8\\htdocs\\Project\\tenant.avinertech.com\\Stubs\\demo.avinertech.com\\storage\\framework/sessions',
+    'files' => 'D:\\project.avinertech.com\\core.avinertech.com\\MicroServices\\mailer.avinertech.com\\storage\\framework/sessions',
     'connection' => NULL,
     'table' => 'sessions',
     'store' => NULL,
@@ -637,7 +739,7 @@
       0 => 2,
       1 => 100,
     ),
-    'cookie' => 'tenant_larevel_session',
+    'cookie' => 'aviner_technologies_session',
     'path' => '/',
     'domain' => NULL,
     'secure' => NULL,
@@ -649,113 +751,8 @@
   array (
     'paths' => 
     array (
-      0 => 'E:\\xampp-8\\htdocs\\Project\\tenant.avinertech.com\\Stubs\\demo.avinertech.com\\resources\\views',
+      0 => 'D:\\project.avinertech.com\\core.avinertech.com\\MicroServices\\mailer.avinertech.com\\resources\\views',
     ),
-    'compiled' => 'E:\\xampp-8\\htdocs\\Project\\tenant.avinertech.com\\Stubs\\demo.avinertech.com\\storage\\framework/views',
-  ),
-  'broadcasting' => 
-  array (
-    'default' => 'log',
-    'connections' => 
-    array (
-      'reverb' => 
-      array (
-        'driver' => 'reverb',
-        'key' => NULL,
-        'secret' => NULL,
-        'app_id' => NULL,
-        'options' => 
-        array (
-          'host' => NULL,
-          'port' => 443,
-          'scheme' => 'https',
-          'useTLS' => true,
-        ),
-        'client_options' => 
-        array (
-        ),
-      ),
-      'pusher' => 
-      array (
-        'driver' => 'pusher',
-        'key' => NULL,
-        'secret' => NULL,
-        'app_id' => NULL,
-        'options' => 
-        array (
-          'cluster' => NULL,
-          'host' => 'api-mt1.pusher.com',
-          'port' => 443,
-          'scheme' => 'https',
-          'encrypted' => true,
-          'useTLS' => true,
-        ),
-        'client_options' => 
-        array (
-        ),
-      ),
-      'ably' => 
-      array (
-        'driver' => 'ably',
-        'key' => NULL,
-      ),
-      'log' => 
-      array (
-        'driver' => 'log',
-      ),
-      'null' => 
-      array (
-        'driver' => 'null',
-      ),
-    ),
-  ),
-  'concurrency' => 
-  array (
-    'default' => 'process',
-  ),
-  'cors' => 
-  array (
-    'paths' => 
-    array (
-      0 => 'api/*',
-      1 => 'sanctum/csrf-cookie',
-    ),
-    'allowed_methods' => 
-    array (
-      0 => '*',
-    ),
-    'allowed_origins' => 
-    array (
-      0 => '*',
-    ),
-    'allowed_origins_patterns' => 
-    array (
-    ),
-    'allowed_headers' => 
-    array (
-      0 => '*',
-    ),
-    'exposed_headers' => 
-    array (
-    ),
-    'max_age' => 0,
-    'supports_credentials' => false,
-  ),
-  'hashing' => 
-  array (
-    'driver' => 'bcrypt',
-    'bcrypt' => 
-    array (
-      'rounds' => '12',
-      'verify' => true,
-    ),
-    'argon' => 
-    array (
-      'memory' => 65536,
-      'threads' => 1,
-      'time' => 4,
-      'verify' => true,
-    ),
-    'rehash_on_login' => true,
+    'compiled' => 'D:\\project.avinertech.com\\core.avinertech.com\\MicroServices\\mailer.avinertech.com\\storage\\framework/views',
   ),
 );
