@@ -35,7 +35,13 @@
 					],
 					"request": {
 						"method": "GET",
-						"header": [],
+						"header": [
+							{
+							"key": "X-APP-SIGNATURE",
+							"value": "{{X_APP_SIGNATURE}}",
+							"type": "text"
+						}
+					],
 						"url": {
 							"raw": "{{BASE_URL}}/api/v1/database/capabilities",
 							"host": [
@@ -1897,29 +1903,6 @@
 					"name": "Get All View Definitions",
 					"event": [
 						{
-							"listen": "prerequest",
-							"script": {
-								"exec": [
-									"// Set headers for view management",
-									"pm.request.headers.add({",
-									"    key: 'X-App-Signature',",
-									"    value: pm.environment.get('X_APP_SIGNATURE')",
-									"});",
-									"",
-									"// Set tenant and schema from signature",
-									"pm.request.headers.add({",
-									"    key: 'X-Tenant-ID',",
-									"    value: 'tenant_123'",
-									"});",
-									"pm.request.headers.add({",
-									"    key: 'X-Schema-Name',",
-									"    value: 'test_schema'",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						},
-						{
 							"listen": "test",
 							"script": {
 								"exec": [
@@ -1939,7 +1922,13 @@
 					],
 					"request": {
 						"method": "GET",
-						"header": [],
+						"header": [
+							{
+								"key": "X-APP-SIGNATURE",
+								"value": "{{X_APP_SIGNATURE}}",
+								"type": "text"
+							}
+					],
 						"url": {
 							"raw": "{{BASE_URL}}/api/v1/database/views?table_name={{TABLE_NAME}}",
 							"host": [
@@ -1963,29 +1952,6 @@
 				{
 					"name": "Create View Definition",
 					"event": [
-						{
-							"listen": "prerequest",
-							"script": {
-								"exec": [
-									"// Set headers for view management",
-									"pm.request.headers.add({",
-									"    key: 'X-App-Signature',",
-									"    value: pm.environment.get('X_APP_SIGNATURE')",
-									"});",
-									"",
-									"// Set tenant and schema from signature",
-									"pm.request.headers.add({",
-									"    key: 'X-Tenant-ID',",
-									"    value: 'tenant_123'",
-									"});",
-									"pm.request.headers.add({",
-									"    key: 'X-Schema-Name',",
-									"    value: 'test_schema'",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						},
 						{
 							"listen": "test",
 							"script": {
@@ -2037,29 +2003,6 @@
 					"name": "Get Specific View Definition",
 					"event": [
 						{
-							"listen": "prerequest",
-							"script": {
-								"exec": [
-									"// Set headers for view management",
-									"pm.request.headers.add({",
-									"    key: 'X-App-Signature',",
-									"    value: pm.environment.get('X_APP_SIGNATURE')",
-									"});",
-									"",
-									"// Set tenant and schema from signature",
-									"pm.request.headers.add({",
-									"    key: 'X-Tenant-ID',",
-									"    value: 'tenant_123'",
-									"});",
-									"pm.request.headers.add({",
-									"    key: 'X-Schema-Name',",
-									"    value: 'test_schema'",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						},
-						{
 							"listen": "test",
 							"script": {
 								"exec": [
@@ -2079,7 +2022,13 @@
 					],
 					"request": {
 						"method": "GET",
-						"header": [],
+						"header": [
+							{
+							"key": "X-APP-SIGNATURE",
+							"value": "{{X_APP_SIGNATURE}}",
+							"type": "text"
+						}
+					],
 						"url": {
 							"raw": "{{BASE_URL}}/api/v1/database/views/{{VIEW_ID}}",
 							"host": [
@@ -2098,29 +2047,6 @@
 				{
 					"name": "Update View Definition",
 					"event": [
-						{
-							"listen": "prerequest",
-							"script": {
-								"exec": [
-									"// Set headers for view management",
-									"pm.request.headers.add({",
-									"    key: 'X-App-Signature',",
-									"    value: pm.environment.get('X_APP_SIGNATURE')",
-									"});",
-									"",
-									"// Set tenant and schema from signature",
-									"pm.request.headers.add({",
-									"    key: 'X-Tenant-ID',",
-									"    value: 'tenant_123'",
-									"});",
-									"pm.request.headers.add({",
-									"    key: 'X-Schema-Name',",
-									"    value: 'test_schema'",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						},
 						{
 							"listen": "test",
 							"script": {
@@ -2168,29 +2094,6 @@
 				{
 					"name": "Render View (Hybrid)",
 					"event": [
-						{
-							"listen": "prerequest",
-							"script": {
-								"exec": [
-									"// Set headers for view management",
-									"pm.request.headers.add({",
-									"    key: 'X-App-Signature',",
-									"    value: pm.environment.get('X_APP_SIGNATURE')",
-									"});",
-									"",
-									"// Set tenant and schema from signature",
-									"pm.request.headers.add({",
-									"    key: 'X-Tenant-ID',",
-									"    value: 'tenant_123'",
-									"});",
-									"pm.request.headers.add({",
-									"    key: 'X-Schema-Name',",
-									"    value: 'test_schema'",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						},
 						{
 							"listen": "test",
 							"script": {
@@ -2242,29 +2145,6 @@
 					"name": "Build and Cache View",
 					"event": [
 						{
-							"listen": "prerequest",
-							"script": {
-								"exec": [
-									"// Set headers for view management",
-									"pm.request.headers.add({",
-									"    key: 'X-App-Signature',",
-									"    value: pm.environment.get('X_APP_SIGNATURE')",
-									"});",
-									"",
-									"// Set tenant and schema from signature",
-									"pm.request.headers.add({",
-									"    key: 'X-Tenant-ID',",
-									"    value: 'tenant_123'",
-									"});",
-									"pm.request.headers.add({",
-									"    key: 'X-Schema-Name',",
-									"    value: 'test_schema'",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						},
-						{
 							"listen": "test",
 							"script": {
 								"exec": [
@@ -2314,29 +2194,6 @@
 					"name": "Get Cached View",
 					"event": [
 						{
-							"listen": "prerequest",
-							"script": {
-								"exec": [
-									"// Set headers for view management",
-									"pm.request.headers.add({",
-									"    key: 'X-App-Signature',",
-									"    value: pm.environment.get('X_APP_SIGNATURE')",
-									"});",
-									"",
-									"// Set tenant and schema from signature",
-									"pm.request.headers.add({",
-									"    key: 'X-Tenant-ID',",
-									"    value: 'tenant_123'",
-									"});",
-									"pm.request.headers.add({",
-									"    key: 'X-Schema-Name',",
-									"    value: 'test_schema'",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						},
-						{
 							"listen": "test",
 							"script": {
 								"exec": [
@@ -2356,7 +2213,13 @@
 					],
 					"request": {
 						"method": "GET",
-						"header": [],
+						"header": [
+						{
+							"key": "X-APP-SIGNATURE",
+							"value": "{{X_APP_SIGNATURE}}",
+							"type": "text"
+						}
+					],
 						"url": {
 							"raw": "{{BASE_URL}}/api/v1/database/views/{{VIEW_ID}}/cached",
 							"host": [
@@ -2376,29 +2239,6 @@
 				{
 					"name": "Update Column Configuration",
 					"event": [
-						{
-							"listen": "prerequest",
-							"script": {
-								"exec": [
-									"// Set headers for view management",
-									"pm.request.headers.add({",
-									"    key: 'X-App-Signature',",
-									"    value: pm.environment.get('X_APP_SIGNATURE')",
-									"});",
-									"",
-									"// Set tenant and schema from signature",
-									"pm.request.headers.add({",
-									"    key: 'X-Tenant-ID',",
-									"    value: 'tenant_123'",
-									"});",
-									"pm.request.headers.add({",
-									"    key: 'X-Schema-Name',",
-									"    value: 'test_schema'",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						},
 						{
 							"listen": "test",
 							"script": {
@@ -2449,29 +2289,6 @@
 					"name": "Reorder Columns",
 					"event": [
 						{
-							"listen": "prerequest",
-							"script": {
-								"exec": [
-									"// Set headers for view management",
-									"pm.request.headers.add({",
-									"    key: 'X-App-Signature',",
-									"    value: pm.environment.get('X_APP_SIGNATURE')",
-									"});",
-									"",
-									"// Set tenant and schema from signature",
-									"pm.request.headers.add({",
-									"    key: 'X-Tenant-ID',",
-									"    value: 'tenant_123'",
-									"});",
-									"pm.request.headers.add({",
-									"    key: 'X-Schema-Name',",
-									"    value: 'test_schema'",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						},
-						{
 							"listen": "test",
 							"script": {
 								"exec": [
@@ -2521,29 +2338,6 @@
 					"name": "Get Schema Analysis",
 					"event": [
 						{
-							"listen": "prerequest",
-							"script": {
-								"exec": [
-									"// Set headers for view management",
-									"pm.request.headers.add({",
-									"    key: 'X-App-Signature',",
-									"    value: pm.environment.get('X_APP_SIGNATURE')",
-									"});",
-									"",
-									"// Set tenant and schema from signature",
-									"pm.request.headers.add({",
-									"    key: 'X-Tenant-ID',",
-									"    value: 'tenant_123'",
-									"});",
-									"pm.request.headers.add({",
-									"    key: 'X-Schema-Name',",
-									"    value: 'test_schema'",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						},
-						{
 							"listen": "test",
 							"script": {
 								"exec": [
@@ -2563,7 +2357,13 @@
 					],
 					"request": {
 						"method": "GET",
-						"header": [],
+						"header": [
+						{
+							"key": "X-APP-SIGNATURE",
+							"value": "{{X_APP_SIGNATURE}}",
+							"type": "text"
+						}
+					],
 						"url": {
 							"raw": "{{BASE_URL}}/api/v1/database/views/tables/{{TABLE_NAME}}/schema",
 							"host": [
@@ -2584,29 +2384,6 @@
 				{
 					"name": "Build All Views for Table",
 					"event": [
-						{
-							"listen": "prerequest",
-							"script": {
-								"exec": [
-									"// Set headers for view management",
-									"pm.request.headers.add({",
-									"    key: 'X-App-Signature',",
-									"    value: pm.environment.get('X_APP_SIGNATURE')",
-									"});",
-									"",
-									"// Set tenant and schema from signature",
-									"pm.request.headers.add({",
-									"    key: 'X-Tenant-ID',",
-									"    value: 'tenant_123'",
-									"});",
-									"pm.request.headers.add({",
-									"    key: 'X-Schema-Name',",
-									"    value: 'test_schema'",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						},
 						{
 							"listen": "test",
 							"script": {
@@ -2658,29 +2435,6 @@
 					"name": "Delete View Definition",
 					"event": [
 						{
-							"listen": "prerequest",
-							"script": {
-								"exec": [
-									"// Set headers for view management",
-									"pm.request.headers.add({",
-									"    key: 'X-App-Signature',",
-									"    value: pm.environment.get('X_APP_SIGNATURE')",
-									"});",
-									"",
-									"// Set tenant and schema from signature",
-									"pm.request.headers.add({",
-									"    key: 'X-Tenant-ID',",
-									"    value: 'tenant_123'",
-									"});",
-									"pm.request.headers.add({",
-									"    key: 'X-Schema-Name',",
-									"    value: 'test_schema'",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						},
-						{
 							"listen": "test",
 							"script": {
 								"exec": [
@@ -2699,7 +2453,13 @@
 					],
 					"request": {
 						"method": "DELETE",
-						"header": [],
+						"header": [
+							{
+							"key": "X-APP-SIGNATURE",
+							"value": "{{X_APP_SIGNATURE}}",
+							"type": "text"
+						}
+					],
 						"url": {
 							"raw": "{{BASE_URL}}/api/v1/database/views/{{VIEW_ID}}",
 							"host": [
@@ -2724,29 +2484,6 @@
 					"name": "Get All Data Types",
 					"event": [
 						{
-							"listen": "prerequest",
-							"script": {
-								"exec": [
-									"// Set headers for view metadata",
-									"pm.request.headers.add({",
-									"    key: 'X-App-Signature',",
-									"    value: pm.environment.get('X_APP_SIGNATURE')",
-									"});",
-									"",
-									"// Set tenant and schema from signature",
-									"pm.request.headers.add({",
-									"    key: 'X-Tenant-ID',",
-									"    value: 'tenant_123'",
-									"});",
-									"pm.request.headers.add({",
-									"    key: 'X-Schema-Name',",
-									"    value: 'test_schema'",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						},
-						{
 							"listen": "test",
 							"script": {
 								"exec": [
@@ -2767,7 +2504,13 @@
 					],
 					"request": {
 						"method": "GET",
-						"header": [],
+						"header": [
+						{
+							"key": "X-APP-SIGNATURE",
+							"value": "{{X_APP_SIGNATURE}}",
+							"type": "text"
+						}
+					],
 						"url": {
 							"raw": "{{BASE_URL}}/api/v1/database/view-metadata/data-types",
 							"host": [
@@ -2786,29 +2529,6 @@
 				{
 					"name": "Get Data Types by Category",
 					"event": [
-						{
-							"listen": "prerequest",
-							"script": {
-								"exec": [
-									"// Set headers for view metadata",
-									"pm.request.headers.add({",
-									"    key: 'X-App-Signature',",
-									"    value: pm.environment.get('X_APP_SIGNATURE')",
-									"});",
-									"",
-									"// Set tenant and schema from signature",
-									"pm.request.headers.add({",
-									"    key: 'X-Tenant-ID',",
-									"    value: 'tenant_123'",
-									"});",
-									"pm.request.headers.add({",
-									"    key: 'X-Schema-Name',",
-									"    value: 'test_schema'",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						},
 						{
 							"listen": "test",
 							"script": {
@@ -2830,7 +2550,13 @@
 					],
 					"request": {
 						"method": "GET",
-						"header": [],
+						"header": [
+						{
+							"key": "X-APP-SIGNATURE",
+							"value": "{{X_APP_SIGNATURE}}",
+							"type": "text"
+						}
+					],
 						"url": {
 							"raw": "{{BASE_URL}}/api/v1/database/view-metadata/data-types/categories",
 							"host": [
@@ -2850,29 +2576,6 @@
 				{
 					"name": "Get Form Controls",
 					"event": [
-						{
-							"listen": "prerequest",
-							"script": {
-								"exec": [
-									"// Set headers for view metadata",
-									"pm.request.headers.add({",
-									"    key: 'X-App-Signature',",
-									"    value: pm.environment.get('X_APP_SIGNATURE')",
-									"});",
-									"",
-									"// Set tenant and schema from signature",
-									"pm.request.headers.add({",
-									"    key: 'X-Tenant-ID',",
-									"    value: 'tenant_123'",
-									"});",
-									"pm.request.headers.add({",
-									"    key: 'X-Schema-Name',",
-									"    value: 'test_schema'",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						},
 						{
 							"listen": "test",
 							"script": {
@@ -2894,7 +2597,13 @@
 					],
 					"request": {
 						"method": "GET",
-						"header": [],
+						"header": [
+						{
+							"key": "X-APP-SIGNATURE",
+							"value": "{{X_APP_SIGNATURE}}",
+							"type": "text"
+						}
+					],
 						"url": {
 							"raw": "{{BASE_URL}}/api/v1/database/view-metadata/form-controls",
 							"host": [
@@ -2913,29 +2622,6 @@
 				{
 					"name": "Get Validation Rules",
 					"event": [
-						{
-							"listen": "prerequest",
-							"script": {
-								"exec": [
-									"// Set headers for view metadata",
-									"pm.request.headers.add({",
-									"    key: 'X-App-Signature',",
-									"    value: pm.environment.get('X_APP_SIGNATURE')",
-									"});",
-									"",
-									"// Set tenant and schema from signature",
-									"pm.request.headers.add({",
-									"    key: 'X-Tenant-ID',",
-									"    value: 'tenant_123'",
-									"});",
-									"pm.request.headers.add({",
-									"    key: 'X-Schema-Name',",
-									"    value: 'test_schema'",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						},
 						{
 							"listen": "test",
 							"script": {
@@ -2957,7 +2643,13 @@
 					],
 					"request": {
 						"method": "GET",
-						"header": [],
+						"header": [
+						{
+							"key": "X-APP-SIGNATURE",
+							"value": "{{X_APP_SIGNATURE}}",
+							"type": "text"
+						}
+					],
 						"url": {
 							"raw": "{{BASE_URL}}/api/v1/database/view-metadata/validation-rules",
 							"host": [
@@ -2976,29 +2668,6 @@
 				{
 					"name": "Get View Types",
 					"event": [
-						{
-							"listen": "prerequest",
-							"script": {
-								"exec": [
-									"// Set headers for view metadata",
-									"pm.request.headers.add({",
-									"    key: 'X-App-Signature',",
-									"    value: pm.environment.get('X_APP_SIGNATURE')",
-									"});",
-									"",
-									"// Set tenant and schema from signature",
-									"pm.request.headers.add({",
-									"    key: 'X-Tenant-ID',",
-									"    value: 'tenant_123'",
-									"});",
-									"pm.request.headers.add({",
-									"    key: 'X-Schema-Name',",
-									"    value: 'test_schema'",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						},
 						{
 							"listen": "test",
 							"script": {
@@ -3020,7 +2689,13 @@
 					],
 					"request": {
 						"method": "GET",
-						"header": [],
+						"header": [
+						{
+							"key": "X-APP-SIGNATURE",
+							"value": "{{X_APP_SIGNATURE}}",
+							"type": "text"
+						}
+					],
 						"url": {
 							"raw": "{{BASE_URL}}/api/v1/database/view-metadata/view-types",
 							"host": [
@@ -3039,29 +2714,6 @@
 				{
 					"name": "Get Layout Types",
 					"event": [
-						{
-							"listen": "prerequest",
-							"script": {
-								"exec": [
-									"// Set headers for view metadata",
-									"pm.request.headers.add({",
-									"    key: 'X-App-Signature',",
-									"    value: pm.environment.get('X_APP_SIGNATURE')",
-									"});",
-									"",
-									"// Set tenant and schema from signature",
-									"pm.request.headers.add({",
-									"    key: 'X-Tenant-ID',",
-									"    value: 'tenant_123'",
-									"});",
-									"pm.request.headers.add({",
-									"    key: 'X-Schema-Name',",
-									"    value: 'test_schema'",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						},
 						{
 							"listen": "test",
 							"script": {
@@ -3083,7 +2735,13 @@
 					],
 					"request": {
 						"method": "GET",
-						"header": [],
+						"header": [
+						{
+							"key": "X-APP-SIGNATURE",
+							"value": "{{X_APP_SIGNATURE}}",
+							"type": "text"
+						}
+					],
 						"url": {
 							"raw": "{{BASE_URL}}/api/v1/database/view-metadata/layout-types",
 							"host": [
@@ -3107,29 +2765,6 @@
 				{
 					"name": "Get All View Types",
 					"event": [
-						{
-							"listen": "prerequest",
-							"script": {
-								"exec": [
-									"// Set headers for enhanced view management",
-									"pm.request.headers.add({",
-									"    key: 'X-App-Signature',",
-									"    value: pm.environment.get('X_APP_SIGNATURE')",
-									"});",
-									"",
-									"// Set tenant and schema from signature",
-									"pm.request.headers.add({",
-									"    key: 'X-Tenant-ID',",
-									"    value: 'tenant_123'",
-									"});",
-									"pm.request.headers.add({",
-									"    key: 'X-Schema-Name',",
-									"    value: 'test_schema'",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						},
 						{
 							"listen": "test",
 							"script": {
@@ -3159,7 +2794,13 @@
 					],
 					"request": {
 						"method": "GET",
-						"header": [],
+						"header": [
+						{
+							"key": "X-APP-SIGNATURE",
+							"value": "{{X_APP_SIGNATURE}}",
+							"type": "text"
+						}
+					],
 						"url": {
 							"raw": "{{BASE_URL}}/api/v1/database/enhanced-views/view-types",
 							"host": [
@@ -3178,29 +2819,6 @@
 				{
 					"name": "Get Table Schema",
 					"event": [
-						{
-							"listen": "prerequest",
-							"script": {
-								"exec": [
-									"// Set headers for enhanced view management",
-									"pm.request.headers.add({",
-									"    key: 'X-App-Signature',",
-									"    value: pm.environment.get('X_APP_SIGNATURE')",
-									"});",
-									"",
-									"// Set tenant and schema from signature",
-									"pm.request.headers.add({",
-									"    key: 'X-Tenant-ID',",
-									"    value: 'tenant_123'",
-									"});",
-									"pm.request.headers.add({",
-									"    key: 'X-Schema-Name',",
-									"    value: 'test_schema'",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						},
 						{
 							"listen": "test",
 							"script": {
@@ -3222,7 +2840,13 @@
 					],
 					"request": {
 						"method": "GET",
-						"header": [],
+						"header": [
+						{
+							"key": "X-APP-SIGNATURE",
+							"value": "{{X_APP_SIGNATURE}}",
+							"type": "text"
+						}
+					],
 						"url": {
 							"raw": "{{BASE_URL}}/api/v1/database/enhanced-views/table-schema?schema_name=test_schema&table_name={{TABLE_NAME}}",
 							"host": [
@@ -3251,29 +2875,6 @@
 				{
 					"name": "Generate Default Configurations",
 					"event": [
-						{
-							"listen": "prerequest",
-							"script": {
-								"exec": [
-									"// Set headers for enhanced view management",
-									"pm.request.headers.add({",
-									"    key: 'X-App-Signature',",
-									"    value: pm.environment.get('X_APP_SIGNATURE')",
-									"});",
-									"",
-									"// Set tenant and schema from signature",
-									"pm.request.headers.add({",
-									"    key: 'X-Tenant-ID',",
-									"    value: 'tenant_123'",
-									"});",
-									"pm.request.headers.add({",
-									"    key: 'X-Schema-Name',",
-									"    value: 'test_schema'",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						},
 						{
 							"listen": "test",
 							"script": {
@@ -3325,29 +2926,6 @@
 					"name": "Validate Configuration",
 					"event": [
 						{
-							"listen": "prerequest",
-							"script": {
-								"exec": [
-									"// Set headers for enhanced view management",
-									"pm.request.headers.add({",
-									"    key: 'X-App-Signature',",
-									"    value: pm.environment.get('X_APP_SIGNATURE')",
-									"});",
-									"",
-									"// Set tenant and schema from signature",
-									"pm.request.headers.add({",
-									"    key: 'X-Tenant-ID',",
-									"    value: 'tenant_123'",
-									"});",
-									"pm.request.headers.add({",
-									"    key: 'X-Schema-Name',",
-									"    value: 'test_schema'",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						},
-						{
 							"listen": "test",
 							"script": {
 								"exec": [
@@ -3396,29 +2974,6 @@
 					"name": "Create Enhanced View Definition",
 					"event": [
 						{
-							"listen": "prerequest",
-							"script": {
-								"exec": [
-									"// Set headers for enhanced view management",
-									"pm.request.headers.add({",
-									"    key: 'X-App-Signature',",
-									"    value: pm.environment.get('X_APP_SIGNATURE')",
-									"});",
-									"",
-									"// Set tenant and schema from signature",
-									"pm.request.headers.add({",
-									"    key: 'X-Tenant-ID',",
-									"    value: 'tenant_123'",
-									"});",
-									"pm.request.headers.add({",
-									"    key: 'X-Schema-Name',",
-									"    value: 'test_schema'",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						},
-						{
 							"listen": "test",
 							"script": {
 								"exec": [
@@ -3453,7 +3008,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"tenant_id\": \"tenant_123\",\n  \"schema_name\": \"test_schema\",\n  \"table_name\": \"{{TABLE_NAME}}\",\n  \"view_name\": \"enhanced_user_list\",\n  \"view_type\": \"list\",\n  \"title\": \"Enhanced User List\",\n  \"description\": \"Enhanced list view for users with advanced options\",\n  \"view_configuration\": {\n    \"pagination\": true,\n    \"page_size\": 25,\n    \"show_search\": true,\n    \"show_filters\": true,\n    \"export_enabled\": true\n  },\n  \"columns\": [\n    {\n      \"column_name\": \"id\",\n      \"display_name\": \"ID\",\n      \"data_type\": \"BIGINT\",\n      \"display_order\": 1,\n      \"is_visible\": true,\n      \"is_editable\": false,\n      \"is_required\": false,\n      \"is_searchable\": true,\n      \"is_sortable\": true,\n      \"is_password_field\": false,\n      \"validation_rules\": {},\n      \"column_options\": {\n        \"hide\": false,\n        \"sortable\": true,\n        \"searchable\": true,\n        \"exportable\": true,\n        \"column_width\": \"100px\"\n      }\n    },\n    {\n      \"column_name\": \"email\",\n      \"display_name\": \"Email Address\",\n      \"data_type\": \"VARCHAR\",\n      \"display_order\": 2,\n      \"is_visible\": true,\n      \"is_editable\": true,\n      \"is_required\": true,\n      \"is_searchable\": true,\n      \"is_sortable\": true,\n      \"is_password_field\": false,\n      \"validation_rules\": {\n        \"required\": true,\n        \"email\": true,\n        \"max\": 255\n      },\n      \"placeholder_text\": \"Enter email address\",\n      \"help_text\": \"Valid email address required\",\n      \"column_options\": {\n        \"hide\": false,\n        \"sortable\": true,\n        \"searchable\": true,\n        \"filterable\": true,\n        \"exportable\": true,\n        \"column_width\": \"200px\"\n      }\n    },\n    {\n      \"column_name\": \"password\",\n      \"display_name\": \"Password\",\n      \"data_type\": \"VARCHAR\",\n      \"display_order\": 3,\n      \"is_visible\": true,\n      \"is_editable\": true,\n      \"is_required\": true,\n      \"is_searchable\": false,\n      \"is_sortable\": false,\n      \"is_password_field\": true,\n      \"validation_rules\": {\n        \"required\": true,\n        \"min\": 8\n      },\n      \"placeholder_text\": \"Enter password\",\n      \"help_text\": \"Minimum 8 characters\",\n      \"column_options\": {\n        \"hide\": false,\n        \"password\": true,\n        \"show_encrypted\": false,\n        \"exportable\": false\n      }\n    }\n  ]\n}"
+							"raw": "{\n  \"tenant_id\": \"tenant_123\",\n  \"schema_name\": \"test_schema\",\n  \"table_name\": \"{{TABLE_NAME}}\",\n  \"view_name\": \"user_management\",\n  \"view_types\": [\"list\", \"create/update\"],\n  \"title\": \"User Management\",\n  \"description\": \"Manage system users\",\n  \"rendering_mode\": \"hybrid\",\n  \"column_configurations\": [\n    {\n      \"column_name\": \"id\",\n      \"display_name\": \"ID\",\n      \"is_visible\": true,\n      \"is_editable\": false,\n      \"is_required\": false,\n      \"is_searchable\": true,\n      \"is_sortable\": true,\n      \"list_display_order\": 1,\n      \"form_display_order\": 1,\n      \"data_type\": \"BIGINT\",\n      \"validation_rules\": {}\n    },\n    {\n      \"column_name\": \"email\",\n      \"display_name\": \"Email Address\",\n      \"is_visible\": true,\n      \"is_editable\": true,\n      \"is_required\": true,\n      \"is_searchable\": true,\n      \"is_sortable\": true,\n      \"list_display_order\": 2,\n      \"form_display_order\": 2,\n      \"data_type\": \"VARCHAR\",\n      \"validation_rules\": {\n        \"required\": true,\n        \"email\": true,\n        \"max\": 255\n      },\n      \"placeholder_text\": \"Enter email address\"\n    },\n    {\n      \"column_name\": \"password\",\n      \"display_name\": \"Password\",\n      \"is_visible\": true,\n      \"is_editable\": true,\n      \"is_required\": true,\n      \"is_searchable\": false,\n      \"is_sortable\": false,\n      \"list_display_order\": 3,\n      \"form_display_order\": 3,\n      \"data_type\": \"PASSWORD\",\n      \"is_password_field\": true,\n      \"validation_rules\": {\n        \"required\": true,\n        \"min\": 8\n      },\n      \"placeholder_text\": \"Enter password\"\n    }\n  ]\n}"
 						},
 						"url": {
 							"raw": "{{BASE_URL}}/api/v1/database/enhanced-views/",
@@ -3473,29 +3028,6 @@
 				{
 					"name": "Get Enhanced View Definition",
 					"event": [
-						{
-							"listen": "prerequest",
-							"script": {
-								"exec": [
-									"// Set headers for enhanced view management",
-									"pm.request.headers.add({",
-									"    key: 'X-App-Signature',",
-									"    value: pm.environment.get('X_APP_SIGNATURE')",
-									"});",
-									"",
-									"// Set tenant and schema from signature",
-									"pm.request.headers.add({",
-									"    key: 'X-Tenant-ID',",
-									"    value: 'tenant_123'",
-									"});",
-									"pm.request.headers.add({",
-									"    key: 'X-Schema-Name',",
-									"    value: 'test_schema'",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						},
 						{
 							"listen": "test",
 							"script": {
@@ -3521,7 +3053,13 @@
 					],
 					"request": {
 						"method": "GET",
-						"header": [],
+						"header": [
+						{
+							"key": "X-APP-SIGNATURE",
+							"value": "{{X_APP_SIGNATURE}}",
+							"type": "text"
+						}
+					],
 						"url": {
 							"raw": "{{BASE_URL}}/api/v1/database/enhanced-views/{{ENHANCED_VIEW_ID}}",
 							"host": [
@@ -3540,29 +3078,6 @@
 				{
 					"name": "Update Enhanced View Definition",
 					"event": [
-						{
-							"listen": "prerequest",
-							"script": {
-								"exec": [
-									"// Set headers for enhanced view management",
-									"pm.request.headers.add({",
-									"    key: 'X-App-Signature',",
-									"    value: pm.environment.get('X_APP_SIGNATURE')",
-									"});",
-									"",
-									"// Set tenant and schema from signature",
-									"pm.request.headers.add({",
-									"    key: 'X-Tenant-ID',",
-									"    value: 'tenant_123'",
-									"});",
-									"pm.request.headers.add({",
-									"    key: 'X-Schema-Name',",
-									"    value: 'test_schema'",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						},
 						{
 							"listen": "test",
 							"script": {
@@ -3612,29 +3127,6 @@
 					"name": "Get Enhanced View Definitions",
 					"event": [
 						{
-							"listen": "prerequest",
-							"script": {
-								"exec": [
-									"// Set headers for enhanced view management",
-									"pm.request.headers.add({",
-									"    key: 'X-App-Signature',",
-									"    value: pm.environment.get('X_APP_SIGNATURE')",
-									"});",
-									"",
-									"// Set tenant and schema from signature",
-									"pm.request.headers.add({",
-									"    key: 'X-Tenant-ID',",
-									"    value: 'tenant_123'",
-									"});",
-									"pm.request.headers.add({",
-									"    key: 'X-Schema-Name',",
-									"    value: 'test_schema'",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						},
-						{
 							"listen": "test",
 							"script": {
 								"exec": [
@@ -3655,7 +3147,13 @@
 					],
 					"request": {
 						"method": "GET",
-						"header": [],
+						"header": [
+						{
+							"key": "X-APP-SIGNATURE",
+							"value": "{{X_APP_SIGNATURE}}",
+							"type": "text"
+						}
+					],
 						"url": {
 							"raw": "{{BASE_URL}}/api/v1/database/enhanced-views/?tenant_id=tenant_123&schema_name=test_schema&table_name={{TABLE_NAME}}&view_type=list",
 							"host": [
@@ -3692,29 +3190,6 @@
 				{
 					"name": "Create Analytics View",
 					"event": [
-						{
-							"listen": "prerequest",
-							"script": {
-								"exec": [
-									"// Set headers for enhanced view management",
-									"pm.request.headers.add({",
-									"    key: 'X-App-Signature',",
-									"    value: pm.environment.get('X_APP_SIGNATURE')",
-									"});",
-									"",
-									"// Set tenant and schema from signature",
-									"pm.request.headers.add({",
-									"    key: 'X-Tenant-ID',",
-									"    value: 'tenant_123'",
-									"});",
-									"pm.request.headers.add({",
-									"    key: 'X-Schema-Name',",
-									"    value: 'test_schema'",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						},
 						{
 							"listen": "test",
 							"script": {
@@ -3767,29 +3242,6 @@
 				{
 					"name": "Create Soft Delete View",
 					"event": [
-						{
-							"listen": "prerequest",
-							"script": {
-								"exec": [
-									"// Set headers for enhanced view management",
-									"pm.request.headers.add({",
-									"    key: 'X-App-Signature',",
-									"    value: pm.environment.get('X_APP_SIGNATURE')",
-									"});",
-									"",
-									"// Set tenant and schema from signature",
-									"pm.request.headers.add({",
-									"    key: 'X-Tenant-ID',",
-									"    value: 'tenant_123'",
-									"});",
-									"pm.request.headers.add({",
-									"    key: 'X-Schema-Name',",
-									"    value: 'test_schema'",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						},
 						{
 							"listen": "test",
 							"script": {
@@ -4313,59 +3765,6 @@
 				}
 			],
 			"description": "Error testing scenarios to verify validation and security"
-		}
-	],
-	"event": [
-		{
-			"listen": "prerequest",
-			"script": {
-				"type": "text/javascript",
-				"exec": [
-					"// Global pre-request script",
-					"// This runs before every request in the collection",
-					"",
-					"// Set timestamp for idempotency keys",
-					"pm.globals.set('timestamp', Date.now());",
-					"",
-					"// Log request details",
-					"console.log('Making request to:', pm.request.url.toString());",
-					"console.log('Method:', pm.request.method);",
-					"console.log('Headers:', pm.request.headers);"
-				]
-			}
-		},
-		{
-			"listen": "test",
-			"script": {
-				"type": "text/javascript",
-				"exec": [
-					"// Global test script",
-					"// This runs after every request in the collection",
-					"",
-					"// Log response details",
-					"console.log('Response Status:', pm.response.status);",
-					"console.log('Response Time:', pm.response.responseTime + 'ms');",
-					"",
-					"// Basic response validation",
-					"pm.test('Response status is not 500', function () {",
-					"    pm.expect(pm.response.code).to.not.equal(500);",
-					"});",
-					"",
-					"// Check for JSON response",
-					"if (pm.response.headers.get('Content-Type') && pm.response.headers.get('Content-Type').includes('application/json')) {",
-					"    pm.test('Response is valid JSON', function () {",
-					"        pm.response.to.be.json;",
-					"    });",
-					"    ",
-					"    // Check for standard response format",
-					"    pm.test('Response has standard format', function () {",
-					"        const jsonData = pm.response.json();",
-					"        pm.expect(jsonData).to.have.property('status');",
-					"        pm.expect(jsonData).to.have.property('message');",
-					"    });",
-					"}"
-				]
-			}
 		}
 	],
 	"variable": [

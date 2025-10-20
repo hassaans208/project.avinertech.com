@@ -15,6 +15,36 @@ class ViewTypeSeeder extends Seeder
     {
         $viewTypes = [
             [
+                'name' => 'create',
+                'display_name' => 'Create Form',
+                'description' => 'Form-based interface for creating new records with validation',
+                'icon' => 'plus',
+                'color' => '#10B981',
+                'default_config' => [
+                    'auto_save' => false,
+                    'show_validation_errors' => true,
+                    'confirm_before_save' => true,
+                    'redirect_after_save' => true
+                ],
+                'is_active' => true,
+                'sort_order' => 1
+            ],
+            [
+                'name' => 'update',
+                'display_name' => 'Update Form',
+                'description' => 'Form-based interface for editing existing records with validation',
+                'icon' => 'edit',
+                'color' => '#F59E0B',
+                'default_config' => [
+                    'auto_save' => false,
+                    'show_validation_errors' => true,
+                    'confirm_before_save' => true,
+                    'redirect_after_save' => true
+                ],
+                'is_active' => true,
+                'sort_order' => 2
+            ],
+            [
                 'name' => 'list',
                 'display_name' => 'List View',
                 'description' => 'Display data in a tabular format with sorting, filtering, and pagination capabilities',
@@ -28,52 +58,7 @@ class ViewTypeSeeder extends Seeder
                     'export_enabled' => true
                 ],
                 'is_active' => true,
-                'sort_order' => 1
-            ],
-            [
-                'name' => 'create/update',
-                'display_name' => 'Create/Update Form',
-                'description' => 'Form-based interface for creating and editing records with validation',
-                'icon' => 'edit',
-                'color' => '#10B981',
-                'default_config' => [
-                    'auto_save' => false,
-                    'show_validation_errors' => true,
-                    'confirm_before_save' => true,
-                    'redirect_after_save' => true
-                ],
-                'is_active' => true,
-                'sort_order' => 2
-            ],
-            [
-                'name' => 'analytics',
-                'display_name' => 'Analytics Dashboard',
-                'description' => 'Interactive dashboard with charts, graphs, and data analysis tools',
-                'icon' => 'chart-bar',
-                'color' => '#F59E0B',
-                'default_config' => [
-                    'chart_types' => ['bar', 'line', 'pie', 'scatter'],
-                    'time_range_options' => ['7d', '30d', '90d', '1y'],
-                    'auto_refresh' => true,
-                    'refresh_interval' => 300
-                ],
-                'is_active' => true,
                 'sort_order' => 3
-            ],
-            [
-                'name' => 'soft-delete',
-                'display_name' => 'Soft Delete Management',
-                'description' => 'Manage soft-deleted records with restore and permanent delete options',
-                'icon' => 'trash',
-                'color' => '#EF4444',
-                'default_config' => [
-                    'show_deleted_at' => true,
-                    'allow_restore' => true,
-                    'allow_permanent_delete' => false,
-                    'bulk_operations' => true
-                ],
-                'is_active' => true,
-                'sort_order' => 4
             ]
         ];
 

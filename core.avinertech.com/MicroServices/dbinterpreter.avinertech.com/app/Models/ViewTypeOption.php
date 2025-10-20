@@ -178,4 +178,6 @@ class ViewTypeOption extends Model
         
         return $formatted;
     }
+
 }
+

@@ -8,9 +8,9 @@ use App\Http\Controllers\Api\V1\OperationController;
 use App\Http\Controllers\Api\V1\AdminController;
 use App\Http\Controllers\Api\V1\MetadataController;
 use App\Http\Controllers\Api\V1\RawQueryController;
-use App\Http\Controllers\Api\V1\ViewController;
-use App\Http\Controllers\Api\V1\ViewMetadataController;
-use App\Http\Controllers\EnhancedViewController;
+use App\Http\Controllers\Api\V1\ModuleController;
+use App\Http\Controllers\Api\V1\ModuleMetadataController;
+use App\Http\Controllers\EnhancedModuleController;
 use App\Http\Middleware\SignatureVerificationMiddleware;
 use App\Http\Middleware\TenantSecurityMiddleware;
 use App\Http\Middleware\IdempotencyMiddleware;
@@ -82,49 +82,26 @@ Route::prefix('v1/database')->middleware([
     // Raw Query API (strict validation)
     Route::post('/raw-query', [RawQueryController::class, 'execute']); // Execute validated raw SELECT queries
     
-    // View Management APIs
-    Route::prefix('views')->group(function () {
-        Route::get('/', [ViewController::class, 'index']); // Get all view definitions
-        Route::post('/', [ViewController::class, 'store']); // Create view definition
-        Route::get('/{viewId}', [ViewController::class, 'show']); // Get specific view definition
-        Route::patch('/{viewId}', [ViewController::class, 'update']); // Update view definition
-        Route::delete('/{viewId}', [ViewController::class, 'destroy']); // Delete view definition
-        
-        // View rendering
-        Route::post('/render', [ViewController::class, 'render']); // Render view (hybrid)
-        Route::post('/{viewId}/build', [ViewController::class, 'build']); // Build and cache view
-        Route::get('/{viewId}/cached', [ViewController::class, 'getCached']); // Get cached view content
-        
-        // Column management
-        Route::patch('/{viewId}/columns/{columnName}', [ViewController::class, 'updateColumn']); // Update column configuration
-        Route::post('/{viewId}/columns/reorder', [ViewController::class, 'reorderColumns']); // Reorder columns
-        
-        // Schema analysis
-        Route::get('/tables/{tableName}/schema', [ViewController::class, 'getSchemaAnalysis']); // Get schema analysis
-        Route::post('/tables/{tableName}/build-all', [ViewController::class, 'buildAllViews']); // Build all views for table
+    
+    // Module Metadata APIs
+    Route::prefix('module-metadata')->group(function () {
+        Route::get('/module-categories', [ModuleMetadataController::class, 'getModuleCategories']); // Get module categories
+        Route::get('/data-types', [ModuleMetadataController::class, 'getDataTypes']); // Get all data types
+        Route::get('/data-types/categories', [ModuleMetadataController::class, 'getDataTypesByCategory']); // Get data types by category
+        Route::get('/form-controls', [ModuleMetadataController::class, 'getFormControls']); // Get form controls
+        Route::get('/validation-rules', [ModuleMetadataController::class, 'getValidationRules']); // Get validation rules
+        Route::get('/module-types', [ModuleMetadataController::class, 'getModuleTypes']); // Get module types
+        Route::get('/layout-types', [ModuleMetadataController::class, 'getLayoutTypes']); // Get layout types
     });
     
-    // View Metadata APIs
-    Route::prefix('view-metadata')->group(function () {
-        Route::get('/data-types', [ViewMetadataController::class, 'getDataTypes']); // Get all data types
-        Route::get('/data-types/categories', [ViewMetadataController::class, 'getDataTypesByCategory']); // Get data types by category
-        Route::get('/form-controls', [ViewMetadataController::class, 'getFormControls']); // Get form controls
-        Route::get('/validation-rules', [ViewMetadataController::class, 'getValidationRules']); // Get validation rules
-        Route::get('/view-types', [ViewMetadataController::class, 'getViewTypes']); // Get view types
-        Route::get('/layout-types', [ViewMetadataController::class, 'getLayoutTypes']); // Get layout types
-    });
-    
-    // Enhanced View Management APIs
-    Route::prefix('enhanced-views')->group(function () {
-        Route::get('/view-types', [EnhancedViewController::class, 'getViewTypes']); // Get all view types with options
-        Route::get('/table-schema', [EnhancedViewController::class, 'getTableSchema']); // Get table schema
-        Route::post('/generate-configurations', [EnhancedViewController::class, 'generateDefaultConfigurations']); // Generate default configs
-        Route::post('/validate-configuration', [EnhancedViewController::class, 'validateConfiguration']); // Validate configuration
-        
-        Route::get('/', [EnhancedViewController::class, 'getViewDefinitions']); // Get view definitions
-        Route::post('/', [EnhancedViewController::class, 'createViewDefinition']); // Create view definition
-        Route::get('/{id}', [EnhancedViewController::class, 'getViewDefinition']); // Get specific view definition
-        Route::patch('/{id}', [EnhancedViewController::class, 'updateViewDefinition']); // Update view definition
+    // Enhanced Module Management APIs
+    Route::prefix('enhanced-modules')->group(function () {        
+        Route::get('/', [EnhancedModuleController::class, 'getModuleDefinitions']); // Get module definitions
+        Route::post('/', [EnhancedModuleController::class, 'createModuleDefinition']); // Create module definition
+        Route::get('/groups', [EnhancedModuleController::class, 'getModuleGroups']); // Get module groups (requires tenant_id, optional schema_name)
+        Route::get('/{id}', [EnhancedModuleController::class, 'getModuleDefinition']); // Get specific module definition
+        Route::patch('/{id}', [EnhancedModuleController::class, 'updateModuleDefinition']); // Update module definition
+
     });
     
     // SQL Preview (never executes)

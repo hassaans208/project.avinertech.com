@@ -185,7 +185,7 @@ class ViewController extends Controller
             ], 422);
         } catch (\Exception $e) {
             DB::rollBack();
-            
+
             Log::error('Failed to create view definition', [
                 'tenant_id' => $request->get('tenant_id'),
                 'error' => $e->getMessage()
@@ -196,7 +196,8 @@ class ViewController extends Controller
                 'message' => 'Failed to create view definition',
                 'error' => [
                     'code' => 'VIEW_CREATION_FAILED',
-                    'details' => $e->getMessage()
+                    'details' => $e->getMessage(),
+                    'trace' => $e->getTraceAsString()
                 ]
             ], 500);
         }

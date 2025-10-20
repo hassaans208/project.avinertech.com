@@ -22,7 +22,7 @@ class SignatureVerificationMiddleware
         }
 
         $signature = $request->header('X-APP-SIGNATURE');
-        
+        // dd($signature);
         if (!$signature) {
             return response()->json([
                 'status' => 'error',

@@ -46,7 +46,7 @@ class ViewType extends Model
      */
     public function viewDefinitions(): HasMany
     {
-        return $this->hasMany(ViewDefinition::class, 'view_type', 'name');
+        return $this->hasMany(ViewDefinition::class, 'view_type_id');
     }
 
     /**
@@ -80,7 +80,7 @@ class ViewType extends Model
     {
         $config = $this->default_config ?? [];
         
-        foreach ($this->activeOptions as $option) {
+        foreach ($this->activeOptions()->get() as $option) {
             if ($option->default_value !== null) {
                 $config[$option->option_key] = $option->default_value;
             }
@@ -96,7 +96,7 @@ class ViewType extends Model
     {
         $errors = [];
         
-        foreach ($this->activeOptions as $option) {
+        foreach ($this->activeOptions()->get() as $option) {
             if ($option->is_required && !isset($config[$option->option_key])) {
                 $errors[] = "Option '{$option->option_key}' is required";
                 continue;
@@ -133,4 +133,5 @@ class ViewType extends Model
         
         return $errors;
     }
+
 }
