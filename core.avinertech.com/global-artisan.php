@@ -16,10 +16,10 @@ $defaultLoaderBinding = [
     'App\\' => '/app/',
     'Database\\Factories\\' => '/database/factories/',
     'Database\\Seeders\\' => '/database/seeders/',
-    // 'Database\\Migrations\\' => '/database/migrations/'
+    'Database\\Migrations\\' => '/database/migrations/'
 ];
 
-$loaderBinding = array_merge($loaderBinding, $defaultLoaderBinding);
+$loaderBinding = array_merge($loaderBinding ?? [], $defaultLoaderBinding);
 foreach ($loaderBinding as $class => $dir) $loader->addPsr4($class, "$base$dir");
 // $loader->addPsr4('App\\Models\\',  __DIR__."/Services/migrator.avinertech.com/app/Models");
 $loader->register();
